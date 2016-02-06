@@ -1,18 +1,20 @@
 <?php
 
-class ModelUsuarios {
+class ModelUsers {
 
     private $table;
+    private $dbcon;
 
     public function __construct() {
-        require_once $_SERVER["DOCUMENT_ROOT"] . "/engine/class.dbcom.php";
-        $this->table = "usuario";
+        require_once $_SERVER["DOCUMENT_ROOT"] . "/engine/class.mysqldb.php";
+        $this->dbcon = new MysqlDb();
+        $this->table = "users";
     }
 
     public function _list() {
         $sql = "SELECT * FROM " . $this->table . " ORDER BY id ASC";
 
-        return Dbcom::query($sql);
+        return $this->dbcon->query($sql);
     }
 
     public function _get($req) {

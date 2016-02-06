@@ -2,7 +2,7 @@
 
 session_start();
 
-class Main {
+class System {
 
     private $controller;
     private $action;
@@ -37,35 +37,6 @@ class Main {
                     "type" => $type,
                     "msg" => $msg
         );
-    }
-
-    public function auth($permission = null, $logout = true) {
-        $denied = false;
-
-        if (isset($_SESSION['user'])) {
-            
-            $db_user = $this->execute("usuarios","_get",array("id" => $_SESSION['user']->id));
-            
-            if (!empty($db_user)) {
-                if ($_SESSION['user']->senha != $db_user->senha) {
-                    $denied = true;
-                } else {
-                    // verificação de permissão de usuário.
-                }
-            } else {
-                $denied = true;
-            }
-        } else {
-            $denied = true;
-        }
-
-        if ($denied) {
-            if ($logout)
-                $this->execute("usuarios", "logout", "Sua autenticação falhou.");
-            return false;
-        }
-
-        return true;
     }
 
 }
