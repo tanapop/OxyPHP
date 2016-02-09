@@ -12,15 +12,4 @@ jQuery(document).ready(function () {
     setTimeout(function () {
         jQuery('.close-alert').click();
     }, 3000);
-    
-    jQuery(".dataTable").DataTable();
-    
-    jQuery(".submenu>a").click(function(e){
-        e.preventDefault();
-    });
-    jQuery(".submenu").hover(function(){
-        jQuery(this).find("ul").show('fast');
-    },function(){
-        jQuery(this).find("ul").hide('fast');
-    });
 });

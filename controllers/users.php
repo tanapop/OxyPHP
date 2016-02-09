@@ -2,21 +2,6 @@
 
 class Users extends Controller {
 
-    private $model;
-    private $module;
-    private $system;
-
-    public function __construct() {
-        global $system;
-        $this->system = $system;
-        $this->module = "users";
-
-        require_once $_SERVER['DOCUMENT_ROOT'] . "/models/" . $this->module . ".php";
-
-        $classname = "Model" . ucfirst($this->module);
-        $this->model = new $classname();
-    }
-    
     public function getFromDB($data){
         return $this->model->_get($data);
     }
@@ -26,9 +11,9 @@ class Users extends Controller {
         
         $list = $this->model->_list();
 
-        self::view("common", "top");
-        self::view($this->module, "list", array("list" => $list));
-        self::view("common", "footer");
+        $this->view("common", "top");
+        $this->view($this->module, "list", array("list" => $list));
+        $this->view("common", "footer");
     }
     
     public function saveToDB() {

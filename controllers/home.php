@@ -1,23 +1,17 @@
 <?php
 
 class Home extends Controller {
-
-    private $module;
-
-    public function __construct() {
-        $this->module = "home";
-    }
     
     public function index(){
         global $system;
         
-        self::view("common", "top");
-        if($system->auth(null, false)){
-            self::view("home", "index");
+        $this->view("common", "top");
+        if($this->system->execute("users", "auth", array(null, false))){
+            $this->view("home", "index");
         } else{
-            self::view("home", "login");
+            $this->view("home", "login");
         }
-        self::view("common", "footer");
+        $this->view("common", "footer");
     }
 
 }
