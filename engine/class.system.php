@@ -5,19 +5,23 @@ session_start();
 class System {
 
     // The name of running controller.
-    private $controller;
+    public $controller;
     // The controller's method name which will be called.
-    private $action;
+    private $method;
     // The arguments which will be supplied for the method.
     private $args;
 
-    // Include global Controller class and uses data passed on REQUEST or URL to set running controller, action and args.
+    // Include global Controller class and uses data passed on POST, GET or URI to set running controller, action and args.
     public function __construct() {
         require_once "engine/class.controller.php";
-        $this->controller = (isset($_REQUEST["c"]) ? $_REQUEST["c"] : DEFAULT_CONTROLLER);
-        $this->action = (isset($_REQUEST["a"]) ? $_REQUEST["a"] : DEFAULT_ACTION);
-        $this->args = array();
-
+        
+        $action = explode("/",str_replace(strrchr($_SERVER["REQUEST_URI"], "?"), "", $_SERVER["REQUEST_URI"]));
+        array_shift($action);
+        
+        $this->controller = (isset($_REQUEST["c"]) ? $_REQUEST["c"] : (!empty($action[0]) ? $action[0] : DEFAULT_CONTROLLER));
+        $this->method = (isset($_REQUEST["a"]) ? $_REQUEST["a"] : (!empty($action[1]) ? $action[1] : DEFAULT_ACTION));
+        $this->args = array_slice($action, 2);
+        
         if (isset($_REQUEST["args"])) {
             if (!is_array($_REQUEST["args"])) {
                 exit('"args" must be an array of arguments.');
@@ -30,8 +34,8 @@ class System {
      * If no controller, action or args is supplied, it uses the ones setted in __construct method, above.
      */
 
-    public function execute($c = null, $a = null, $args = null) {
-        $controller = (empty($c) ? $this->controller : $c);
+    public function execute($controller = null, $method = null, $args = null) {
+        $controller = (empty($controller) ? $this->controller : $controller);
 
         if (!empty($args) && !is_array($args)) {
             exit('"args" must be an array of arguments.');
@@ -41,7 +45,7 @@ class System {
 
         try {
             include_once $_SERVER["DOCUMENT_ROOT"] . "/controllers/" . $controller . ".php";
-            return call_user_func_array(array(new $className(), (empty($a) ? $this->action : $a)), (empty($args) ? $this->args : $args));
+            return call_user_func_array(array(new $className(), (empty($method) ? $this->method : $method)), (empty($args) ? $this->args : $args));
         } catch (Exception $ex) {
             exit($ex->getMessage());
         }

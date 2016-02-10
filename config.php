@@ -11,8 +11,8 @@ define("MYSQL_CONNECTION_MAX_TRIES", 5);
 
 //< SUPER ADMIN USER:
 define("ADMIN_EMAIL", "gabriel.valguelfi@gmail.com");
-define("ADMIN_NAME", "Super Administrador");
-define("ADMIN_PASS", "gabriel2016");
+define("ADMIN_NAME", "Super Administrator");
+define("ADMIN_PASS", "oxyphp");
 //>
 
 //< SYSTEM:

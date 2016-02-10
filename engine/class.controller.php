@@ -4,10 +4,8 @@ class Controller {
 
     // The running global instance of system class
     private $system;
-    
     // Current module. It's the same name of the running controller.
     private $module;
-    
     // An instance of the module's model, if it exists.
     private $model;
 
@@ -15,7 +13,7 @@ class Controller {
     public function __construct() {
         global $system;
         $this->system = $system;
-        
+
         $this->module = $this->system->controller;
 
         $modelPath = $_SERVER['DOCUMENT_ROOT'] . "/models/" . $this->module . ".php";
@@ -30,9 +28,13 @@ class Controller {
     public function view($file, $varlist = null, $module = null, $return = false) {
         $path = $_SERVER['DOCUMENT_ROOT'] . "/views/" . (empty($module) ? $this->module : $module) . "/" . $file . ".php";
 
-        if (!empty($varlist))
-            extract($varlist);
+        if (!empty($varlist)) {
+            if (!is_array($varlist))
+                exit("class.controller: Argument Error: varlist must be an array.");
 
+            extract($varlist);
+        }
+        
         ob_start();
         if (file_exists($path)) {
             include $path;
