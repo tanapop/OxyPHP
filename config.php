@@ -1,13 +1,11 @@
 <?php
 //< DATABASE CONFIGS:
 
-define("DBNAME", "marmitao");
-
-define("DBHOST", "localhost");
-
-define("DBUSER", "root");
-
-define("DBPASS", "h7t846m2");
+define("MYSQL_DBNAME", "marmitao");
+define("MYSQL_DBHOST", "localhost");
+define("MYSQL_DBUSER", "root");
+define("MYSQL_DBPASS", "h7t846m2");
+define("MYSQL_CONNECTION_MAX_TRIES", 5);
 
 //>
 

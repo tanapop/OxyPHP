@@ -6,10 +6,8 @@ class System {
 
     // The name of running controller.
     private $controller;
-    
     // The controller's method name which will be called.
     private $action;
-    
     // The arguments which will be supplied for the method.
     private $args;
 
@@ -31,34 +29,28 @@ class System {
     /* Create an instance of a custom controller and calls it's method, passing specified arguments. 
      * If no controller, action or args is supplied, it uses the ones setted in __construct method, above.
      */
+
     public function execute($c = null, $a = null, $args = null) {
         $controller = (empty($c) ? $this->controller : $c);
-        $action = (empty($a) ? $this->action : $a);
-        $_args = array();
 
-        if (!empty($args)) {
-            if (!is_array($args)) {
-                exit('"args" must be an array of arguments.');
-            }
-            $_args = $args;
-        } else{
-            $_args = $this->args;
+        if (!empty($args) && !is_array($args)) {
+            exit('"args" must be an array of arguments.');
         }
 
         $className = ucfirst($controller);
 
         try {
             include_once $_SERVER["DOCUMENT_ROOT"] . "/controllers/" . $controller . ".php";
-            $c_obj = new $className();
-            return call_user_func_array(array($c_obj, $action), $_args);
+            return call_user_func_array(array(new $className(), (empty($a) ? $this->action : $a)), (empty($args) ? $this->args : $args));
         } catch (Exception $ex) {
             exit($ex->getMessage());
         }
     }
 
-    /* This static method set a custom alert data in SESSION for further usage.
+    /* This static method set a custom alert in SESSION for further usage.
      * By default, it is shown to user(See index.php).
      */
+
     public static function setAlert($msg, $type = ALERT_WARNING) {
         $_SESSION['sys_alerts'][] = (object) array(
                     "type" => $type,

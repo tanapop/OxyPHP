@@ -27,11 +27,11 @@ class Controller {
     }
 
     // Show or return the contents of a view file, passing specified variables for this file, if they're supplied.
-    public function view($dir, $file, $args = null, $return = false) {
-        $path = $_SERVER['DOCUMENT_ROOT'] . "/views/" . $dir . "/" . $file . ".php";
+    public function view($file, $varlist = null, $module = null, $return = false) {
+        $path = $_SERVER['DOCUMENT_ROOT'] . "/views/" . (empty($module) ? $this->module : $module) . "/" . $file . ".php";
 
-        if (!empty($args))
-            extract($args);
+        if (!empty($varlist))
+            extract($varlist);
 
         ob_start();
         if (file_exists($path)) {

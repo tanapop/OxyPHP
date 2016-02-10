@@ -34,16 +34,16 @@ class Mysql {
             }
         }
 
-        $this->dbhost = (isset($dbinfo["dbhost"]) ? $dbinfo["dbhost"] : DBHOST);
-        $this->dbname = (isset($dbinfo["dbname"]) ? $dbinfo["dbname"] : DBNAME);
-        $this->dbuser = (isset($dbinfo["dbuser"]) ? $dbinfo["dbuser"] : DBUSER);
-        $this->dbpass = (isset($dbinfo["dbpass"]) ? $dbinfo["dbpass"] : DBPASS);
+        $this->dbhost = (isset($dbinfo["dbhost"]) ? $dbinfo["dbhost"] : MYSQL_DBHOST);
+        $this->dbname = (isset($dbinfo["dbname"]) ? $dbinfo["dbname"] : MYSQL_DBNAME);
+        $this->dbuser = (isset($dbinfo["dbuser"]) ? $dbinfo["dbuser"] : MYSQL_DBUSER);
+        $this->dbpass = (isset($dbinfo["dbpass"]) ? $dbinfo["dbpass"] : MYSQL_DBPASS);
 
         $this->cnnInfo = new stdClass();
         $this->cnnInfo->info = "No connection info.";
     }
     
-    /* Tries to connect to mysql database 5 times. If all attempts fails, write error to property and returns false.
+    /* Tries to connect to mysql database much times as configured. If all attempts fails, write error to property and returns false.
      * Returns true on first success.
      */
     private function connect() {
@@ -54,10 +54,9 @@ class Mysql {
 
         if (!empty($error)) {
             $this->connection->close();
-            $maxtries = 5;
             $currenttry = 1;
             
-            while ($currenttry < $maxtries) {
+            while ($currenttry < MYSQL_CONNECTION_MAX_TRIES) {
                 $this->connection = new mysqli($this->dbhost, $this->dbuser, $this->dbpass, $this->dbname);
                 $error = mysqli_connect_error();
                 if (empty($error)) {
@@ -65,6 +64,7 @@ class Mysql {
                 } else {
                     $this->connection->close();
                 }
+                $currenttry++;
             }
             $this->connection = $error;
             return false;
