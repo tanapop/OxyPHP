@@ -34,7 +34,7 @@ class Controller {
 
             extract($varlist);
         }
-        
+
         ob_start();
         if (file_exists($path)) {
             include $path;

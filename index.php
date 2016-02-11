@@ -1,6 +1,7 @@
 <?php
 // Includes global configs and global System class.
 require_once "config.php";
+require_once "constants.php";
 require_once "engine/class.system.php";
 
 // Create the global instance of System class.
@@ -28,7 +29,7 @@ $system = new System();
     </head>
     <body>
         <?php
-        // Calls a method from a controller. Method and controller are specified in REQUEST or URL.
+        // Calls a method from a controller. Method and controller are specified in REQUEST or URI.
         $system->execute();
         
         // Shows an alert dialog to user.(See System::setAlert method).

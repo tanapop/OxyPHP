@@ -18,13 +18,13 @@ class System {
         $action = explode("/",str_replace(strrchr($_SERVER["REQUEST_URI"], "?"), "", $_SERVER["REQUEST_URI"]));
         array_shift($action);
         
-        $this->controller = (isset($_REQUEST["c"]) ? $_REQUEST["c"] : (!empty($action[0]) ? $action[0] : DEFAULT_CONTROLLER));
-        $this->method = (isset($_REQUEST["a"]) ? $_REQUEST["a"] : (!empty($action[1]) ? $action[1] : DEFAULT_ACTION));
+        $this->controller = (isset($_REQUEST["controller"]) ? $_REQUEST["controller"] : (!empty($action[0]) ? $action[0] : DEFAULT_CONTROLLER));
+        $this->method = (isset($_REQUEST["method"]) ? $_REQUEST["method"] : (!empty($action[1]) ? $action[1] : DEFAULT_METHOD));
         $this->args = array_slice($action, 2);
         
         if (isset($_REQUEST["args"])) {
             if (!is_array($_REQUEST["args"])) {
-                exit('"args" must be an array of arguments.');
+                exit('class.system: Argument Error: args must be an array.');
             }
             $this->args = $_REQUEST["args"];
         }
@@ -35,16 +35,16 @@ class System {
      */
 
     public function execute($controller = null, $method = null, $args = null) {
-        $controller = (empty($controller) ? $this->controller : $controller);
+        $this->controller = (empty($controller) ? $this->controller : $controller);
 
         if (!empty($args) && !is_array($args)) {
-            exit('"args" must be an array of arguments.');
+            exit('class.system: Argument Error: args must be an array.');
         }
 
-        $className = ucfirst($controller);
+        $className = ucfirst($this->controller);
 
         try {
-            include_once $_SERVER["DOCUMENT_ROOT"] . "/controllers/" . $controller . ".php";
+            include_once $_SERVER["DOCUMENT_ROOT"] . "/controllers/" . $this->controller . ".php";
             return call_user_func_array(array(new $className(), (empty($method) ? $this->method : $method)), (empty($args) ? $this->args : $args));
         } catch (Exception $ex) {
             exit($ex->getMessage());
