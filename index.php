@@ -11,7 +11,7 @@ $system = new System();
     <head>
 
         <!--<META>-->
-        <title>OxiMVC - PHP Microframework</title>
+        <title>Oxy - PHP Microframework</title>
         <!--</META>-->
 
 

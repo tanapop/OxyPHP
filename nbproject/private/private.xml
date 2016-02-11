@@ -3,11 +3,11 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/home/gabriel/Projects/oximvc/config.php</file>
-            <file>file:/home/gabriel/Projects/oximvc/engine/class.mysql.php</file>
-            <file>file:/home/gabriel/Projects/oximvc/engine/class.controller.php</file>
-            <file>file:/home/gabriel/Projects/oximvc/engine/class.system.php</file>
-            <file>file:/home/gabriel/Projects/oximvc/index.php</file>
+            <file>file:/home/gabriel/Projects/oxyphp/engine/class.system.php</file>
+            <file>file:/home/gabriel/Projects/oxyphp/config.php</file>
+            <file>file:/home/gabriel/Projects/oxyphp/.htaccess</file>
+            <file>file:/home/gabriel/Projects/oxyphp/index.php</file>
+            <file>file:/home/gabriel/Projects/oxyphp/engine/class.controller.php</file>
         </group>
     </open-files>
 </project-private>

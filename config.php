@@ -22,6 +22,8 @@ define("ALERT_WARNING", 3);
 
 define("DEFAULT_CONTROLLER","home");
 define("DEFAULT_ACTION", "index");
+
+define("SETUP_MODE", true);
 //>
 
 ?>
