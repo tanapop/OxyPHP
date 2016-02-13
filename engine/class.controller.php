@@ -3,34 +3,34 @@
 class Controller {
 
     // The running global instance of system class
-    private $system;
+    protected $system;
     // Current module. It's the same name of the running controller.
     private $module;
     // An instance of the module's model, if it exists.
-    private $model;
+    protected $model;
 
     // Set the global system property, set the module and create module's model instance.
-    public function __construct() {
+    public function __construct($module) {
         global $system;
         $this->system = $system;
 
-        $this->module = $this->system->controller;
+        $this->module = $module;
 
         $modelPath = $_SERVER['DOCUMENT_ROOT'] . "/models/" . $this->module . ".php";
         if (file_exists($modelPath)) {
             require_once $modelPath;
             $classname = "Model" . ucfirst($this->module);
-            $this->model = new $classname();
+            $this->model = new $classname($this->module);
         }
     }
 
     // Show or return the contents of a view file, passing specified variables for this file, if they're supplied.
-    public function view($file, $varlist = null, $module = null, $return = false) {
+    protected function view($file, $varlist = null, $module = null, $return = false) {
         $path = $_SERVER['DOCUMENT_ROOT'] . "/views/" . (empty($module) ? $this->module : $module) . "/" . $file . ".php";
 
         if (!empty($varlist)) {
             if (!is_array($varlist))
-                exit("class.controller: Argument Error: varlist must be an array.");
+                System::debug(array("class.controller: Argument Error: varlist must be an array."), array('$varlist' => $varlist));
 
             extract($varlist);
         }

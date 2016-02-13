@@ -5,7 +5,7 @@ session_start();
 class System {
 
     // The name of running controller.
-    public $controller;
+    private $controller;
     // The controller's method name which will be called.
     private $method;
     // The arguments which will be supplied for the method.
@@ -14,17 +14,18 @@ class System {
     // Include global Controller class and uses data passed on POST, GET or URI to set running controller, action and args.
     public function __construct() {
         require_once "engine/class.controller.php";
-        
-        $action = explode("/",str_replace(strrchr($_SERVER["REQUEST_URI"], "?"), "", $_SERVER["REQUEST_URI"]));
+        require_once "engine/class.model.php";
+
+        $action = explode("/", str_replace(strrchr($_SERVER["REQUEST_URI"], "?"), "", $_SERVER["REQUEST_URI"]));
         array_shift($action);
-        
+
         $this->controller = (isset($_REQUEST["controller"]) ? $_REQUEST["controller"] : (!empty($action[0]) ? $action[0] : DEFAULT_CONTROLLER));
         $this->method = (isset($_REQUEST["method"]) ? $_REQUEST["method"] : (!empty($action[1]) ? $action[1] : DEFAULT_METHOD));
         $this->args = array_slice($action, 2);
-        
+
         if (isset($_REQUEST["args"])) {
             if (!is_array($_REQUEST["args"])) {
-                exit('class.system: Argument Error: args must be an array.');
+                self::debug(array('class.system: Argument Error: args must be an array.'),array('args'=>$_REQUEST["args"]));
             }
             $this->args = $_REQUEST["args"];
         }
@@ -38,14 +39,14 @@ class System {
         $this->controller = (empty($controller) ? $this->controller : $controller);
 
         if (!empty($args) && !is_array($args)) {
-            exit('class.system: Argument Error: args must be an array.');
+            self::debug(array('class.system: Argument Error: args must be an array.'),array('args'=>$args));
         }
 
         $className = ucfirst($this->controller);
 
         try {
             include_once $_SERVER["DOCUMENT_ROOT"] . "/controllers/" . $this->controller . ".php";
-            return call_user_func_array(array(new $className(), (empty($method) ? $this->method : $method)), (empty($args) ? $this->args : $args));
+            return call_user_func_array(array(new $className($this->controller), (empty($method) ? $this->method : $method)), (empty($args) ? $this->args : $args));
         } catch (Exception $ex) {
             exit($ex->getMessage());
         }
@@ -60,6 +61,14 @@ class System {
                     "type" => $type,
                     "msg" => $msg
         );
+    }
+
+    /* This static method gather a colletcion of requesting and processing data, set it into SESSION,
+     * then navigate to a special URI where these data will be formated and printed on screen for debug purposes.
+     */
+
+    public static function debug($messages = array(), $toPrint = array()) {
+        
     }
 
 }
