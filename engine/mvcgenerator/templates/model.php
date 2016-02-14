@@ -3,81 +3,57 @@
 class _CLASS_NAME_ extends Model {
 
     public function _get($fields, $conditions, $debug = false) {
-        $sql = "SELECT ";
+        if (is_string($fields)) {
+            $fields = array($fields);
+        } elseif (!is_array($fields)) {
+            return false;
+        }
 
-        if (is_array($fields)) {
-            foreach ($fields as $f) {
-                $sql .= $f . ",";
-            }
-            $sql = rtrim($sql, ",");
-        } elseif (is_string($fields)) {
-            $sql .= $fields;
+        if (!is_array($conditions)) {
+            return false;
+        }
+
+        if ($debug) {
+            System::debug(array(), array($this->buildquery("select", array($fields, $conditions))));
         } else {
-            return false;
+            if ($result = $this->mysql->query($this->buildquery("select", array($fields, $conditions)))) {
+                if (count($result) > 1) {
+                    return $result;
+                } else {
+                    return $result[0];
+                }
+            } else
+                return false;
         }
-
-        $sql .= " FROM " . $this->table;
-
-        if (!empty($conditions) && is_array($conditions)) {
-            $sql .= " WHERE ";
-            foreach ($conditions as $key => $val) {
-                $sql .= $key . "=" . (is_numeric($val) ? $val : "'" . $val . "'");
-                $sql .= " AND ";
-            }
-            $sql = rtrim($sql, " AND ");
-        }
-
-        if ($result = $this->mysql->query($sql)) {
-            if (count($result) > 1) {
-                return $result;
-            } else {
-                return $result[0];
-            }
-        } else
-            return false;
     }
 
-    public function _save($data, $debug = false) {
-        if (property_exists($data, "id")) {
-            $sql = "UPDATE " . $this->table .
-                    " SET nome='" . $data->nome . "'" .
-                    ",email='" . $data->email . "'" .
-                    (!empty($data->senha) ? ",senha='" . $data->senha . "'" : "") .
-                    ",telefone=" . (!empty($data->telefone) ? "'" . $data->telefone . "'" : "default") .
-                    " WHERE id=" . $data->id;
+    public function _save($dataset, $debug = false) {
+        $dataset = (array) $dataset;
+        if (array_key_exists("id", $dataset)) {
+            $sql = $this->buildquery("update", array($dataset));
         } else {
-            if (!empty($test = Dbcom::query("SELECT id FROM " . $this->table . " WHERE nome='" . $data->nome . "'"))) {
-                $system->alert("Já existe outro usuário registrado com esse nome.");
-                return false;
-            }
-            $sql = "INSERT INTO " . $this->table . " (id, nome, email, senha, telefone) VALUES(default,'" .
-                    $data->nome .
-                    "','" . $data->email .
-                    "','" . $data->senha .
-                    "','" . $data->telefone .
-                    "')";
+            $sql = $this->buildquery("insert", array($dataset));
         }
 
-        return Dbcom::query($sql);
+        if ($debug) {
+            System::debug(array(), array($sql));
+        } else {
+            return $this->mysql->query($sql);
+        }
     }
 
     public function _delete($list, $debug = false) {
-        $sql = "DELETE FROM " . $this->table . " WHERE id";
-
-        if (is_array($list)) {
-            $sql .= " IN (";
-            foreach ($list as $id) {
-                $sql .= $id . ",";
-            }
-            $sql = rtrim($sql, ",");
-            $sql .= ")";
-        } elseif (is_numeric($list)) {
-            $sql .= "=" . $list;
-        } else {
+        if (is_numeric($list)) {
+            $list = array($list);
+        } elseif (!is_array($list)) {
             return false;
         }
 
-        return $this->mysql->query($sql);
+        if ($debug) {
+            System::debug(array(), array($this->buildquery("delete", array($list))));
+        } else {
+            return $this->mysql->query($this->buildquery("delete", array($list)));
+        }
     }
 
 }
