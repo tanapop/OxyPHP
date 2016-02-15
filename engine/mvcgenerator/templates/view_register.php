@@ -1,8 +1,8 @@
-<?php
-
-/* 
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
-
+<div id="_CONTROLLER_NAME_-register-contents">
+    <form method="post" action="/_CONTROLLER_NAME_/save">
+        _REGISTER_FORM_FIELDS_
+    <div class="row">
+        <div class="col-md-12"><input type="submit" value="Save"></div>
+    </div>
+    </form>
+</div>

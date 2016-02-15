@@ -25,9 +25,23 @@ class System {
 
         if (isset($_REQUEST["args"])) {
             if (!is_array($_REQUEST["args"])) {
-                self::debug(array('class.system: Argument Error: args must be an array.'),array('args'=>$_REQUEST["args"]));
+                self::debug(array('class.system: Argument Error: args must be an array.'), array('args' => $_REQUEST["args"]));
             }
             $this->args = $_REQUEST["args"];
+        } elseif (!empty($_POST)) {
+            if (isset($_POST['controller']))
+                unset($_POST['controller']);
+            if (isset($_POST['method']))
+                unset($_POST['method']);
+
+            $this->args = array($_POST);
+        } elseif (!empty($_GET)) {
+            if (isset($_GET['controller']))
+                unset($_GET['controller']);
+            if (isset($_GET['method']))
+                unset($_GET['method']);
+
+            $this->args = array($_GET);
         }
     }
 
@@ -39,7 +53,7 @@ class System {
         $this->controller = (empty($controller) ? $this->controller : $controller);
 
         if (!empty($args) && !is_array($args)) {
-            self::debug(array('class.system: Argument Error: args must be an array.'),array('args'=>$args));
+            self::debug(array('class.system: Argument Error: args must be an array.'), array('args' => $args));
         }
 
         $className = ucfirst($this->controller);

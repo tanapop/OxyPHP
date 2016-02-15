@@ -29,9 +29,11 @@ class _CLASS_NAME_ extends Model {
 
     public function _save($dataset, $debug = false) {
         $dataset = (array) $dataset;
-        if (array_key_exists("id", $dataset)) {
+        if (!empty($dataset["id"])) {
             $sql = $this->buildquery("update", array($dataset));
         } else {
+            if(isset($dataset["id"]))
+                unset($dataset["id"]);
             $sql = $this->buildquery("insert", array($dataset));
         }
 

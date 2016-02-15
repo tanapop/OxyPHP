@@ -10,8 +10,10 @@
             <file>file:/home/gabriel/Projects/oxyphp/engine/mvcgenerator/templates/controller.php</file>
             <file>file:/home/gabriel/Projects/oxyphp/index.php</file>
             <file>file:/home/gabriel/Projects/oxyphp/engine/class.model.php</file>
+            <file>file:/home/gabriel/Projects/oxyphp/engine/mvcgenerator/templates/view_listing.php</file>
             <file>file:/home/gabriel/Projects/oxyphp/engine/class.controller.php</file>
             <file>file:/home/gabriel/Projects/oxyphp/engine/mvcgenerator/templates/model.php</file>
+            <file>file:/home/gabriel/Projects/oxyphp/engine/mvcgenerator/templates/view_register.php</file>
         </group>
     </open-files>
 </project-private>
