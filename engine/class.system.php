@@ -10,8 +10,10 @@ class System {
     private $method;
     // The arguments which will be supplied for the method.
     private $args;
+    // The path to controllers directory
+    private $cpath;
 
-    // Include global Controller class and uses data passed on POST, GET or URI to set running controller, action and args.
+    // Include global Controller and Model classs and uses data passed on POST, GET or URI to set running controller, action and args.
     public function __construct() {
         require_once "engine/class.controller.php";
         require_once "engine/class.model.php";
@@ -19,8 +21,27 @@ class System {
         $action = explode("/", str_replace(strrchr($_SERVER["REQUEST_URI"], "?"), "", $_SERVER["REQUEST_URI"]));
         array_shift($action);
 
+        $this->cpath = $_SERVER["DOCUMENT_ROOT"] . "/controllers/";
         $this->controller = (isset($_REQUEST["controller"]) ? $_REQUEST["controller"] : (!empty($action[0]) ? $action[0] : DEFAULT_CONTROLLER));
         $this->method = (isset($_REQUEST["method"]) ? $_REQUEST["method"] : (!empty($action[1]) ? $action[1] : DEFAULT_METHOD));
+
+        if (SETUP_MODE) {
+            $this->setup($action);
+        }
+
+        $this->setargs($action);
+    }
+
+    private function setup($action) {
+        if (empty($action[0]) || $action[0] == 'mvcgenerator') {
+            $this->cpath = $_SERVER["DOCUMENT_ROOT"] . "engine/mvcgenerator/class.";
+
+            $this->controller = "mvcgenerator";
+            $this->method = (empty($this->method) ? "index" : $this->method);
+        }
+    }
+
+    private function setargs($action) {
         $this->args = array_slice($action, 2);
 
         if (isset($_REQUEST["args"])) {
@@ -59,7 +80,7 @@ class System {
         $className = ucfirst($this->controller);
 
         try {
-            include_once $_SERVER["DOCUMENT_ROOT"] . "/controllers/" . $this->controller . ".php";
+            include_once $this->cpath . $this->controller . ".php";
             return call_user_func_array(array(new $className($this->controller), (empty($method) ? $this->method : $method)), (empty($args) ? $this->args : $args));
         } catch (Exception $ex) {
             exit($ex->getMessage());

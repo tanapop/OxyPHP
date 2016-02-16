@@ -1,5 +1,5 @@
-<h1>Oxy - PHP Framework - Module Generator</h1>
-
+<h2 style="text-align: center;">Oxy - Object Oriented MVC Framework - PHP Edition - Module Generator</h2>
+<br>
 <p>
     The system read your application's database to know what tables it contains. It assumes that each table represents one 
     potential module.
