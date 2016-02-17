@@ -1,6 +1,6 @@
 <?php
 
-class Cliente extends Controller {
+class Usuario extends Controller {
 
     public function index() {
         $this->listing();

@@ -35,6 +35,7 @@ class Mvcgenerator {
         $contents = ob_get_clean();
 
         echo $contents;
+        System::showAlerts();
     }
 
     public function createmodel($modulename, $return = false) {
@@ -48,12 +49,12 @@ class Mvcgenerator {
             chmod($path . $modulename . ".php", 0777);
             if ($return)
                 return true;
-            System::setAlert($modulename . " model created successfully.", ALERT_SUCCESS);
+            System::setAlert('"'.ucfirst($modulename) . '" module\'s model created successfully.', ALERT_SUCCESS);
             header('Location: /');
         } else {
             if ($return)
                 return false;
-            System::setAlert("Attempt to create " . $modulename . " model failed.", ALERT_FAILURE);
+            System::setAlert('Attempt to create "'.ucfirst($modulename) . '" module\'s model failed.', ALERT_FAILURE);
             header('Location: /');
         }
     }
@@ -69,12 +70,12 @@ class Mvcgenerator {
             chmod($path . $modulename . ".php", 0777);
             if ($return)
                 return true;
-            System::setAlert($modulename . " controller created successfully.", ALERT_SUCCESS);
+            System::setAlert('"'.ucfirst($modulename) . '" module\'s controller created successfully.', ALERT_SUCCESS);
             header('Location: /');
         } else {
             if ($return)
                 return false;
-            System::setAlert("Attempt to create " . $modulename . " controller failed.", ALERT_FAILURE);
+            System::setAlert('Attempt to create "'.ucfirst($modulename) . '" module\'s controller failed.', ALERT_FAILURE);
             header('Location: /');
         }
     }
@@ -117,12 +118,12 @@ class Mvcgenerator {
             chmod($viewpath . "register.php", 0777);
             if ($return)
                 return true;
-            System::setAlert($modulename . " views created successfully.", ALERT_SUCCESS);
+            System::setAlert('"'.ucfirst($modulename) . '" module\'s views created successfully.', ALERT_SUCCESS);
             header('Location: /');
         } else {
             if ($return)
                 return false;
-            System::setAlert("Attempt to create " . $modulename . " views failed.", ALERT_FAILURE);
+            System::setAlert('Attempt to create "'.ucfirst($modulename) . '" module\'s views failed.', ALERT_FAILURE);
             header('Location: /');
         }
     }

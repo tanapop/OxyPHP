@@ -87,15 +87,18 @@ class System {
         }
     }
 
-    /* This static method set a custom alert in SESSION for further usage.
-     * By default, it is shown to user(See index.php).
-     */
+    // This static method set a custom alert in SESSION for further usage.
 
     public static function setAlert($msg, $type = ALERT_WARNING) {
         $_SESSION['sys_alerts'][] = (object) array(
                     "type" => $type,
                     "msg" => $msg
         );
+    }
+    
+    // Shows all alerts setted in System::setAlert as dialogs to the user.
+    public static function showAlerts(){
+        include $_SERVER["DOCUMENT_ROOT"]."engine/widgets/system_alerts.php";
     }
 
     /* This static method gather a colletcion of requesting and processing data, set it into SESSION,

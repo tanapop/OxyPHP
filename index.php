@@ -33,22 +33,6 @@ $system = new System();
         <?php
         // Calls a method from a controller. Method and controller are specified in REQUEST or URI.
         $system->execute();
-        
-        // Shows an alert dialog to user.(See System::setAlert method).
-        if (!empty($_SESSION['sys_alerts'])):
-            $i = 0;
-            foreach ($_SESSION['sys_alerts'] as $alert):
-                ?>
-                <div class="sys-alert alert-<?php echo $alert->type; ?>">
-                    <img src="/media/img/icon/alert-<?php echo $alert->type; ?>.png">
-                    <span title="Close alert" class="close-alert cursor-pointer">[X]</span>
-                    <p><?php echo $alert->msg; ?></p>
-                </div>
-                <?php
-                unset($_SESSION['sys_alerts'][$i]);
-                $i++;
-            endforeach;
-        endif;
         ?>
     </body>
 </html>

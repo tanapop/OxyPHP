@@ -8,10 +8,12 @@ class _CLASS_NAME_ extends Controller {
 
     public function listing() {
         $this->view("listing", array("dataset" => $this->get("*")));
+        System::showAlerts();
     }
 
     public function register($id = null) {
         $this->view("register", array("dataset" => (!empty($id) ? $this->get("*", array("id" => $id)) : array())));
+        System::showAlerts();
     }
 
     public function get($fields, $conditions = null) {
