@@ -43,10 +43,9 @@ class Mvcgenerator {
         $f = str_replace("_CLASS_NAME_", "Model" . ucfirst($modulename), $f);
 
         $path = $_SERVER["DOCUMENT_ROOT"] . "models/";
-        chmod($path, 0777);
         if (file_put_contents($path . $modulename . ".php", $f)) {
-            chmod($path . $modulename . ".php", 0755);
-            chmod($path, 0755);
+            touch($path . $modulename . ".php");
+            chmod($path . $modulename . ".php", 0777);
             if ($return)
                 return true;
             System::setAlert($modulename . " model created successfully.", ALERT_SUCCESS);
@@ -62,17 +61,12 @@ class Mvcgenerator {
     public function createcontroller($modulename, $return = false) {
         $f = file_get_contents($_SERVER["DOCUMENT_ROOT"] . "engine/mvcgenerator/templates/controller.php");
 
-        echo $f;
         $f = str_replace("_CLASS_NAME_", ucfirst($modulename), $f);
-        echo "<hr>";
-        echo $f;
-        die;
 
         $path = $_SERVER["DOCUMENT_ROOT"] . "controllers/";
-            chmod($path, 0777);
         if (file_put_contents($path . $modulename . ".php", $f)) {
-            chmod($path . $modulename . ".php", 0755);
-            chmod($path, 0755);
+            touch($path . $modulename . ".php");
+            chmod($path . $modulename . ".php", 0777);
             if ($return)
                 return true;
             System::setAlert($modulename . " controller created successfully.", ALERT_SUCCESS);
@@ -117,8 +111,10 @@ class Mvcgenerator {
         chmod($viewpath, 0777);
 
         if (file_put_contents($viewpath . "listing.php", $fl) && file_put_contents($viewpath . "register.php", $fl)) {
-            chmod($viewpath . "listing.php", 0755);
-            chmod($viewpath . "register.php", 0755);
+            touch($viewpath . "listing.php");
+            chmod($viewpath . "listing.php", 0777);
+            touch($viewpath . "register.php");
+            chmod($viewpath . "register.php", 0777);
             if ($return)
                 return true;
             System::setAlert($modulename . " views created successfully.", ALERT_SUCCESS);

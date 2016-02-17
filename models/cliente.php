@@ -1,6 +1,6 @@
 <?php
 
-class _CLASS_NAME_ extends Model {
+class ModelCliente extends Model {
 
     public function _get($fields, $conditions, $debug = false) {
         if (is_string($fields)) {
