@@ -14,7 +14,7 @@ $system = new System();
         <!--<META>-->
         <title>Oxy - Object Oriented MVC Framework - PHP Edition</title>
         <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
-        <link rel="icon" type="image/png" href="/media/img/icon/favicon.png">
+        <link rel="icon" type="image/png" href="/media/img/oxylogo.png">
         <!--</META>-->
 
 

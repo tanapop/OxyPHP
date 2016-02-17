@@ -9,7 +9,8 @@ class Mvcgenerator {
     public function __construct() {
         require_once $_SERVER['DOCUMENT_ROOT'] . "engine/databaseclasses/class.mysql.php";
 
-        $this->mysql = new Mysql();
+        if (MYSQL_DATABASE_ON)
+            $this->mysql = new Mysql();
 
         $tables = $this->mysql->query("SHOW TABLES");
 
@@ -49,12 +50,12 @@ class Mvcgenerator {
             chmod($path . $modulename . ".php", 0777);
             if ($return)
                 return true;
-            System::setAlert('"'.ucfirst($modulename) . '" module\'s model created successfully.', ALERT_SUCCESS);
+            System::setAlert('"' . ucfirst($modulename) . '" module\'s model created successfully.', ALERT_SUCCESS);
             header('Location: /');
         } else {
             if ($return)
                 return false;
-            System::setAlert('Attempt to create "'.ucfirst($modulename) . '" module\'s model failed.', ALERT_FAILURE);
+            System::setAlert('Attempt to create "' . ucfirst($modulename) . '" module\'s model failed.', ALERT_FAILURE);
             header('Location: /');
         }
     }
@@ -70,12 +71,12 @@ class Mvcgenerator {
             chmod($path . $modulename . ".php", 0777);
             if ($return)
                 return true;
-            System::setAlert('"'.ucfirst($modulename) . '" module\'s controller created successfully.', ALERT_SUCCESS);
+            System::setAlert('"' . ucfirst($modulename) . '" module\'s controller created successfully.', ALERT_SUCCESS);
             header('Location: /');
         } else {
             if ($return)
                 return false;
-            System::setAlert('Attempt to create "'.ucfirst($modulename) . '" module\'s controller failed.', ALERT_FAILURE);
+            System::setAlert('Attempt to create "' . ucfirst($modulename) . '" module\'s controller failed.', ALERT_FAILURE);
             header('Location: /');
         }
     }
@@ -118,12 +119,12 @@ class Mvcgenerator {
             chmod($viewpath . "register.php", 0777);
             if ($return)
                 return true;
-            System::setAlert('"'.ucfirst($modulename) . '" module\'s views created successfully.', ALERT_SUCCESS);
+            System::setAlert('"' . ucfirst($modulename) . '" module\'s views created successfully.', ALERT_SUCCESS);
             header('Location: /');
         } else {
             if ($return)
                 return false;
-            System::setAlert('Attempt to create "'.ucfirst($modulename) . '" module\'s views failed.', ALERT_FAILURE);
+            System::setAlert('Attempt to create "' . ucfirst($modulename) . '" module\'s views failed.', ALERT_FAILURE);
             header('Location: /');
         }
     }
@@ -146,7 +147,7 @@ class Mvcgenerator {
         }
 
         System::setAlert("Module " . $modulename . " MVC created successfully.", ALERT_SUCCESS);
-        header('Location: /mvcgenerator/');
+        header('Location: /');
     }
 
 }

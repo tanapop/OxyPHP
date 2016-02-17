@@ -13,7 +13,8 @@ class Model {
 
         $this->table = $table;
 
-        $this->mysql = new Mysql();
+        if (MYSQL_DATABASE_ON)
+            $this->mysql = new Mysql();
     }
 
     protected function buildquery($type, $data) {
@@ -36,8 +37,8 @@ class Model {
         }
         $fields = rtrim($fields, ",") . ")";
         $values = rtrim($values, ",") . ")";
-        
-        $sql .= $fields.$values;
+
+        $sql .= $fields . $values;
         return $sql;
     }
 
@@ -50,7 +51,7 @@ class Model {
         $sql = rtrim($sql, ",");
 
         $sql .= " WHERE id=" . $dataset['id'];
-        
+
         return $sql;
     }
 
