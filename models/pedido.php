@@ -1,6 +1,6 @@
 <?php
 
-class ModelUsuario extends Model {
+class ModelPedido extends Model {
 
     public function _get($fields, $conditions = array(), $debug = false) {
         if (is_string($fields)) {
@@ -14,7 +14,7 @@ class ModelUsuario extends Model {
         }
 
         if ($debug) {
-            System::debug(array(), array("Mysql Query" => $this->buildquery("select", array($fields, $conditions))));
+            System::debug(array(), array($this->buildquery("select", array($fields, $conditions))));
         } else {
             if ($result = $this->mysql->query($this->buildquery("select", array($fields, $conditions)))) {
                 return $result;
@@ -39,7 +39,7 @@ class ModelUsuario extends Model {
         }
 
         if ($debug) {
-            System::debug(array(), array("Mysql Query" => $sql));
+            System::debug(array(), array($sql));
         } else {
             return $this->mysql->query($sql);
         }
@@ -53,7 +53,7 @@ class ModelUsuario extends Model {
         }
 
         if ($debug) {
-            System::debug(array(), array("Mysql Query" => $this->buildquery("delete", array($list))));
+            System::debug(array(), array($this->buildquery("delete", array($list))));
         } else {
             return $this->mysql->query($this->buildquery("delete", array($list)));
         }

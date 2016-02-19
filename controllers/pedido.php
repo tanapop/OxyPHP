@@ -1,6 +1,6 @@
 <?php
 
-class Cliente extends Controller {
+class Pedido extends Controller {
 
     public function index() {
         $this->listing();
@@ -26,8 +26,6 @@ class Cliente extends Controller {
         } else {
             System::setAlert("Attempt to save data failed!", ALERT_FAILURE);
         }
-        
-        header('Location: /cliente');
     }
 
     public function delete($list) {
@@ -36,8 +34,6 @@ class Cliente extends Controller {
         } else {
             System::setAlert("Attempt to delete registers failed!", ALERT_FAILURE);
         }
-        
-        header('Location: /cliente');
     }
 
 }

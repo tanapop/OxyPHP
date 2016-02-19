@@ -31,7 +31,7 @@
 <div id="_MODULE_NAME_-listing-contents">
     <div class="row">
         <div class="col-md-12">
-            <span><a href="/_MODULE_NAME_/regiter/">New entry</a></span>
+            <span><a href="/_MODULE_NAME_/register/">New entry</a></span>
             <span><a id="del-items" href="#">Delete checked</a></span>
         </div>
     </div>
@@ -47,16 +47,22 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <?php foreach ($dataset as $key => $val): ?>
+                        <?php
+                        if(!empty($dataset)):
+                        foreach ($dataset as $key => $val): ?>
                             <tr>
                                 <td><input class="check-item" type="checkbox" name="<?php echo $key; ?>" value="<?php echo $val->id; ?>"></td>
                                 _TABLE_FIELDS_VALUES_
                                 <td class="actions">
-                                    <a href="/_MODULE_NAME_/regiter/<?php echo $val->id; ?>">Edit</a>
+                                    <a href="/_MODULE_NAME_/register/<?php echo $val->id; ?>">Edit</a>
                                     <a href="/_MODULE_NAME_/delete/<?php echo $val->id; ?>">Delete</a>
                                 </td>
                             </tr>
-                        <?php endforeach; ?>
+                        <?php endforeach;
+                        else:?>
+                            <tr><td align="center" colspan="_COUNT_COLUMNS_">--- NO DATA RECORDS ---</td></tr>
+                        <?php endif;
+                        ?>
                     </tbody>
                 </table>
             </form>

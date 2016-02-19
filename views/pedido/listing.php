@@ -31,7 +31,7 @@
 <div id="pedido-listing-contents">
     <div class="row">
         <div class="col-md-12">
-            <span><a href="/pedido/regiter/">New entry</a></span>
+            <span><a href="/pedido/register/">New entry</a></span>
             <span><a id="del-items" href="#">Delete checked</a></span>
         </div>
     </div>
@@ -66,7 +66,7 @@
 <td><?php echo $val->custo; ?></td>
 
                                 <td class="actions">
-                                    <a href="/pedido/regiter/<?php echo $val->id; ?>">Edit</a>
+                                    <a href="/pedido/register/<?php echo $val->id; ?>">Edit</a>
                                     <a href="/pedido/delete/<?php echo $val->id; ?>">Delete</a>
                                 </td>
                             </tr>

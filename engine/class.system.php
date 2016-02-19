@@ -20,11 +20,16 @@ class System {
 
         $action = explode("/", str_replace(strrchr($_SERVER["REQUEST_URI"], "?"), "", $_SERVER["REQUEST_URI"]));
         array_shift($action);
+        
+        if($action[0] == "debug"){
+            include $_SERVER['DOCUMENT_ROOT']."engine/widgets/debug.php";
+            die;
+        }
 
         $this->cpath = $_SERVER["DOCUMENT_ROOT"] . "/controllers/";
         $this->controller = (isset($_REQUEST["controller"]) ? $_REQUEST["controller"] : (!empty($action[0]) ? $action[0] : DEFAULT_CONTROLLER));
         $this->method = (isset($_REQUEST["method"]) ? $_REQUEST["method"] : (!empty($action[1]) ? $action[1] : DEFAULT_METHOD));
-
+        
         if (SETUP_MODE) {
             $this->setup($action);
         }
@@ -105,8 +110,20 @@ class System {
      * then navigate to a special URI where these data will be formated and printed on screen for debug purposes.
      */
 
-    public static function debug($messages = array(), $toPrint = array()) {
+    public static function debug($messages = array(), $print_data = array()) {
+        $session = $_SESSION;
+        $_SESSION['debug']['session'] = $session;
         
+        $_SESSION['debug']['request'] = $_REQUEST;
+        
+        $_SESSION['debug']['backtrace'] = debug_backtrace();
+        
+        $_SESSION['debug']['route'] = str_replace(strrchr($_SERVER["REQUEST_URI"], "?"), "", $_SERVER["REQUEST_URI"]);
+        $_SESSION['debug']['messages'] = $messages;
+        $_SESSION['debug']['print_data'] = $toPrint;
+        
+        echo "<script>window.open('/debug');</script>";
+        die;
     }
 
 }

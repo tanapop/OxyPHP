@@ -2,7 +2,7 @@
 
 class _CLASS_NAME_ extends Model {
 
-    public function _get($fields, $conditions, $debug = false) {
+    public function _get($fields, $conditions = array(), $debug = false) {
         if (is_string($fields)) {
             $fields = array($fields);
         } elseif (!is_array($fields)) {
@@ -14,17 +14,18 @@ class _CLASS_NAME_ extends Model {
         }
 
         if ($debug) {
-            System::debug(array(), array($this->buildquery("select", array($fields, $conditions))));
+            System::debug(array(), array("Mysql Query" => $this->buildquery("select", array($fields, $conditions))));
         } else {
             if ($result = $this->mysql->query($this->buildquery("select", array($fields, $conditions)))) {
-                if (count($result) > 1) {
-                    return $result;
-                } else {
-                    return $result[0];
-                }
+                return $result;
             } else
                 return false;
         }
+    }
+    
+    public function _row($fields, $conditions = array(), $debug = false){
+        $return = $this->_get($fields, $conditions, $debug);
+        return $return[0];
     }
 
     public function _save($dataset, $debug = false) {
@@ -38,7 +39,7 @@ class _CLASS_NAME_ extends Model {
         }
 
         if ($debug) {
-            System::debug(array(), array($sql));
+            System::debug(array(), array("Mysql Query" => $sql));
         } else {
             return $this->mysql->query($sql);
         }
@@ -52,7 +53,7 @@ class _CLASS_NAME_ extends Model {
         }
 
         if ($debug) {
-            System::debug(array(), array($this->buildquery("delete", array($list))));
+            System::debug(array(), array("Mysql Query" => $this->buildquery("delete", array($list))));
         } else {
             return $this->mysql->query($this->buildquery("delete", array($list)));
         }

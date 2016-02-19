@@ -12,11 +12,11 @@ class _CLASS_NAME_ extends Controller {
     }
 
     public function register($id = null) {
-        $this->view("register", array("dataset" => (!empty($id) ? $this->get("*", array("id" => $id)) : array())));
+        $this->view("register", array("dataset" => (!empty($id) ? $this->model->_row("*", array("id" => $id)) : array())));
         System::showAlerts();
     }
 
-    public function get($fields, $conditions = null) {
+    public function get($fields, $conditions = array()) {
         return $this->model->_get($fields, $conditions);
     }
 
@@ -26,6 +26,8 @@ class _CLASS_NAME_ extends Controller {
         } else {
             System::setAlert("Attempt to save data failed!", ALERT_FAILURE);
         }
+        
+        header('Location: /_MODULE_NAME_');
     }
 
     public function delete($list) {
@@ -34,6 +36,8 @@ class _CLASS_NAME_ extends Controller {
         } else {
             System::setAlert("Attempt to delete registers failed!", ALERT_FAILURE);
         }
+        
+        header('Location: /_MODULE_NAME_');
     }
 
 }

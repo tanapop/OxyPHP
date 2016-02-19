@@ -63,6 +63,7 @@ class Mvcgenerator {
     public function createcontroller($modulename, $return = false) {
         $f = file_get_contents($_SERVER["DOCUMENT_ROOT"] . "engine/mvcgenerator/templates/controller.php");
 
+        $f = str_replace("_MODULE_NAME_", $modulename, $f);
         $f = str_replace("_CLASS_NAME_", ucfirst($modulename), $f);
 
         $path = $_SERVER["DOCUMENT_ROOT"] . "controllers/";
@@ -101,6 +102,7 @@ class Mvcgenerator {
             $form_fields .= '<div class="row"><div class="col-md-12"><input ' . ($f->Null == "NO" && $f->Field != "id" ? "required" : "") . ' type="' . ($f->Field == "id" ? "hidden" : $this->datatypes[$f->Type]) . '" name="' . $f->Field . '" placeholder="' . $f->Field . '" value="<?php echo $dataset->' . $f->Field . '; ?>"></div></div>';
         }
 
+        $fl = str_replace("_COUNT_COLUMNS_", count($fields) + 2, $fl);
         $fl = str_replace("_TABLE_FIELDS_HEADERS_", $list_headers, $fl);
         $fl = str_replace("_TABLE_FIELDS_VALUES_", $list_values, $fl);
 
@@ -108,11 +110,12 @@ class Mvcgenerator {
 
         $viewpath = $_SERVER['DOCUMENT_ROOT'] . "views/" . $modulename . "/";
 
-        mkdir($viewpath, 0777, true);
+        if (!file_exists($viewpath))
+            mkdir($viewpath, 0777, true);
         touch($viewpath);
         chmod($viewpath, 0777);
 
-        if (file_put_contents($viewpath . "listing.php", $fl) && file_put_contents($viewpath . "register.php", $fl)) {
+        if (file_put_contents($viewpath . "listing.php", $fl) && file_put_contents($viewpath . "register.php", $fr)) {
             touch($viewpath . "listing.php");
             chmod($viewpath . "listing.php", 0777);
             touch($viewpath . "register.php");

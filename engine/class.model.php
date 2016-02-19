@@ -32,7 +32,7 @@ class Model {
         foreach ($dataset as $key => $val) {
             if (!empty($val)) {
                 $fields .= $key . ",";
-                $values .= (is_numeric($val) ? $val : "'" . $val . "',");
+                $values .= (is_numeric($val) ? $val : "'" . $val . "'").",";
             }
         }
         $fields = rtrim($fields, ",") . ")";
@@ -46,7 +46,7 @@ class Model {
         $sql = "UPDATE " . $this->table . " SET ";
         foreach ($dataset as $key => $val) {
             if (!empty($val))
-                $sql .= $key . "=" . (is_numeric($val) ? $val : "'" . $val . "',");
+                $sql .= $key . "=" . (is_numeric($val) ? $val : "'" . $val . "'").",";
         }
         $sql = rtrim($sql, ",");
 
