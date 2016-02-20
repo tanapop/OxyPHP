@@ -6,7 +6,7 @@
 </style>
 <div id="setup-contents">
     <div style="text-align: center;"><img src="/media/img/oxylogo.png"></div>
-    <h2 style="text-align: center; margin-top:0px;">Oxy - Object Oriented MVC Framework - PHP Edition - Module Generator(Setup)</h2>
+    <h2 style="text-align: center; margin-top:0px;">Oxy - Object Oriented MVC Framework - PHP Edition - Setup Screen</h2>
     <br>
     <p>
         Oxy framework reads your application's database to know what tables it contains. It assumes that each table represents one 
