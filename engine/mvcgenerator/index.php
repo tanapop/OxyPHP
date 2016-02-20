@@ -33,7 +33,8 @@
                 </tr>
             </thead>
             <tbody>
-                <?php foreach ($tables as $t): ?>
+                <?php // Put database's tables list into an organized table with actions.
+                foreach ($tables as $t): ?>
                     <tr>
                         <td><?php echo $t; ?></td>
                         <td>

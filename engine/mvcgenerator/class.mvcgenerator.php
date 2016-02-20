@@ -2,10 +2,14 @@
 
 class Mvcgenerator {
 
+    // An instance of Mysql class
     private $mysql;
+    // A tables list from database
     private $tables;
+    // A dictionary to translate database datatypes to form input's type.
     private $datatypes;
 
+    // Include Mysql class file and instantiate it on this->mysql, write database tables list and set the datatypes dictionary.
     public function __construct() {
         require_once $_SERVER['DOCUMENT_ROOT'] . "engine/databaseclasses/class.mysql.php";
 
@@ -25,6 +29,7 @@ class Mvcgenerator {
         );
     }
 
+    // Include mvcgenerator index page and show its contents, passing the tables list to it.
     public function index() {
         $path = $_SERVER['DOCUMENT_ROOT'] . "engine/mvcgenerator/index.php";
 
@@ -39,6 +44,7 @@ class Mvcgenerator {
         System::showAlerts();
     }
 
+    // Generate a model file, based on a template, adapting it to the module which is being created.
     public function createmodel($modulename, $return = false) {
         $f = file_get_contents($_SERVER["DOCUMENT_ROOT"] . "engine/mvcgenerator/templates/model.php");
 
@@ -60,6 +66,7 @@ class Mvcgenerator {
         }
     }
 
+    // Generate a controller file, based on a template, adapting it to the module which is being created.
     public function createcontroller($modulename, $return = false) {
         $f = file_get_contents($_SERVER["DOCUMENT_ROOT"] . "engine/mvcgenerator/templates/controller.php");
 
@@ -82,6 +89,7 @@ class Mvcgenerator {
         }
     }
 
+    // Generate "listing" and "register" view files, based on templates, adapting them to the module which is being created.
     public function createviews($modulename, $return = false) {
 
         $fl = file_get_contents($_SERVER["DOCUMENT_ROOT"] . "engine/mvcgenerator/templates/view_listing.php");
@@ -132,6 +140,7 @@ class Mvcgenerator {
         }
     }
 
+    // Generate a model, a controller and the 2 view files, calling the other creation methods within this class.
     public function createall($modulename) {
         if (!$this->createcontroller($modulename, true)) {
             System::setAlert("Attempt to create module's controller failed. No file created.", ALERT_FAILURE);

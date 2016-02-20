@@ -1,5 +1,7 @@
 <?php
+// Include Krumo accessory class.
 include $_SERVER['DOCUMENT_ROOT'] . "accessories/krumo/class.krumo.php";
+// Turn debug data from session into separated variables then remove this data from session.
 extract($_SESSION['debug']);
 unset($_SESSION['debug']);
 ?>
@@ -17,6 +19,7 @@ unset($_SESSION['debug']);
 <div id="debug-contents">
     <div style="text-align: center;"><img src="/media/img/oxylogo.png"></div>
     <h2 style="text-align: center;">Oxy - MVC Framework - PHP Edition - Debug Screen</h2>
+    <!--Header with general debug data-->
     <b>Debug called from: </b><?php echo $backtrace[1]['class']; ?>::<?php echo $backtrace[1]['function']; ?>()
     in 
     "<?php echo $backtrace[0]['file']; ?>", line <?php echo $backtrace[0]['line']; ?>.
@@ -41,6 +44,7 @@ unset($_SESSION['debug']);
         <br>
     <?php endif; ?>
     <hr>
+    <!--Printing the current session data-->
     <h5>CURRENT SESSION: </h5>
     <?php
     if (!empty($session)):
@@ -53,6 +57,7 @@ unset($_SESSION['debug']);
     <?php endif; ?>
     <br>
     <hr>
+    <!--Printing the current request data-->
     <h5>CURRENT REQUEST: </h5>
     <?php
     if (!empty($request)):
@@ -65,6 +70,7 @@ unset($_SESSION['debug']);
     <?php endif; ?>
     <br>
     <hr>
+    <!--Printing custom debug messages-->
     <h5>DEBUG MESSAGES:</h5>
     <div style="border: 1px solid;">
         <?php
@@ -81,6 +87,7 @@ unset($_SESSION['debug']);
     </div>
     <br>
     <hr>
+    <!--Printing custom debug data-->
     <h5>PRINT DATA:</h5>
     <?php
     if (!empty($print_data)):

@@ -31,13 +31,14 @@ class System {
         $this->method = (isset($_REQUEST["method"]) ? $_REQUEST["method"] : (!empty($action[1]) ? $action[1] : DEFAULT_METHOD));
         
         if (SETUP_MODE) {
-            $this->setup($action);
+            $this->setupmode($action);
         }
 
         $this->setargs($action);
     }
 
-    private function setup($action) {
+    // Change path of controller classes to mvcgenerator, set running controller to mvcgenerator and method to index, if not defined.
+    private function setupmode($action) {
         if (empty($action[0]) || $action[0] == 'mvcgenerator') {
             $this->cpath = $_SERVER["DOCUMENT_ROOT"] . "engine/mvcgenerator/class.";
 
@@ -46,6 +47,7 @@ class System {
         }
     }
 
+    // Set the args which will be passed to the called method using data from URI or REQUEST.
     private function setargs($action) {
         $this->args = array_slice($action, 2);
 

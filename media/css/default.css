@@ -1,3 +1,4 @@
+/* GENERAL RULES*/
 body{
     font-family:arial;
 }
@@ -43,7 +44,7 @@ input[type="button"],input[type="submit"],input[type="radio"],input[type="checkb
     border:2px solid #999900;
 }
 
-/* GENERAL CLASSES */
+/* USEFUL CLASSES */
 .cursor-pointer{
     cursor:pointer;
 }

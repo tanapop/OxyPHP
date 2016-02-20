@@ -17,6 +17,7 @@ class Model {
             $this->mysql = new Mysql();
     }
 
+    // This function is called from any model to build the query based on argument passed in type.
     protected function buildquery($type, $data) {
         if (!is_array($data)) {
             System::debug(array("class.model: Argument Error: data must be an array. In method build."), array($data));
@@ -24,6 +25,7 @@ class Model {
         return call_user_func_array(array($this, $type . "_query"), $data);
     }
 
+    // Build a insert type query with argument passed in dataset.
     private function insert_query($dataset) {
         $sql = "INSERT INTO " . $this->table . " (";
         $fields = "";
@@ -42,6 +44,7 @@ class Model {
         return $sql;
     }
 
+    // Build a update type query with argument passed in dataset.
     private function update_query($dataset) {
         $sql = "UPDATE " . $this->table . " SET ";
         foreach ($dataset as $key => $val) {
@@ -55,6 +58,7 @@ class Model {
         return $sql;
     }
 
+    // Build a select type query with argument passed in dataset.
     private function select_query($fields, $conditions) {
         $sql = "SELECT ";
         foreach ($fields as $f) {
@@ -76,6 +80,7 @@ class Model {
         return $sql;
     }
 
+    // Build a delete type query with argument passed in dataset.
     private function delete_query($list) {
         $sql = "DELETE FROM " . $this->table . " WHERE id IN (";
         foreach ($list as $id) {
