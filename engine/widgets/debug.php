@@ -1,6 +1,6 @@
 <?php
 // Include Krumo accessory class.
-include $_SERVER['DOCUMENT_ROOT'] . "accessories/krumo/class.krumo.php";
+require_once $_SERVER['DOCUMENT_ROOT'] . "accessories/krumo/class.krumo.php";
 // Turn debug data from session into separated variables then remove this data from session.
 extract($_SESSION['debug']);
 unset($_SESSION['debug']);

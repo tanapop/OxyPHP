@@ -2,6 +2,7 @@
 // Includes global configs and global System class.
 require_once "config.php";
 require_once "constants.php";
+require_once "engine/class.objloader.php";
 require_once "engine/class.system.php";
 
 // Create the global instance of System class.

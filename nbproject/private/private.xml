@@ -3,8 +3,17 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
+            <file>file:/home/gabriel/Projects/oxyphp/media/css/default.css</file>
+            <file>file:/home/gabriel/Projects/oxyphp/engine/databaseclasses/class.mysql.php</file>
             <file>file:/home/gabriel/Projects/oxyphp/engine/class.system.php</file>
+            <file>file:/home/gabriel/Projects/oxyphp/config.php</file>
             <file>file:/home/gabriel/Projects/oxyphp/engine/widgets/debug.php</file>
+            <file>file:/home/gabriel/Projects/oxyphp/engine/mvcgenerator/class.mvcgenerator.php</file>
+            <file>file:/home/gabriel/Projects/oxyphp/index.php</file>
+            <file>file:/home/gabriel/Projects/oxyphp/engine/class.model.php</file>
+            <file>file:/home/gabriel/Projects/oxyphp/media/js/main.js</file>
+            <file>file:/home/gabriel/Projects/oxyphp/engine/widgets/system_alerts.php</file>
+            <file>file:/home/gabriel/Projects/oxyphp/engine/class.controller.php</file>
         </group>
     </open-files>
 </project-private>

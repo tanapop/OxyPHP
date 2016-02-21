@@ -9,12 +9,10 @@ class Model {
 
     // It sets the main table name and isntantiate class Mysql.
     public function __construct($table) {
-        require_once $_SERVER["DOCUMENT_ROOT"] . "/engine/databaseclasses/class.mysql.php";
-
         $this->table = $table;
 
         if (MYSQL_DATABASE_ON)
-            $this->mysql = new Mysql();
+            $this->mysql = System::loadClass($_SERVER["DOCUMENT_ROOT"] . "/engine/databaseclasses/class.mysql.php", "Mysql");
     }
 
     // This function is called from any model to build the query based on argument passed in type.
@@ -34,7 +32,7 @@ class Model {
         foreach ($dataset as $key => $val) {
             if (!empty($val)) {
                 $fields .= $key . ",";
-                $values .= (is_numeric($val) ? $val : "'" . $val . "'").",";
+                $values .= (is_numeric($val) ? $val : "'" . $val . "'") . ",";
             }
         }
         $fields = rtrim($fields, ",") . ")";
@@ -49,7 +47,7 @@ class Model {
         $sql = "UPDATE " . $this->table . " SET ";
         foreach ($dataset as $key => $val) {
             if (!empty($val))
-                $sql .= $key . "=" . (is_numeric($val) ? $val : "'" . $val . "'").",";
+                $sql .= $key . "=" . (is_numeric($val) ? $val : "'" . $val . "'") . ",";
         }
         $sql = rtrim($sql, ",");
 

@@ -12,16 +12,11 @@ class Controller {
     // Set the global system property, set the module and create module's model instance.
     public function __construct($module) {
         global $system;
-        $this->system = $system;
+        $this->system = &$system;
 
         $this->module = $module;
 
-        $modelPath = $_SERVER['DOCUMENT_ROOT'] . "/models/" . $this->module . ".php";
-        if (file_exists($modelPath)) {
-            require_once $modelPath;
-            $classname = "Model" . ucfirst($this->module);
-            $this->model = new $classname($this->module);
-        }
+        $this->model = System::loadClass($_SERVER['DOCUMENT_ROOT'] . "/models/" . $this->module . ".php", "Model" . ucfirst($this->module), array($this->module));
     }
 
     // Show or return the contents of a view file, passing specified variables for this file, if they're supplied.

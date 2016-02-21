@@ -2,7 +2,7 @@
 
 session_start();
 
-class System {
+class System extends ObjLoader{
 
     // The name of running controller.
     private $controller;
@@ -20,21 +20,22 @@ class System {
 
         $action = explode("/", str_replace(strrchr($_SERVER["REQUEST_URI"], "?"), "", $_SERVER["REQUEST_URI"]));
         array_shift($action);
-        
-        if($action[0] == "debug"){
-            include $_SERVER['DOCUMENT_ROOT']."engine/widgets/debug.php";
+
+        if ($action[0] == "debug") {
+            include $_SERVER['DOCUMENT_ROOT'] . "engine/widgets/debug.php";
             die;
         }
 
         $this->cpath = $_SERVER["DOCUMENT_ROOT"] . "/controllers/";
         $this->controller = (isset($_REQUEST["controller"]) ? $_REQUEST["controller"] : (!empty($action[0]) ? $action[0] : DEFAULT_CONTROLLER));
         $this->method = (isset($_REQUEST["method"]) ? $_REQUEST["method"] : (!empty($action[1]) ? $action[1] : DEFAULT_METHOD));
-        
+
         if (SETUP_MODE) {
             $this->setupmode($action);
         }
 
         $this->setargs($action);
+        
     }
 
     // Change path of controller classes to mvcgenerator, set running controller to mvcgenerator and method to index, if not defined.
@@ -84,11 +85,8 @@ class System {
             self::debug(array('class.system: Argument Error: args must be an array.'), array('args' => $args));
         }
 
-        $className = ucfirst($this->controller);
-
         try {
-            include_once $this->cpath . $this->controller . ".php";
-            return call_user_func_array(array(new $className($this->controller), (empty($method) ? $this->method : $method)), (empty($args) ? $this->args : $args));
+            return call_user_func_array(array(self::loadClass($this->cpath . $this->controller . ".php", $this->controller, array($this->controller)), (empty($method) ? $this->method : $method)), (empty($args) ? $this->args : $args));
         } catch (Exception $ex) {
             exit($ex->getMessage());
         }
@@ -102,10 +100,10 @@ class System {
                     "msg" => $msg
         );
     }
-    
+
     // Shows all alerts setted in System::setAlert as dialogs to the user.
-    public static function showAlerts(){
-        include $_SERVER["DOCUMENT_ROOT"]."engine/widgets/system_alerts.php";
+    public static function showAlerts() {
+        include $_SERVER["DOCUMENT_ROOT"] . "engine/widgets/system_alerts.php";
     }
 
     /* This static method gather a colletcion of requesting and processing data, set it into SESSION,
@@ -115,17 +113,21 @@ class System {
     public static function debug($messages = array(), $print_data = array()) {
         $session = $_SESSION;
         $_SESSION['debug']['session'] = $session;
-        
+
         $_SESSION['debug']['request'] = $_REQUEST;
-        
+
         $_SESSION['debug']['backtrace'] = debug_backtrace();
-        
+
         $_SESSION['debug']['route'] = str_replace(strrchr($_SERVER["REQUEST_URI"], "?"), "", $_SERVER["REQUEST_URI"]);
         $_SESSION['debug']['messages'] = $messages;
         $_SESSION['debug']['print_data'] = $toPrint;
-        
+
         echo "<script>window.open('/debug');</script>";
         die;
+    }
+
+    public static function loadClass($ab_path, $classname, $args = array()) {
+        return self::load($ab_path, $classname, $args);
     }
 
 }

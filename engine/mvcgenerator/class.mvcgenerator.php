@@ -11,10 +11,8 @@ class Mvcgenerator {
 
     // Include Mysql class file and instantiate it on this->mysql, write database tables list and set the datatypes dictionary.
     public function __construct() {
-        require_once $_SERVER['DOCUMENT_ROOT'] . "engine/databaseclasses/class.mysql.php";
-
         if (MYSQL_DATABASE_ON)
-            $this->mysql = new Mysql();
+            $this->mysql = System::loadClass($_SERVER["DOCUMENT_ROOT"] . "/engine/databaseclasses/class.mysql.php", "Mysql");
 
         $tables = $this->mysql->query("SHOW TABLES");
 
@@ -31,7 +29,7 @@ class Mvcgenerator {
 
     // Include mvcgenerator index page and show its contents, passing the tables list to it.
     public function index() {
-        $path = $_SERVER['DOCUMENT_ROOT'] . "engine/mvcgenerator/index.php";
+        $path = $_SERVER['DOCUMENT_ROOT']."engine/mvcgenerator/index.php";
 
         extract(array("tables" => $this->tables));
 
@@ -91,7 +89,7 @@ class Mvcgenerator {
 
     // Generate "listing" and "register" view files, based on templates, adapting them to the module which is being created.
     public function createviews($modulename, $return = false) {
-
+        $breakline = (PATH_SEPARATOR == ":" ? "\r\n" : "\n");
         $fl = file_get_contents($_SERVER["DOCUMENT_ROOT"] . "engine/mvcgenerator/templates/view_listing.php");
         $fr = file_get_contents($_SERVER["DOCUMENT_ROOT"] . "engine/mvcgenerator/templates/view_register.php");
 
@@ -104,10 +102,10 @@ class Mvcgenerator {
         $list_values = "";
         $form_fields = "";
         foreach ($fields as $f) {
-            $list_headers .= "<th>" . $f->Field . "</th>" . (PATH_SEPARATOR == ":" ? "\r\n" : "\n");
-            $list_values .= '<td><?php echo $val->' . $f->Field . '; ?></td>' . (PATH_SEPARATOR == ":" ? "\r\n" : "\n");
+            $list_headers .= "<th>" . $f->Field . "</th>" . $breakline;
+            $list_values .= '<td><?php echo $val->' . $f->Field . '; ?></td>' . $breakline;
 
-            $form_fields .= '<div class="row"><div class="col-md-12"><input ' . ($f->Null == "NO" && $f->Field != "id" ? "required" : "") . ' type="' . ($f->Field == "id" ? "hidden" : $this->datatypes[$f->Type]) . '" name="' . $f->Field . '" placeholder="' . $f->Field . '" value="<?php echo $dataset->' . $f->Field . '; ?>"></div></div>';
+            $form_fields .= '<div class="row">'.$breakline.'<div class="col-md-12"><input ' . ($f->Null == "NO" && $f->Field != "id" ? "required" : "") . ' type="' . ($f->Field == "id" ? "hidden" : $this->datatypes[$f->Type]) . '" name="' . $f->Field . '" placeholder="' . $f->Field . '" value="<?php echo isset($dataset) ? $dataset->' . $f->Field . ' : ""; ?>"></div>'.$breakline.'</div>'.$breakline;
         }
 
         $fl = str_replace("_COUNT_COLUMNS_", count($fields) + 2, $fl);
