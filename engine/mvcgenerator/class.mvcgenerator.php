@@ -105,7 +105,7 @@ class Mvcgenerator {
             $list_headers .= "<th>" . $f->Field . "</th>" . $breakline;
             $list_values .= '<td><?php echo $val->' . $f->Field . '; ?></td>' . $breakline;
 
-            $form_fields .= '<div class="row">'.$breakline.'<div class="col-md-12"><input ' . ($f->Null == "NO" && $f->Field != "id" ? "required" : "") . ' type="' . ($f->Field == "id" ? "hidden" : $this->datatypes[$f->Type]) . '" name="' . $f->Field . '" placeholder="' . $f->Field . '" value="<?php echo isset($dataset) ? $dataset->' . $f->Field . ' : ""; ?>"></div>'.$breakline.'</div>'.$breakline;
+            $form_fields .= '<div class="row">'.$breakline.'<div class="col-md-12">'.$breakline.'<input ' . ($f->Null == "NO" && $f->Field != "id" ? "required" : "") . ' type="' . ($f->Field == "id" ? "hidden" : $this->datatypes[$f->Type]) . '" name="' . $f->Field .'" '.($f->Field == "id" ? "" : 'placeholder="'.$f->Field.'" ') . 'value="<?php echo !empty($dataset) ? $dataset->' . $f->Field . ' : ""; ?>">'.$breakline.'</div>'.$breakline.'</div>'.$breakline;
         }
 
         $fl = str_replace("_COUNT_COLUMNS_", count($fields) + 2, $fl);

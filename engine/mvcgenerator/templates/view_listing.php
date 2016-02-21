@@ -1,13 +1,14 @@
 <script>
     jQuery(document).ready(function ( ) {
         jQuery("#_MODULE_NAME_-listing-contents #check-all").click(function (e) {
-            e.preventDefault();
             var $this = jQuery(this);
 
-            if (jQuery("#_MODULE_NAME_-listing-contents #check -all:checked").length > 0) {
-                $this.prop("chec ked", false);
-                jQuery("#_MODULE_NAME_-listing- contents .check-item").prop("checked", false);
+            if (jQuery("#_MODULE_NAME_-listing-contents #check-all").hasClass("active")) {
+                jQuery("#_MODULE_NAME_-listing-contents #check-all").removeClass("active");
+                $this.prop("checked", false);
+                jQuery("#_MODULE_NAME_-listing-contents .check-item").prop("checked", false);
             } else {
+                jQuery("#_MODULE_NAME_-listing-contents #check-all").addClass("active");
                 $this.prop("checked", true);
                 jQuery("#_MODULE_NAME_-listing-contents .check-item").prop("checked", true);
             }
@@ -29,43 +30,44 @@
 </script>
 
 <div id="_MODULE_NAME_-listing-contents">
-    <div class="row">
-        <div class="col-md-12">
-            <span><a href="/_MODULE_NAME_/register/">New entry</a></span>
-            <span><a id="del-items" href="#">Delete checked</a></span>
-        </div>
-    </div>
-    <div class="row">
-        <div class="col-md-12">
-            <form id="form-check-items" method="post" action="/_MODULE_NAME_/delete/">
-                <table class="table table-hover table-striped">
-                    <thead>
-                        <tr>
-                            <th><input title="Check all" id="check-all" type="checkbox" value=""></th>
-                            _TABLE_FIELDS_HEADERS_
-                            <th>Actions</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <?php
-                        if(!empty($dataset)):
-                        foreach ($dataset as $key => $val): ?>
-                            <tr>
-                                <td><input class="check-item" type="checkbox" name="<?php echo $key; ?>" value="<?php echo $val->id; ?>"></td>
-                                _TABLE_FIELDS_VALUES_
-                                <td class="actions">
-                                    <a href="/_MODULE_NAME_/register/<?php echo $val->id; ?>">Edit</a>
-                                    <a href="/_MODULE_NAME_/delete/<?php echo $val->id; ?>">Delete</a>
-                                </td>
-                            </tr>
-                        <?php endforeach;
-                        else:?>
-                            <tr><td align="center" colspan="_COUNT_COLUMNS_">--- NO DATA RECORDS ---</td></tr>
-                        <?php endif;
-                        ?>
-                    </tbody>
-                </table>
-            </form>
-        </div>
-    </div>
+<div class="row">
+<div class="col-md-12">
+<span><a href="/_MODULE_NAME_/register/">New entry</a></span>
+<span><a id="del-items" href="#">Delete checked</a></span>
+</div>
+</div>
+<div class="row">
+<div class="col-md-12">
+<form id="form-check-items" method="post" action="/_MODULE_NAME_/delete/">
+<table class="table table-hover table-striped">
+<thead>
+<tr>
+<th><input title="Check/uncheck all" id="check-all" type="checkbox" value=""></th>
+<th>id</th>
+<th>nome</th>
+<th>Actions</th>
+</tr>
+</thead>
+<tbody>
+<?php
+if(!empty($dataset)):
+foreach ($dataset as $key => $val): ?>
+<tr>
+<td><input class="check-item" type="checkbox" name="<?php echo $key; ?>" value="<?php echo $val->id; ?>"></td>
+<td><?php echo $val->id; ?></td>
+<td><?php echo $val->nome; ?></td>
+<td class="actions">
+<a href="/_MODULE_NAME_/register/<?php echo $val->id; ?>">Edit</a>
+<a href="/_MODULE_NAME_/delete/<?php echo $val->id; ?>">Delete</a>
+</td>
+</tr>
+<?php endforeach;
+else:?>
+<tr><td align="center" colspan="4">--- NO DATA RECORDS ---</td></tr>
+<?php endif; ?>
+</tbody>
+</table>
+</form>
+</div>
+</div>
 </div>
