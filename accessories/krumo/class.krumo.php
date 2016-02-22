@@ -776,7 +776,7 @@ This is a list of all the values from the <code><b><?php echo realpath($ini_file
 	* @access private
 	* @static
 	*/
-	Private Static Function _dump(&$data, $name='...') {
+	Private Static Function _dump(&$data, $name='&#10148;') {
 
 		// object ?
 		//

@@ -1,6 +1,6 @@
 <?php
 // Include Krumo accessory class.
-require_once $_SERVER['DOCUMENT_ROOT'] . "accessories/krumo/class.krumo.php";
+System::loadClass($_SERVER['DOCUMENT_ROOT'] . "accessories/krumo/class.krumo.php", "Krumo");
 // Turn debug data from session into separated variables then remove this data from session.
 extract($_SESSION['debug']);
 unset($_SESSION['debug']);
@@ -47,8 +47,8 @@ unset($_SESSION['debug']);
     <!--Printing the current session data-->
     <h5>CURRENT SESSION: </h5>
     <?php
-    if (!empty($session)):
-        Krumo($session);
+    if (!empty($_SESSION)):
+        Krumo($_SESSION);
     else:
         ?>
         <div style="border: 1px solid;">

@@ -120,7 +120,7 @@ class System extends ObjLoader{
 
         $_SESSION['debug']['route'] = str_replace(strrchr($_SERVER["REQUEST_URI"], "?"), "", $_SERVER["REQUEST_URI"]);
         $_SESSION['debug']['messages'] = $messages;
-        $_SESSION['debug']['print_data'] = $toPrint;
+        $_SESSION['debug']['print_data'] = $print_data;
 
         echo "<script>window.open('/debug');</script>";
         die;

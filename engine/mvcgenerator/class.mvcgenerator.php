@@ -66,10 +66,22 @@ class Mvcgenerator {
         echo $contents;
         System::showAlerts();
     }
+    
+    public function createmvc($modulename, $fileset){
+        $fields = $this->mysql->query("DESCRIBE " . $modulename);
+        foreach ($fields as $row) {
+            if ($row->Key == "PRI") {
+                $this->primarykey = $row->Field;
+                break;
+            }
+        }
+        
+        call_user_func_array(array($this, "create".$fileset), array($modulename, $fields));
+    }
 
     // Generate a model file, based on a template, adapting it to the module which is being created.
-    public function createmodel($modulename, $return = false) {
-        $f = file_get_contents($_SERVER["DOCUMENT_ROOT"] . "engine/mvcgenerator/templates/model.php");
+    private function createmodel($modulename, $fields, $return = false) {
+        $f = file_get_contents($_SERVER["DOCUMENT_ROOT"] . "engine/mvcgenerator/templates/model");
 
         $f = str_replace("_CLASS_NAME_", "Model" . ucfirst($modulename), $f);
 
@@ -90,11 +102,27 @@ class Mvcgenerator {
     }
 
     // Generate a controller file, based on a template, adapting it to the module which is being created.
-    public function createcontroller($modulename, $return = false) {
-        $f = file_get_contents($_SERVER["DOCUMENT_ROOT"] . "engine/mvcgenerator/templates/controller.php");
+    private function createcontroller($modulename, $fields, $return = false) {
+        $breakline = (PATH_SEPARATOR == ":" ? "\r\n" : "\n");
+        $f = file_get_contents($_SERVER["DOCUMENT_ROOT"] . "engine/mvcgenerator/templates/controller");
 
         $f = str_replace("_MODULE_NAME_", $modulename, $f);
         $f = str_replace("_CLASS_NAME_", ucfirst($modulename), $f);
+        
+        $file_handler = "";
+        foreach($fields as $field){
+            $tablekey = preg_replace('/\([^)]*\)|[()]/', '', $field->Type);
+            if($this->datatypes[$tablekey] == "file"){
+                $file_handler = 'if(!empty($_FILES)){'.$breakline.
+                    'foreach($_FILES as $k => $f){'.$breakline.
+                    '$dataset[$k] = file_get_contents($_FILES[$k]["tmp_name"]);'.$breakline.
+                    '}'.$breakline.
+                    '}';
+                break;
+            }
+        }
+        
+        $f = str_replace("_SAVE_FILE_HANDLER_", $file_handler, $f);
 
         $path = $_SERVER["DOCUMENT_ROOT"] . "controllers/";
         if (file_put_contents($path . $modulename . ".php", $f)) {
@@ -113,21 +141,13 @@ class Mvcgenerator {
     }
 
     // Generate "listing" and "register" view files, based on templates, adapting them to the module which is being created.
-    public function createviews($modulename, $return = false) {
+    private function createviews($modulename, $fields, $return = false) {
         $breakline = (PATH_SEPARATOR == ":" ? "\r\n" : "\n");
-        $fl = file_get_contents($_SERVER["DOCUMENT_ROOT"] . "engine/mvcgenerator/templates/view_listing.php");
-        $fr = file_get_contents($_SERVER["DOCUMENT_ROOT"] . "engine/mvcgenerator/templates/view_register.php");
+        $fl = file_get_contents($_SERVER["DOCUMENT_ROOT"] . "engine/mvcgenerator/templates/view_listing");
+        $fr = file_get_contents($_SERVER["DOCUMENT_ROOT"] . "engine/mvcgenerator/templates/view_register");
 
         $fl = str_replace("_MODULE_NAME_", $modulename, $fl);
         $fr = str_replace("_MODULE_NAME_", $modulename, $fr);
-
-        $fields = $this->mysql->query("DESCRIBE " . $modulename);
-        foreach ($fields as $row) {
-            if ($row->Key == "PRI") {
-                $this->primarykey = $row->Field;
-                break;
-            }
-        }
 
         $list_headers = "";
         $list_values = "";
@@ -189,18 +209,18 @@ class Mvcgenerator {
     }
 
     // Generate a model, a controller and the 2 view files, calling the other creation methods within this class.
-    public function createall($modulename) {
-        if (!$this->createcontroller($modulename, true)) {
+    private function createall($modulename, $fields) {
+        if (!$this->createcontroller($modulename, $fields, true)) {
             System::setAlert("Attempt to create module's controller failed. No file created.", ALERT_FAILURE);
             header('Location: /');
             return false;
         }
-        if (!$this->createmodel($modulename, true)) {
+        if (!$this->createmodel($modulename, $fields, true)) {
             System::setAlert("Attempt to create module's model failed. But controller file created with success.");
             header('Location: /');
             return false;
         }
-        if (!$this->createviews($modulename, true)) {
+        if (!$this->createviews($modulename, $fields, true)) {
             System::setAlert("Attempt to create module's views failed. But controller and model files created with success.");
             header('Location: /');
             return false;

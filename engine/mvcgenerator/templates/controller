@@ -21,6 +21,7 @@ class _CLASS_NAME_ extends Controller {
     }
 
     public function save($dataset) {
+        _SAVE_FILE_HANDLER_
         $conditions = (empty($dataset[$this->model->primarykey]) ? array() : array($this->model->primarykey => $dataset[$this->model->primarykey]));
         
         if ($this->model->_save($dataset, $conditions)) {

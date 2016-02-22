@@ -38,13 +38,13 @@
                     <tr>
                         <td><?php echo $t; ?></td>
                         <td>
-                            <a href="/mvcgenerator/createmodel/<?php echo $t; ?>">Create Model</a>
+                            <a href="/mvcgenerator/createmvc/<?php echo $t; ?>/model">Create Model</a>
                             &nbsp;
-                            <a href="/mvcgenerator/createviews/<?php echo $t; ?>">Create Views</a>
+                            <a href="/mvcgenerator/createmvc/<?php echo $t; ?>/views">Create Views</a>
                             &nbsp;
-                            <a href="/mvcgenerator/createcontroller/<?php echo $t; ?>">Create Controller</a>
+                            <a href="/mvcgenerator/createmvc/<?php echo $t; ?>/controller">Create Controller</a>
                             &nbsp;
-                            <a href="/mvcgenerator/createall/<?php echo $t; ?>">Create MVC</a>
+                            <a href="/mvcgenerator/createmvc/<?php echo $t; ?>/all">Create MVC</a>
                         </td>
                     </tr>
                 <?php endforeach; ?>
