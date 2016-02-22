@@ -8,6 +8,8 @@ class Mvcgenerator {
     private $tables;
     // A dictionary to translate database datatypes to form input's type.
     private $datatypes;
+    // The current table's primary key name.
+    private $primarykey;
 
     // Include Mysql class file and instantiate it on this->mysql, write database tables list and set the datatypes dictionary.
     public function __construct() {
@@ -22,14 +24,37 @@ class Mvcgenerator {
         }
 
         $this->datatypes = array(
-            "int(11)" => "number",
-            "varchar(255)" => "text"
+            "char" => "text",
+            "varchar" => "text",
+            "text" => "text",
+            "tinytext" => "text",
+            "mediumtext" => "text",
+            "longtext" => "text",
+            "binary" => "file",
+            "varbinary" => "file",
+            "tinyblob" => "file",
+            "mediumblob" => "file",
+            "blob" => "file",
+            "longblob" => "file",
+            "date" => "text",
+            "datetime" => "text",
+            "timestamp" => "text",
+            "time" => "text",
+            "year" => "text",
+            "bit" => "number",
+            "int" => "number",
+            "tinyint" => "number",
+            "mediumint" => "number",
+            "bigint" => "number",
+            "decimal" => "number",
+            "float" => "number",
+            "double" => "number"
         );
     }
 
     // Include mvcgenerator index page and show its contents, passing the tables list to it.
     public function index() {
-        $path = $_SERVER['DOCUMENT_ROOT']."engine/mvcgenerator/index.php";
+        $path = $_SERVER['DOCUMENT_ROOT'] . "engine/mvcgenerator/index.php";
 
         extract(array("tables" => $this->tables));
 
@@ -97,6 +122,12 @@ class Mvcgenerator {
         $fr = str_replace("_MODULE_NAME_", $modulename, $fr);
 
         $fields = $this->mysql->query("DESCRIBE " . $modulename);
+        foreach ($fields as $row) {
+            if ($row->Key == "PRI") {
+                $this->primarykey = $row->Field;
+                break;
+            }
+        }
 
         $list_headers = "";
         $list_values = "";
@@ -105,7 +136,26 @@ class Mvcgenerator {
             $list_headers .= "<th>" . $f->Field . "</th>" . $breakline;
             $list_values .= '<td><?php echo $val->' . $f->Field . '; ?></td>' . $breakline;
 
-            $form_fields .= '<div class="row">'.$breakline.'<div class="col-md-12">'.$breakline.'<input ' . ($f->Null == "NO" && $f->Field != "id" ? "required" : "") . ' type="' . ($f->Field == "id" ? "hidden" : $this->datatypes[$f->Type]) . '" name="' . $f->Field .'" '.($f->Field == "id" ? "" : 'placeholder="'.$f->Field.'" ') . 'value="<?php echo !empty($dataset) ? $dataset->' . $f->Field . ' : ""; ?>">'.$breakline.'</div>'.$breakline.'</div>'.$breakline;
+            if ($f->Field == $this->primarykey) {
+                $ftype = "hidden";
+            } elseif ($f->Type == "tinyint(1)") {
+                $ftype = "checkbox";
+            } elseif (array_key_exists($key = preg_replace('/\([^)]*\)|[()]/', '', $f->Type), $this->datatypes)) {
+                $ftype = $this->datatypes[$key];
+            } else {
+                $ftype = "text";
+            }
+
+            $form_fields .= '<div class="row">' .
+                    $breakline .
+                    '<div class="col-md-12">' .
+                    $breakline . '<input id="input-' .
+                    $f->Field . '" ' . ($f->Null == "NO" && $f->Field != $this->primarykey ? "required" : "") .
+                    ' type="' . $ftype . '" name="' . $f->Field . '" ' . ($ftype == "hidden" || $ftype == "checkbox" || $ftype == "file" ? "" : 'placeholder="' . $f->Field . '" ' ) .
+                    ($ftype == "file" ? "" : 'value="<?php echo !empty($dataset) ? $dataset->' . $f->Field . ' : ""; ?>"') . '>' .
+                    ($ftype == "checkbox" ? ' <label for="input-' . $f->Field . '">' . $f->Field . "</label>" : "") .
+                    $breakline . '</div>' .
+                    $breakline . '</div>' . $breakline;
         }
 
         $fl = str_replace("_COUNT_COLUMNS_", count($fields) + 2, $fl);

@@ -21,22 +21,30 @@ class Cliente extends Controller {
     }
 
     public function save($dataset) {
-        if ($this->model->_save($dataset)) {
+        $conditions = (empty($dataset[$this->model->primarykey]) ? array() : array($this->model->primarykey => $dataset[$this->model->primarykey]));
+        
+        if ($this->model->_save($dataset, $conditions)) {
             System::setAlert("The data was successfully saved!", ALERT_SUCCESS);
         } else {
             System::setAlert("Attempt to save data failed!", ALERT_FAILURE);
         }
-        
+
         header('Location: /cliente');
     }
 
     public function delete($list) {
-        if ($this->model->_delete($list)) {
+        if (is_numeric($list)) {
+            $list = array($list);
+        } elseif (!is_array($list)) {
+            return false;
+        }
+        
+        if ($this->model->_delete(array($this->model->primarykey => $list))) {
             System::setAlert("The registers were deleted successfully!", ALERT_SUCCESS);
         } else {
             System::setAlert("Attempt to delete registers failed!", ALERT_FAILURE);
         }
-        
+
         header('Location: /cliente');
     }
 

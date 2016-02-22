@@ -2,6 +2,7 @@
 
 class ModelCliente extends Model {
 
+    // Select fields from the table under the rules specified in conditions. Return a list of results.
     public function _get($fields, $conditions = array(), $debug = false) {
         if (is_string($fields)) {
             $fields = array($fields);
@@ -23,18 +24,20 @@ class ModelCliente extends Model {
         }
     }
     
+    // Return the first row from this->_get result.
     public function _row($fields, $conditions = array(), $debug = false){
         $return = $this->_get($fields, $conditions, $debug);
         return $return[0];
     }
 
-    public function _save($dataset, $debug = false) {
+    // Save on database data passed in dataset, under the rules specified in conditions.
+    public function _save($dataset, $conditions = array(), $debug = false) {
         $dataset = (array) $dataset;
-        if (!empty($dataset["id"])) {
-            $sql = $this->buildquery("update", array($dataset));
+        if (!empty($conditions)) {
+            $sql = $this->buildquery("update", array($dataset, $conditions));
         } else {
-            if(isset($dataset["id"]))
-                unset($dataset["id"]);
+            if(isset($dataset[$this->primarykey]))
+                unset($dataset[$this->primarykey]);
             $sql = $this->buildquery("insert", array($dataset));
         }
 
@@ -45,17 +48,12 @@ class ModelCliente extends Model {
         }
     }
 
-    public function _delete($list, $debug = false) {
-        if (is_numeric($list)) {
-            $list = array($list);
-        } elseif (!is_array($list)) {
-            return false;
-        }
-
+    // Delete data from table under the rules specified in conditions.
+    public function _delete($conditions, $debug = false) {
         if ($debug) {
-            System::debug(array(), array("Mysql Query" => $this->buildquery("delete", array($list))));
+            System::debug(array(), array("Mysql Query" => $this->buildquery("delete", array($conditions))));
         } else {
-            return $this->mysql->query($this->buildquery("delete", array($list)));
+            return $this->mysql->query($this->buildquery("delete", array($conditions)));
         }
     }
 
