@@ -43,8 +43,12 @@
 <thead>
 <tr>
 <th><input title="Check/uncheck all" id="check-all" type="checkbox" value=""></th>
-<th>id</th>
-<th>nome</th>
+<th>Id</th>
+<th>Nome</th>
+<th>File</th>
+<th>Floating</th>
+<th>Boolean?</th>
+
 <th>Actions</th>
 </tr>
 </thead>
@@ -56,6 +60,10 @@ foreach ($dataset as $key => $val): ?>
 <td><input class="check-item" type="checkbox" name="<?php echo $key; ?>" value="<?php echo $val->id; ?>"></td>
 <td><?php echo $val->id; ?></td>
 <td><?php echo $val->nome; ?></td>
+<td><?php echo $val->file; ?></td>
+<td><?php echo $val->floating; ?></td>
+<td><?php echo $val->boolean; ?></td>
+
 <td class="actions">
 <a href="/cliente/register/<?php echo $val->id; ?>">Edit</a>
 <a href="/cliente/delete/<?php echo $val->id; ?>">Delete</a>

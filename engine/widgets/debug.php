@@ -20,11 +20,6 @@ unset($_SESSION['debug']);
     <div style="text-align: center;"><img src="/media/img/oxylogo.png"></div>
     <h2 style="text-align: center;">Oxy - MVC Framework - PHP Edition - Debug Screen</h2>
     <!--Header with general debug data-->
-    <b>Debug called from: </b><?php echo $backtrace[1]['class']; ?>::<?php echo $backtrace[1]['function']; ?>()
-    in 
-    "<?php echo $backtrace[0]['file']; ?>", line <?php echo $backtrace[0]['line']; ?>.
-    <br>
-    <br>
     <b>URI: </b><?php echo $route; ?>
     <br>
     <br>
@@ -35,11 +30,17 @@ unset($_SESSION['debug']);
     <b>Method: </b><?php echo (empty($action[1]) ? "index" : $action[1]); ?>
     <br>
     <br>
+    <b>Debug called from: </b><?php echo $backtrace[1]['class']; ?>::<?php echo $backtrace[1]['function']; ?>()
+    in 
+    "<?php echo $backtrace[0]['file']; ?>", line <?php echo $backtrace[0]['line']; ?>.
+    <br>
+    <br>
+    <hr>
     <?php
     $args = $backtrace[1]['args'][0];
     if (!empty($args)):
         ?>
-        <b>Arguments: </b>
+        <h5>ARGUMENTS PASSED ON CALLER FUNCTION "<?php echo $backtrace[1]['class']; ?>::<?php echo $backtrace[1]['function']; ?>()": </h5>
         <?php Krumo($args); ?>
         <br>
     <?php endif; ?>
@@ -71,13 +72,14 @@ unset($_SESSION['debug']);
     <br>
     <hr>
     <!--Printing custom debug messages-->
-    <h5>DEBUG MESSAGES:</h5>
-    <div style="border: 1px solid;">
+    <h5>CUSTOM DEBUG MESSAGES:</h5>
+    <div style="padding: 5px;border: 1px solid;<?php echo (!empty($messages) ? "background-color:#fff;" : "") ?>">
         <?php
         if (!empty($messages)):
             foreach ($messages as $i => $m):
                 ?>
-                <p><b>Message <?php echo $k = 1; ?>:</b> <?php echo $m; ?></p>
+                <b>Message <?php echo $i + 1; ?>:</b>
+                <p style="border:1px solid #808000;background-color:lightyellow;"> <?php echo $m; ?></p>
                 <?php
             endforeach;
         else:
@@ -88,7 +90,7 @@ unset($_SESSION['debug']);
     <br>
     <hr>
     <!--Printing custom debug data-->
-    <h5>PRINT DATA:</h5>
+    <h5>CUSTOM PRINT DATA:</h5>
     <?php
     if (!empty($print_data)):
         foreach ($print_data as $k => $p):

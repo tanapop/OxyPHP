@@ -43,8 +43,7 @@
 <thead>
 <tr>
 <th><input title="Check/uncheck all" id="check-all" type="checkbox" value=""></th>
-<th>id</th>
-<th>nome</th>
+_TABLE_FIELDS_HEADERS_
 <th>Actions</th>
 </tr>
 </thead>
@@ -54,8 +53,7 @@ if(!empty($dataset)):
 foreach ($dataset as $key => $val): ?>
 <tr>
 <td><input class="check-item" type="checkbox" name="<?php echo $key; ?>" value="<?php echo $val->id; ?>"></td>
-<td><?php echo $val->id; ?></td>
-<td><?php echo $val->nome; ?></td>
+_TABLE_FIELDS_VALUES_
 <td class="actions">
 <a href="/_MODULE_NAME_/register/<?php echo $val->id; ?>">Edit</a>
 <a href="/_MODULE_NAME_/delete/<?php echo $val->id; ?>">Delete</a>

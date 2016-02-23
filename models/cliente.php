@@ -44,8 +44,7 @@ class ModelCliente extends Model {
         if ($debug) {
             System::debug(array(), array("Mysql Query" => $sql));
         } else {
-             $this->mysql->query($sql);
-//             System::debug(array("Mysql_query => ".$sql),array("mysql_info" => $this->mysql->getInfo()));
+            return $this->mysql->query($sql);
         }
     }
 

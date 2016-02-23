@@ -66,8 +66,8 @@ class Mvcgenerator {
         echo $contents;
         System::showAlerts();
     }
-    
-    public function createmvc($modulename, $fileset){
+
+    public function createmvc($modulename, $fileset) {
         $fields = $this->mysql->query("DESCRIBE " . $modulename);
         foreach ($fields as $row) {
             if ($row->Key == "PRI") {
@@ -75,8 +75,8 @@ class Mvcgenerator {
                 break;
             }
         }
-        
-        call_user_func_array(array($this, "create".$fileset), array($modulename, $fields));
+
+        call_user_func_array(array($this, "create" . $fileset), array($modulename, $fields));
     }
 
     // Generate a model file, based on a template, adapting it to the module which is being created.
@@ -108,20 +108,20 @@ class Mvcgenerator {
 
         $f = str_replace("_MODULE_NAME_", $modulename, $f);
         $f = str_replace("_CLASS_NAME_", ucfirst($modulename), $f);
-        
+
         $file_handler = "";
-        foreach($fields as $field){
+        foreach ($fields as $field) {
             $tablekey = preg_replace('/\([^)]*\)|[()]/', '', $field->Type);
-            if($this->datatypes[$tablekey] == "file"){
-                $file_handler = 'if(!empty($_FILES)){'.$breakline.
-                    'foreach($_FILES as $k => $f){'.$breakline.
-                    '$dataset[$k] = file_get_contents($_FILES[$k]["tmp_name"]);'.$breakline.
-                    '}'.$breakline.
-                    '}';
+            if ($this->datatypes[$tablekey] == "file") {
+                $file_handler = 'if(!empty($_FILES)){' . $breakline .
+                        'foreach($_FILES as $k => $f){' . $breakline .
+                        '$dataset[$k] = file_get_contents($_FILES[$k]["tmp_name"]);' . $breakline .
+                        '}' . $breakline .
+                        '}';
                 break;
             }
         }
-        
+
         $f = str_replace("_SAVE_FILE_HANDLER_", $file_handler, $f);
 
         $path = $_SERVER["DOCUMENT_ROOT"] . "controllers/";
@@ -140,9 +140,59 @@ class Mvcgenerator {
         }
     }
 
+    // Returns a well formated HTML table row string, based on field type.
+    private function tableListing($f, $header = false) {
+        $breakline = (PATH_SEPARATOR == ":" ? "\r\n" : "\n");
+        if ($header)
+            return "<th>" . ucfirst($f->Field) .($f->Type == "tinyint(1)" ? "?" : ""). "</th>" . $breakline;
+        else
+            return '<td><?php echo $val->' . $f->Field . '; ?></td>' . $breakline;
+    }
+
+    // Returns a well formated form input string, based on field type.
+    private function formField($f) {
+        $breakline = (PATH_SEPARATOR == ":" ? "\r\n" : "\n");
+        if ($f->Field == $this->primarykey) {
+            $input = '<div class="col-md-12">' . $breakline;
+            $input .= '<input id="input-' . $f->Field . '" type="hidden" name="' . $f->Field . '" value="<?php echo !empty($dataset) ? $dataset->' . $f->Field . ' : ""; ?>">' . $breakline;
+            $input .= '</div>';
+        } elseif ($f->Type == "tinyint(1)") {
+            $input = '<div class="col-md-12">' . $breakline;
+            $input .= '<label>' . ucfirst($f->Field) . '?</label>' . $breakline;
+            $input .= '<input class="input-' . $f->Field . '" type="radio" name="' . $f->Field . '" value="0" <?php echo (empty($dataset->' . $f->Field . ') ? "checked" : ""); ?>> No&nbsp;&nbsp;' . $breakline;
+            $input .= '<input class="input-' . $f->Field . '" type="radio" name="' . $f->Field . '" value="1" <?php echo (!empty($dataset->' . $f->Field . ') ? "checked" : ""); ?>> Yes' . $breakline;
+            $input.= '</div>';
+        } elseif ($this->datatypes[preg_replace('/\([^)]*\)|[()]/', '', $f->Type)] == "file") {
+            $input = '<div class="col-md-12">' . $breakline;
+            $input .= '<input id="input-' . $f->Field . '" type="file" name="' . $f->Field . '" ' . ($f->Null == "NO" && $f->Default == null ? "required " : "") . '>';
+            $input.= '</div>';
+        } elseif (array_key_exists($key = preg_replace('/\([^)]*\)|[()]/', '', $f->Type), $this->datatypes)) {
+            $input = '<div class="col-md-12">' . $breakline;
+            $input .= '<input id="input-' . $f->Field . '"'
+                    . ' type="' . $this->datatypes[$key] . '"'
+                    . ' name="' . $f->Field . '"'
+                    . ' value="<?php echo !empty($dataset) ? $dataset->' . $f->Field . ' : ""; ?>"'
+                    . ' ' . ($f->Null == "NO" && $f->Default == null ? "required " : "") . ''
+                    . ' placeholder="' . $f->Field . '">' . $breakline;
+            $input .= '</div>';
+            $ftype = $this->datatypes[$key];
+        } else {
+            $input = '<div class="col-md-12">' . $breakline;
+            $input .= '<input id="input-' . $f->Field . '"'
+                    . ' type="text"'
+                    . ' name="' . $f->Field . '"'
+                    . ' value="<?php echo !empty($dataset) ? $dataset->' . $f->Field . ' : ""; ?>"'
+                    . ' ' . ($f->Null == "NO" && $f->Default == null ? "required " : "") . ''
+                    . ' placeholder="' . $f->Field . '">' . $breakline;
+            $input .= '</div>';
+            $ftype = "text";
+        }
+
+        return '<div class="row">' . $breakline . $input . $breakline . '</div>' . $breakline;
+    }
+
     // Generate "listing" and "register" view files, based on templates, adapting them to the module which is being created.
     private function createviews($modulename, $fields, $return = false) {
-        $breakline = (PATH_SEPARATOR == ":" ? "\r\n" : "\n");
         $fl = file_get_contents($_SERVER["DOCUMENT_ROOT"] . "engine/mvcgenerator/templates/view_listing");
         $fr = file_get_contents($_SERVER["DOCUMENT_ROOT"] . "engine/mvcgenerator/templates/view_register");
 
@@ -153,29 +203,9 @@ class Mvcgenerator {
         $list_values = "";
         $form_fields = "";
         foreach ($fields as $f) {
-            $list_headers .= "<th>" . $f->Field . "</th>" . $breakline;
-            $list_values .= '<td><?php echo $val->' . $f->Field . '; ?></td>' . $breakline;
-
-            if ($f->Field == $this->primarykey) {
-                $ftype = "hidden";
-            } elseif ($f->Type == "tinyint(1)") {
-                $ftype = "checkbox";
-            } elseif (array_key_exists($key = preg_replace('/\([^)]*\)|[()]/', '', $f->Type), $this->datatypes)) {
-                $ftype = $this->datatypes[$key];
-            } else {
-                $ftype = "text";
-            }
-
-            $form_fields .= '<div class="row">' .
-                    $breakline .
-                    '<div class="col-md-12">' .
-                    $breakline . '<input id="input-' .
-                    $f->Field . '" ' . ($f->Null == "NO" && $f->Field != $this->primarykey ? "required" : "") .
-                    ' type="' . $ftype . '" name="' . $f->Field . '" ' . ($ftype == "hidden" || $ftype == "checkbox" || $ftype == "file" ? "" : 'placeholder="' . $f->Field . '" ' ) .
-                    ($ftype == "file" ? "" : 'value="<?php echo !empty($dataset) ? $dataset->' . $f->Field . ' : ""; ?>"') . '>' .
-                    ($ftype == "checkbox" ? ' <label for="input-' . $f->Field . '">' . $f->Field . "</label>" : "") .
-                    $breakline . '</div>' .
-                    $breakline . '</div>' . $breakline;
+            $list_headers .= $this->tableListing($f, true);
+            $list_values .= $this->tableListing($f, false);
+            $form_fields .= $this->formField($f);
         }
 
         $fl = str_replace("_COUNT_COLUMNS_", count($fields) + 2, $fl);

@@ -56,7 +56,7 @@ class Model {
     private function update_query($dataset, $conditions, $join = "AND", $operator = "=") {
         $sql = "UPDATE " . $this->table . " SET ";
         foreach ($dataset as $key => $val) {
-            if (!empty($val))
+            if (!is_null($val) && $val !== false)
                 $sql .= $key . "=" . (is_numeric($val) ? $val : "'" . $val . "'") . ",";
         }
         $sql = rtrim($sql, ",");
