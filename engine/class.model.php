@@ -2,7 +2,7 @@
 
 class Model {
 
-    // Main table of this module. By default, it has the same name of the module itself.
+    // The name of main table of this module. By default, it has the same name of the module itself.
     public $table;
     // An instance of the class Mysql.
     protected $mysql;
@@ -15,14 +15,13 @@ class Model {
 
         if (MYSQL_DATABASE_ON)
             $this->mysql = System::loadClass($_SERVER["DOCUMENT_ROOT"] . "/engine/databaseclasses/class.mysql.php", "Mysql");
-        
-        foreach($this->mysql->query("DESCRIBE ".$this->table) as $row){
-            if($row->Key == "PRI"){
+
+        foreach ($this->mysql->query("DESCRIBE " . $this->table) as $row) {
+            if ($row->Key == "PRI") {
                 $this->primarykey = $row->Field;
                 break;
             }
         }
-        
     }
 
     // This function is called from any model to build the query based on argument passed in type.
@@ -35,6 +34,8 @@ class Model {
 
     // Build a insert type query string with argument passed in dataset and return it.
     private function insert_query($dataset) {
+        $dataset = $this->mysql->escapevar($dataset);
+
         $sql = "INSERT INTO " . $this->table . " (";
         $fields = "";
         $values = " VALUES (";
@@ -54,10 +55,14 @@ class Model {
 
     // Build a update type query string with argument passed in dataset and return it.
     private function update_query($dataset, $conditions, $join = "AND", $operator = "=") {
+        $dataset = $this->mysql->escapevar($dataset);
+        $conditions = $this->escapeParams($conditions);
+
         $sql = "UPDATE " . $this->table . " SET ";
         foreach ($dataset as $key => $val) {
-            if (!is_null($val) && $val !== false)
+            if (!is_null($val) && $val !== false) {
                 $sql .= $key . "=" . (is_numeric($val) ? $val : "'" . $val . "'") . ",";
+            }
         }
         $sql = rtrim($sql, ",");
 
@@ -68,27 +73,40 @@ class Model {
 
     // Build a select type query string with argument passed in dataset and return it.
     private function select_query($fields, $conditions, $join = "AND", $operator = "=") {
+        $fields = $this->mysql->escapevar($fields);
+        $conditions = $this->escapeParams($conditions);
+
         $sql = "SELECT ";
         foreach ($fields as $f) {
             $sql .= $f . ",";
         }
         $sql = rtrim($sql, ",");
 
-        $sql .= " FROM " . $this->table.$this->whereClause($conditions, $join, $operator);
-
-        return $sql;
-    }
-
-    // Build a delete type query string with argument passed in dataset and return it.
-    private function delete_query($conditions, $join = "AND", $operator = "=") {
-        $sql = "DELETE FROM " . $this->table . $this->whereClause($conditions, $join, $operator);
+        $sql .= " FROM " . $this->table . $this->whereClause($conditions, $join, $operator);
 
         return $sql;
     }
     
+    private function escapeParams($params){
+        foreach ($params as $k => $p) {
+            $params[$k] = $this->mysql->escapevar($p);
+        }
+        return $params;
+    }
+
+    // Build a delete type query string with argument passed in dataset and return it.
+    private function delete_query($conditions, $join = "AND", $operator = "=") {
+        $conditions = $this->escapeParams($conditions);
+
+        $sql = "DELETE FROM " . $this->table . $this->whereClause($conditions, $join, $operator);
+
+        return $sql;
+    }
+
     /* Build a where clause string based on conditions passed on params,
      * the join OR or AND and operator as = or LIKE, then return the string.
      */
+
     protected function whereClause($params = array(), $join = 'AND', $operator = '=') {
         $where = '';
         if (!empty($params)) {

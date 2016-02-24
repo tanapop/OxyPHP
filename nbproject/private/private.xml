@@ -5,7 +5,7 @@
         <group>
             <file>file:/home/gabriel/Projects/oxyphp/engine/databaseclasses/class.mysql.php</file>
             <file>file:/home/gabriel/Projects/oxyphp/engine/mvcgenerator/class.mvcgenerator.php</file>
-            <file>file:/home/gabriel/Projects/oxyphp/views/cliente/register.php</file>
+            <file>file:/home/gabriel/Projects/oxyphp/engine/class.model.php</file>
             <file>file:/home/gabriel/Projects/oxyphp/controllers/cliente.php</file>
             <file>file:/home/gabriel/Projects/oxyphp/models/cliente.php</file>
         </group>

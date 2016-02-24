@@ -62,7 +62,7 @@ foreach ($dataset as $key => $val): ?>
 <td><?php echo $val->nome; ?></td>
 <td><?php echo $val->file; ?></td>
 <td><?php echo $val->floating; ?></td>
-<td><?php echo $val->boolean; ?></td>
+<td><?php echo (empty($val->boolean) ? "No" : "Yes"); ?></td>
 
 <td class="actions">
 <a href="/cliente/register/<?php echo $val->id; ?>">Edit</a>
@@ -71,7 +71,7 @@ foreach ($dataset as $key => $val): ?>
 </tr>
 <?php endforeach;
 else:?>
-<tr><td align="center" colspan="4">--- NO DATA RECORDS ---</td></tr>
+<tr><td align="center" colspan="7">--- NO DATA RECORDS ---</td></tr>
 <?php endif; ?>
 </tbody>
 </table>

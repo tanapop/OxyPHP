@@ -14,10 +14,12 @@ class Mysql {
     private $cnnInfo;
     // Connection's link identifier. If connection fails, a string containing the error description.
     private $connection;
+    // Stores an error, it it occurs.
+    public $error;
 
     // Verifies if database connection data is valid, then sets the properties with those values.
     public function __construct($dbinfo = array()) {
-
+        $this->error = 0;
         if (!is_array($dbinfo)) {
             System::debug(array("class.myswql: Argument Error: Invalid argument supplied for method __construct. It must be an array."), array('$dbinfo' => $dbinfo));
         }
@@ -106,9 +108,14 @@ class Mysql {
 
     public function query($sql) {
         if (!$this->connect())
-            System::debug(array("Attempt to connect to mysql database failed."), array("Error" => $this->connection));
+            System::debug(array("Attempt to connect to mysql database failed. Error:" => $this->connection), array());
 
         $res = $this->connection->query($sql);
+
+        if ($this->connection->errno) {
+            $this->error = "Error " . $this->connection->errno . ": " . $this->connection->error;
+            System::debug(array("While executing mysql query an error occured" => $this->error, "Mysql query" => $sql), array());
+        }
 
         if ($res === true || $res === false) {
             $ret = $res;
@@ -123,6 +130,24 @@ class Mysql {
 
         $this->connection->close();
         return $ret;
+    }
+
+    // Escape string var
+    public function escapevar($dataset) {
+        if (!$this->connect())
+            System::debug(array("Attempt to connect to mysql database failed. Error:" => $this->connection), array());
+
+        if (is_array($dataset)) {
+            foreach ($dataset as $key => $data) {
+                if (!is_numeric($data))
+                    $dataset[$key] = mysqli_real_escape_string($this->connection, $data);
+            }
+        } else {
+            $dataset = mysqli_real_escape_string($this->connection, $dataset);
+        }
+
+        $this->connection->close();
+        return $dataset;
     }
 
 }

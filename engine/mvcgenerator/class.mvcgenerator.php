@@ -115,7 +115,7 @@ class Mvcgenerator {
             if ($this->datatypes[$tablekey] == "file") {
                 $file_handler = 'if(!empty($_FILES)){' . $breakline .
                         'foreach($_FILES as $k => $f){' . $breakline .
-                        '$dataset[$k] = file_get_contents($_FILES[$k]["tmp_name"]);' . $breakline .
+                        '$dataset[$k] = "mime-type:".$_FILES[$k]["type"].";".file_get_contents($_FILES[$k]["tmp_name"]);' . $breakline .
                         '}' . $breakline .
                         '}';
                 break;
@@ -146,7 +146,7 @@ class Mvcgenerator {
         if ($header)
             return "<th>" . ucfirst($f->Field) .($f->Type == "tinyint(1)" ? "?" : ""). "</th>" . $breakline;
         else
-            return '<td><?php echo $val->' . $f->Field . '; ?></td>' . $breakline;
+            return '<td>'.($f->Type == "tinyint(1)" ? '<?php echo (empty($val->' . $f->Field . ') ? "No" : "Yes"); ?>' : '<?php echo $val->' . $f->Field . '; ?>').'</td>' . $breakline;
     }
 
     // Returns a well formated form input string, based on field type.

@@ -61,7 +61,7 @@ _TABLE_FIELDS_VALUES_
 </tr>
 <?php endforeach;
 else:?>
-<tr><td align="center" colspan="4">--- NO DATA RECORDS ---</td></tr>
+<tr><td align="center" colspan="_COUNT_COLUMNS_">--- NO DATA RECORDS ---</td></tr>
 <?php endif; ?>
 </tbody>
 </table>

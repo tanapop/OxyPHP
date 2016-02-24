@@ -15,7 +15,7 @@ class _CLASS_NAME_ extends Model {
         }
 
         if ($debug) {
-            System::debug(array(), array("Mysql Query" => $this->buildquery("select", array($fields, $conditions))));
+            System::debug(array("Mysql Query" => $this->buildquery("select", array($fields, $conditions))), array());
         } else {
             if ($result = $this->mysql->query($this->buildquery("select", array($fields, $conditions)))) {
                 return $result;
@@ -23,9 +23,9 @@ class _CLASS_NAME_ extends Model {
                 return false;
         }
     }
-    
+
     // Return the first row from this->_get result.
-    public function _row($fields, $conditions = array(), $debug = false){
+    public function _row($fields, $conditions = array(), $debug = false) {
         $return = $this->_get($fields, $conditions, $debug);
         return $return[0];
     }
@@ -36,13 +36,13 @@ class _CLASS_NAME_ extends Model {
         if (!empty($conditions)) {
             $sql = $this->buildquery("update", array($dataset, $conditions));
         } else {
-            if(isset($dataset[$this->primarykey]))
+            if (isset($dataset[$this->primarykey]))
                 unset($dataset[$this->primarykey]);
             $sql = $this->buildquery("insert", array($dataset));
         }
 
         if ($debug) {
-            System::debug(array(), array("Mysql Query" => $sql));
+            System::debug(array("Mysql Query" => $sql), array());
         } else {
             return $this->mysql->query($sql);
         }
@@ -51,7 +51,7 @@ class _CLASS_NAME_ extends Model {
     // Delete data from table under the rules specified in conditions.
     public function _delete($conditions, $debug = false) {
         if ($debug) {
-            System::debug(array(), array("Mysql Query" => $this->buildquery("delete", array($conditions))));
+            System::debug(array("Mysql Query" => $this->buildquery("delete", array($fields, $conditions))), array());
         } else {
             return $this->mysql->query($this->buildquery("delete", array($conditions)));
         }

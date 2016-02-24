@@ -76,9 +76,9 @@ unset($_SESSION['debug']);
     <div style="padding: 5px;border: 1px solid;<?php echo (!empty($messages) ? "background-color:#fff;" : "") ?>">
         <?php
         if (!empty($messages)):
-            foreach ($messages as $i => $m):
+            foreach ($messages as $k => $m):
                 ?>
-                <b>Message <?php echo $i + 1; ?>:</b>
+                <b><?php echo $k; ?>:</b>
                 <p style="border:1px solid #808000;background-color:lightyellow;"> <?php echo $m; ?></p>
                 <?php
             endforeach;
