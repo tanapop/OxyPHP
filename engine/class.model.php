@@ -86,13 +86,6 @@ class Model {
 
         return $sql;
     }
-    
-    private function escapeParams($params){
-        foreach ($params as $k => $p) {
-            $params[$k] = $this->mysql->escapevar($p);
-        }
-        return $params;
-    }
 
     // Build a delete type query string with argument passed in dataset and return it.
     private function delete_query($conditions, $join = "AND", $operator = "=") {
@@ -101,6 +94,13 @@ class Model {
         $sql = "DELETE FROM " . $this->table . $this->whereClause($conditions, $join, $operator);
 
         return $sql;
+    }
+
+    private function escapeParams($params) {
+        foreach ($params as $k => $p) {
+            $params[$k] = $this->mysql->escapevar($p);
+        }
+        return $params;
     }
 
     /* Build a where clause string based on conditions passed on params,
@@ -141,6 +141,55 @@ class Model {
         }
 
         return $where;
+    }
+
+    // Select fields from the table under the rules specified in conditions. Return a list of results.
+    public function _get($fields, $conditions = array(), $debug = false) {
+        if (is_string($fields)) {
+            $fields = array($fields);
+        } elseif (!is_array($fields)) {
+            return false;
+        }
+
+        if (!is_array($conditions)) {
+            return false;
+        }
+
+        if ($debug) {
+            System::debug(array("Mysql Query" => $this->buildquery("select", array($fields, $conditions))), array());
+        } else {
+            if ($result = $this->mysql->query($this->buildquery("select", array($fields, $conditions)))) {
+                return $result;
+            } else
+                return false;
+        }
+    }
+
+    // Save on database data passed in dataset, under the rules specified in conditions.
+    public function _save($dataset, $conditions = array(), $debug = false) {
+        $dataset = (array) $dataset;
+        if (!empty($conditions)) {
+            $sql = $this->buildquery("update", array($dataset, $conditions));
+        } else {
+            if (isset($dataset[$this->primarykey]))
+                unset($dataset[$this->primarykey]);
+            $sql = $this->buildquery("insert", array($dataset));
+        }
+
+        if ($debug) {
+            System::debug(array("Mysql Query" => $sql), array());
+        } else {
+            return $this->mysql->query($sql);
+        }
+    }
+
+    // Delete data from table under the rules specified in conditions.
+    public function _delete($conditions, $debug = false) {
+        if ($debug) {
+            System::debug(array("Mysql Query" => $this->buildquery("delete", array($fields, $conditions))), array());
+        } else {
+            return $this->mysql->query($this->buildquery("delete", array($conditions)));
+        }
     }
 
 }

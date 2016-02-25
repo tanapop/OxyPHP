@@ -2,59 +2,25 @@
 
 class ModelCliente extends Model {
 
-    // Select fields from the table under the rules specified in conditions. Return a list of results.
-    public function _get($fields, $conditions = array(), $debug = false) {
-        if (is_string($fields)) {
-            $fields = array($fields);
-        } elseif (!is_array($fields)) {
-            return false;
-        }
-
-        if (!is_array($conditions)) {
-            return false;
-        }
-
-        if ($debug) {
-            System::debug(array("Mysql Query" => $this->buildquery("select", array($fields, $conditions))), array());
-        } else {
-            if ($result = $this->mysql->query($this->buildquery("select", array($fields, $conditions)))) {
-                return $result;
-            } else
-                return false;
-        }
+    // An alias for this::_get()
+    public function get($fields, $conditions = array(), $debug = false) {
+        return $this->_get($fields, $conditions, $debug);
     }
 
-    // Return the first row from this->_get result.
-    public function _row($fields, $conditions = array(), $debug = false) {
+    // Return the first row from this::_get() result
+    public function row($fields, $conditions = array(), $debug = false) {
         $return = $this->_get($fields, $conditions, $debug);
         return $return[0];
     }
 
-    // Save on database data passed in dataset, under the rules specified in conditions.
-    public function _save($dataset, $conditions = array(), $debug = false) {
-        $dataset = (array) $dataset;
-        if (!empty($conditions)) {
-            $sql = $this->buildquery("update", array($dataset, $conditions));
-        } else {
-            if (isset($dataset[$this->primarykey]))
-                unset($dataset[$this->primarykey]);
-            $sql = $this->buildquery("insert", array($dataset));
-        }
-
-        if ($debug) {
-            System::debug(array("Mysql Query" => $sql), array());
-        } else {
-            return $this->mysql->query($sql);
-        }
+    // An alias for this::_save()
+    public function save($dataset, $conditions = array(), $debug = false) {
+        return $this->_save($dataset, $conditions, $debug);
     }
 
-    // Delete data from table under the rules specified in conditions.
-    public function _delete($conditions, $debug = false) {
-        if ($debug) {
-            System::debug(array("Mysql Query" => $this->buildquery("delete", array($fields, $conditions))), array());
-        } else {
-            return $this->mysql->query($this->buildquery("delete", array($conditions)));
-        }
+    // An alias for this::_delete()
+    public function delete($conditions, $debug = false) {
+        return $this->_delete($conditions, $debug);
     }
 
 }

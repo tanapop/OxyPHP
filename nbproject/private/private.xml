@@ -3,11 +3,13 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/home/gabriel/Projects/oxyphp/engine/databaseclasses/class.mysql.php</file>
+            <file>file:/home/gabriel/Projects/oxyphp/engine/class.system.php</file>
+            <file>file:/home/gabriel/Projects/oxyphp/engine/mvcgenerator/templates/controller</file>
             <file>file:/home/gabriel/Projects/oxyphp/engine/mvcgenerator/class.mvcgenerator.php</file>
+            <file>file:/home/gabriel/Projects/oxyphp/engine/mvcgenerator/templates/view_listing</file>
             <file>file:/home/gabriel/Projects/oxyphp/engine/class.model.php</file>
-            <file>file:/home/gabriel/Projects/oxyphp/controllers/cliente.php</file>
-            <file>file:/home/gabriel/Projects/oxyphp/models/cliente.php</file>
+            <file>file:/home/gabriel/Projects/oxyphp/engine/mvcgenerator/templates/model</file>
+            <file>file:/home/gabriel/Projects/oxyphp/engine/class.controller.php</file>
         </group>
     </open-files>
 </project-private>

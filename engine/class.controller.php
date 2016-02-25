@@ -20,14 +20,15 @@ class Controller {
     }
 
     // Show or return the contents of a view file, passing specified variables for this file, if they're supplied.
-    protected function view($file, $varlist = null, $module = null, $return = false) {
+    protected function _view($file, $varlist = null, $module = null, $return = false) {
         $path = $_SERVER['DOCUMENT_ROOT'] . "/views/" . (empty($module) ? $this->module : $module) . "/" . $file . ".php";
 
         if (!empty($varlist)) {
-            if (!is_array($varlist))
-                System::debug(array("class.controller: Argument Error: varlist must be an array."), array('$varlist' => $varlist));
-
-            extract($varlist);
+            try {
+                extract($varlist);
+            } catch (Exception $e) {
+                System::debug(array("Error message" => $e->message));
+            }
         }
 
         ob_start();
@@ -41,6 +42,32 @@ class Controller {
             return $contents;
         else
             echo $contents;
+    }
+
+    protected function _downloadfile($args, $filename) {
+        try {
+            if (is_string($args)) {
+                header('Content-Type: ' . mime_content_type($args).';');
+                header('Content-Disposition: attachment; filename=' . end(explode("/", $args)));
+                header('Pragma: no-cache');
+                readfile($args);
+            } elseif (is_array($args)) {
+                $db = $this->model->_get($args['field'], $args['conditions'])[0];
+                foreach ($db as $value) {
+                    $filedata = explode(";", $value, 2);
+                    break;
+                }
+//                System::debug(array("ext" => explode("/", $filedata[0], 2)[1]), array("filedata" => $filedata));
+                header('Content-Type: ' . $filedata[0].'; charset='.mb_detect_encoding($filedata[1]));
+                header('Content-Disposition: attachment; filename="' . $filename . "." . explode("/", $filedata[0], 2)[1].'"');
+                header("Cache-Control: no-cache");
+                ob_clean();
+                echo $filedata[1];
+                exit;
+            }
+        } catch (Exception $e) {
+            System::debug(array("Error message" => $e->message));
+        }
     }
 
 }

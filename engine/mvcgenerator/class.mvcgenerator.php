@@ -115,7 +115,7 @@ class Mvcgenerator {
             if ($this->datatypes[$tablekey] == "file") {
                 $file_handler = 'if(!empty($_FILES)){' . $breakline .
                         'foreach($_FILES as $k => $f){' . $breakline .
-                        '$dataset[$k] = "mime-type:".$_FILES[$k]["type"].";".file_get_contents($_FILES[$k]["tmp_name"]);' . $breakline .
+                        '$dataset[$k] = $_FILES[$k]["type"].";".file_get_contents($_FILES[$k]["tmp_name"]);' . $breakline .
                         '}' . $breakline .
                         '}';
                 break;
@@ -141,12 +141,20 @@ class Mvcgenerator {
     }
 
     // Returns a well formated HTML table row string, based on field type.
-    private function tableListing($f, $header = false) {
+    private function tableListing($f,$modulename, $header = false) {
         $breakline = (PATH_SEPARATOR == ":" ? "\r\n" : "\n");
         if ($header)
             return "<th>" . ucfirst($f->Field) .($f->Type == "tinyint(1)" ? "?" : ""). "</th>" . $breakline;
-        else
-            return '<td>'.($f->Type == "tinyint(1)" ? '<?php echo (empty($val->' . $f->Field . ') ? "No" : "Yes"); ?>' : '<?php echo $val->' . $f->Field . '; ?>').'</td>' . $breakline;
+        else{
+            if($f->Type == "tinyint(1)"){
+                $content = '<?php echo (empty($val->' . $f->Field . ') ? "No" : "Yes"); ?>';
+            } elseif($this->datatypes[preg_replace('/\([^)]*\)|[()]/', '', $f->Type)] == "file"){
+                $content = '<a href="/'.$modulename.'/download/?args[0][field]=' . $f->Field . '&args[0][conditions]['.$this->primarykey.']=<?php echo $val->' . $this->primarykey . '; ?>">Download file</a>';
+            }else{
+                $content = '<?php echo $val->' . $f->Field . '; ?>';
+            }
+            return '<td>'.$content.'</td>' . $breakline;
+        }
     }
 
     // Returns a well formated form input string, based on field type.
@@ -203,8 +211,8 @@ class Mvcgenerator {
         $list_values = "";
         $form_fields = "";
         foreach ($fields as $f) {
-            $list_headers .= $this->tableListing($f, true);
-            $list_values .= $this->tableListing($f, false);
+            $list_headers .= $this->tableListing($f,$modulename, true);
+            $list_values .= $this->tableListing($f,$modulename, false);
             $form_fields .= $this->formField($f);
         }
 

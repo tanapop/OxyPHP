@@ -60,7 +60,7 @@ foreach ($dataset as $key => $val): ?>
 <td><input class="check-item" type="checkbox" name="<?php echo $key; ?>" value="<?php echo $val->id; ?>"></td>
 <td><?php echo $val->id; ?></td>
 <td><?php echo $val->nome; ?></td>
-<td><?php echo $val->file; ?></td>
+<td><a href="/cliente/download/?args[0][field]=file&args[0][conditions][id]=<?php echo $val->id; ?>">Download file</a></td>
 <td><?php echo $val->floating; ?></td>
 <td><?php echo (empty($val->boolean) ? "No" : "Yes"); ?></td>
 
