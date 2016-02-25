@@ -57,13 +57,14 @@ class Controller {
                     $filedata = explode(";", $value, 2);
                     break;
                 }
-//                System::debug(array("ext" => explode("/", $filedata[0], 2)[1]), array("filedata" => $filedata));
                 header('Content-Type: ' . $filedata[0].'; charset='.mb_detect_encoding($filedata[1]));
                 header('Content-Disposition: attachment; filename="' . $filename . "." . explode("/", $filedata[0], 2)[1].'"');
                 header("Cache-Control: no-cache");
                 ob_clean();
                 echo $filedata[1];
                 exit;
+            } else{
+                throw new Exception("Wrong argument type. It must be a string or an array.",1);
             }
         } catch (Exception $e) {
             System::debug(array("Error message" => $e->message));
