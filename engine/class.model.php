@@ -25,7 +25,7 @@ class Model {
     }
 
     // This function is called from any model to build the query based on argument passed in type.
-    protected function buildquery($type, $data) {
+    protected function _buildquery($type, $data) {
         if (!is_array($data)) {
             System::debug(array("class.model: Argument Error: data must be an array. In method build."), array($data));
         }
@@ -66,7 +66,7 @@ class Model {
         }
         $sql = rtrim($sql, ",");
 
-        $sql .= $this->whereClause($conditions, $join, $operator);
+        $sql .= $this->_whereClause($conditions, $join, $operator);
 
         return $sql;
     }
@@ -82,7 +82,7 @@ class Model {
         }
         $sql = rtrim($sql, ",");
 
-        $sql .= " FROM " . $this->table . $this->whereClause($conditions, $join, $operator);
+        $sql .= " FROM " . $this->table . $this->_whereClause($conditions, $join, $operator);
 
         return $sql;
     }
@@ -91,7 +91,7 @@ class Model {
     private function delete_query($conditions, $join = "AND", $operator = "=") {
         $conditions = $this->escapeParams($conditions);
 
-        $sql = "DELETE FROM " . $this->table . $this->whereClause($conditions, $join, $operator);
+        $sql = "DELETE FROM " . $this->table . $this->_whereClause($conditions, $join, $operator);
 
         return $sql;
     }
@@ -107,7 +107,7 @@ class Model {
      * the join OR or AND and operator as = or LIKE, then return the string.
      */
 
-    protected function whereClause($params = array(), $join = 'AND', $operator = '=') {
+    protected function _whereClause($params = array(), $join = 'AND', $operator = '=') {
         $where = '';
         if (!empty($params)) {
             if (is_array($params)) {
@@ -156,9 +156,9 @@ class Model {
         }
 
         if ($debug) {
-            System::debug(array("Mysql Query" => $this->buildquery("select", array($fields, $conditions))), array());
+            System::debug(array("Mysql Query" => $this->_buildquery("select", array($fields, $conditions))), array());
         } else {
-            if ($result = $this->mysql->query($this->buildquery("select", array($fields, $conditions)))) {
+            if ($result = $this->mysql->query($this->_buildquery("select", array($fields, $conditions)))) {
                 return $result;
             } else
                 return false;
@@ -169,11 +169,11 @@ class Model {
     public function _save($dataset, $conditions = array(), $debug = false) {
         $dataset = (array) $dataset;
         if (!empty($conditions)) {
-            $sql = $this->buildquery("update", array($dataset, $conditions));
+            $sql = $this->_buildquery("update", array($dataset, $conditions));
         } else {
             if (isset($dataset[$this->primarykey]))
                 unset($dataset[$this->primarykey]);
-            $sql = $this->buildquery("insert", array($dataset));
+            $sql = $this->_buildquery("insert", array($dataset));
         }
 
         if ($debug) {
@@ -186,9 +186,9 @@ class Model {
     // Delete data from table under the rules specified in conditions.
     public function _delete($conditions, $debug = false) {
         if ($debug) {
-            System::debug(array("Mysql Query" => $this->buildquery("delete", array($fields, $conditions))), array());
+            System::debug(array("Mysql Query" => $this->_buildquery("delete", array($fields, $conditions))), array());
         } else {
-            return $this->mysql->query($this->buildquery("delete", array($conditions)));
+            return $this->mysql->query($this->_buildquery("delete", array($conditions)));
         }
     }
 
