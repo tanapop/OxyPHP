@@ -17,6 +17,7 @@ class System extends ObjLoader{
     public function __construct() {
         require_once "engine/class.controller.php";
         require_once "engine/class.model.php";
+        self::loadClass($_SERVER['DOCUMENT_ROOT'].'engine/class.errorhandler.php', 'errorhandler');
 
         $action = explode("/", str_replace(strrchr($_SERVER["REQUEST_URI"], "?"), "", $_SERVER["REQUEST_URI"]));
         array_shift($action);
@@ -111,9 +112,8 @@ class System extends ObjLoader{
      */
 
     public static function debug($messages = array(), $print_data = array()) {
-        $session = $_SESSION;
-        $_SESSION['debug']['session'] = $session;
-
+        if(!SHOW_DEBUG)
+            return false;
         $_SESSION['debug']['request'] = $_REQUEST;
 
         $_SESSION['debug']['backtrace'] = debug_backtrace();
@@ -121,13 +121,24 @@ class System extends ObjLoader{
         $_SESSION['debug']['route'] = str_replace(strrchr($_SERVER["REQUEST_URI"], "?"), "", $_SERVER["REQUEST_URI"]);
         $_SESSION['debug']['messages'] = $messages;
         $_SESSION['debug']['print_data'] = $print_data;
+        $_SESSION['debug']['time'] = date("Y/m/d - H:i:s", time());
 
         echo "<script>window.open('/debug');</script>";
+        
+        if(DEBUG_LOGGING)
+            self::log ('debug', 'At '.$_SESSION['debug']['time'].': Debug called from '. $_SESSION['debug']['backtrace'][1]['class'].'::'.$_SESSION['debug']['backtrace'][1]['function'].'() in '.$_SESSION['debug']['backtrace'][0]['file'].' on line '.$_SESSION['debug']['backtrace'][0]['line'].'.');
         die;
     }
 
     public static function loadClass($ab_path, $classname, $args = array()) {
         return self::load($ab_path, $classname, $args);
+    }
+    
+    public static function log($logname,$logmsg){
+        $breakline = (PATH_SEPARATOR == ":" ? "\r\n" : "\n");
+        $log = fopen(LOG_FILE_PATH . $logname .'.log', 'a');
+        fwrite($log, $logmsg.str_repeat($breakline,2));
+        fclose($log);
     }
 
 }

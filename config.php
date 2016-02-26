@@ -21,6 +21,11 @@ define("DEFAULT_CONTROLLER","home");
 define("DEFAULT_METHOD", "index");
 
 define("SETUP_MODE", true);
+
+define("SHOW_DEBUG", true);
+define("DEBUG_LOGGING", true);
+define("HANDLE_ERROR_TYPES",E_ALL & ~E_NOTICE & ~E_USER_NOTICE);
+define("LOG_FILE_PATH", $_SERVER['DOCUMENT_ROOT'].'log/');
 //>
 
 ?>

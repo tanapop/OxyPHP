@@ -1,0 +1,12 @@
+At 2016/02/26 - 17:06:08: Warning: include(/var/www/html/oxyphp/views/cliente/registere.php): failed to open stream: No such file or directory In /home/gabriel/Projects/oxyphp/engine/class.controller.php on line 34
+
+At 2016/02/26 - 17:06:09: Warning: filesize(): stat failed for /var/www/html/oxyphp//controllers/accessories.php In /home/gabriel/Projects/oxyphp/engine/class.objloader.php on line 14
+
+At 2016/02/26 - 17:06:09: Warning: filesize(): stat failed for /var/www/html/oxyphp//controllers/accessories.php In /home/gabriel/Projects/oxyphp/engine/class.objloader.php on line 14
+
+At 2016/02/26 - 17:06:26: Warning: include(/var/www/html/oxyphp/views/cliente/registere.php): failed to open stream: No such file or directory In /home/gabriel/Projects/oxyphp/engine/class.controller.php on line 34
+
+At 2016/02/26 - 17:06:26: Warning: filesize(): stat failed for /var/www/html/oxyphp//controllers/accessories.php In /home/gabriel/Projects/oxyphp/engine/class.objloader.php on line 14
+
+At 2016/02/26 - 17:06:26: Warning: filesize(): stat failed for /var/www/html/oxyphp//controllers/accessories.php In /home/gabriel/Projects/oxyphp/engine/class.objloader.php on line 14
+

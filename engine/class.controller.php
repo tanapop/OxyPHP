@@ -21,33 +21,31 @@ class Controller {
 
     // Show or return the contents of a view file, passing specified variables for this file, if they're supplied.
     protected function _view($file, $varlist = null, $module = null, $return = false) {
-        $path = $_SERVER['DOCUMENT_ROOT'] . "/views/" . (empty($module) ? $this->module : $module) . "/" . $file . ".php";
-
         if (!empty($varlist)) {
             try {
                 extract($varlist);
-            } catch (Exception $e) {
-                System::debug(array("Error message" => $e->message));
+            } catch (Exception $ex) {
+                System::debug(array("Error message" => $ex->getMessage() . '. In ' . $ex->getFile() . ' on line ' . $ex->getLine() . '.'));
             }
         }
-
+        
         ob_start();
-        if (file_exists($path)) {
-            include $path;
+        try {
+            include $_SERVER['DOCUMENT_ROOT'] . "views/" . (empty($module) ? $this->module : $module) . "/" . $file . ".php";
+        } catch (Exception $ex) {
+            System::debug(array("Error message" => $ex->getMessage() . '. In ' . $ex->getFile() . ' on line ' . $ex->getLine() . '.'));
         }
 
-        $contents = ob_get_clean();
-
         if ($return === true)
-            return $contents;
+            return ob_get_clean();
         else
-            echo $contents;
+            echo ob_get_clean();
     }
 
     protected function _downloadfile($args, $filename) {
         try {
             if (is_string($args)) {
-                header('Content-Type: ' . mime_content_type($args).';');
+                header('Content-Type: ' . mime_content_type($args) . ';');
                 header('Content-Disposition: attachment; filename=' . end(explode("/", $args)));
                 header('Pragma: no-cache');
                 readfile($args);
@@ -57,14 +55,14 @@ class Controller {
                     $filedata = explode(";", $value, 2);
                     break;
                 }
-                header('Content-Type: ' . $filedata[0].'; charset='.mb_detect_encoding($filedata[1]));
-                header('Content-Disposition: attachment; filename="' . $filename . "." . explode("/", $filedata[0], 2)[1].'"');
+                header('Content-Type: ' . $filedata[0] . '; charset=' . mb_detect_encoding($filedata[1]));
+                header('Content-Disposition: attachment; filename="' . $filename . "." . explode("/", $filedata[0], 2)[1] . '"');
                 header("Cache-Control: no-cache");
                 ob_clean();
                 echo $filedata[1];
                 exit;
-            } else{
-                throw new Exception("Wrong argument type. It must be a string or an array.",1);
+            } else {
+                throw new Exception("Wrong argument type. It must be a string or an array.", 1);
             }
         } catch (Exception $e) {
             System::debug(array("Error message" => $e->message));

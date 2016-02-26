@@ -35,6 +35,9 @@ unset($_SESSION['debug']);
     "<?php echo $backtrace[0]['file']; ?>", line <?php echo $backtrace[0]['line']; ?>.
     <br>
     <br>
+    <b>Date: </b><?php echo $time; ?>
+    <br>
+    <br>
     <hr>
     <?php
     $args = $backtrace[1]['args'][0];

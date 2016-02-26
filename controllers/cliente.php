@@ -12,7 +12,8 @@ class Cliente extends Controller {
     }
 
     public function register($id = null) {
-        $this->_view("register", array("dataset" => (!empty($id) ? $this->model->row("*", array("id" => $id)) : array())));
+//        $this->_view("register", "string de teste");
+        $this->_view("registere", array("dataset" => (!empty($id) ? $this->model->row("*", array("id" => $id)) : array())));
         System::showAlerts();
     }
 
@@ -26,7 +27,8 @@ foreach($_FILES as $k => $f){
 $dataset[$k] = $_FILES[$k]["type"].";".file_get_contents($_FILES[$k]["tmp_name"]);
 }
 }
-        $conditions = (empty($dataset[$this->model->primarykey]) ? array() : array($this->model->primarykey => $dataset[$this->model->primarykey]));
+        $primarykey = $this->model->_get_primary_key();
+        $conditions = (empty($dataset[$primarykey]) ? array() : array($primarykey => $dataset[$primarykey]));
         
         if ($this->model->save($dataset, $conditions)) {
             System::setAlert("The data was successfully saved!", ALERT_SUCCESS);
@@ -44,7 +46,7 @@ $dataset[$k] = $_FILES[$k]["type"].";".file_get_contents($_FILES[$k]["tmp_name"]
             return false;
         }
         
-        if ($this->model->delete(array($this->model->primarykey => $list))) {
+        if ($this->model->delete(array($this->model->_get_primary_key() => $list))) {
             System::setAlert("The registers were deleted successfully!", ALERT_SUCCESS);
         } else {
             System::setAlert("Attempt to delete registers failed!", ALERT_FAILURE);

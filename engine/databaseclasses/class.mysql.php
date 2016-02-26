@@ -12,12 +12,15 @@ class Mysql {
     private $dbpass;
     // Information of current connection.
     private $cnnInfo;
-    // Connection's link identifier. If connection fails, a string containing the error description.
+    // Connection's link identifier. If connection fails, a string containing the connection error description.
     private $connection;
-    // Stores an error, it it occurs.
+    // Stores a query error, if it occurs.
     public $error;
 
-    // Verifies if database connection data is valid, then sets the properties with those values.
+    /* Verifies if database connection data is valid, then sets the properties with those values.
+     * Connect to mysql server and save the connection in a property.
+     */
+
     public function __construct($dbinfo = array()) {
         $this->error = 0;
         if (!is_array($dbinfo)) {
@@ -38,10 +41,18 @@ class Mysql {
 
         $this->cnnInfo = new stdClass();
         $this->cnnInfo->info = "No connection info.";
+
+        if (!$this->connect())
+            System::debug(array("Attempt to connect to mysql database failed. Error:" => $this->connection), array());
     }
 
-    /* Tries to connect to mysql database much times as configured. If all attempts fails, write error to property and returns false.
-     * Returns true on first success.
+    // When this class's object is destructed, close the connection to mysql server.
+    public function __destruct() {
+        $this->disconnect();
+    }
+
+    /* Tries to connect to mysql database much times as configured. If all attempts fails, 
+     * write error to property and returns false. Returns true on first success.
      */
 
     private function connect() {
@@ -69,11 +80,16 @@ class Mysql {
         return true;
     }
 
-    /* Verifies if database connection data suplied is valid, then sets the properties with those values.
-     * Use it for runtime connection changes.
+    // Force the current connection to close.
+    protected function disconnect() {
+        $this->connection->close();
+    }
+
+    /* Verifies if database connection data suplied is valid, sets the properties with those values, then
+     * reconnect to mysql server with the new information.
      */
 
-    public function setInfo($dbinfo) {
+    public function setconnection($dbinfo) {
         if (!is_array($dbinfo)) {
             System::debug(array("class.myswql: Argument Error: Invalid argument supplied for method setInfo. It must be an array."), array('$dbinfo' => $dbinfo));
         }
@@ -89,10 +105,14 @@ class Mysql {
         $this->dbname = (isset($dbinfo["dbname"]) ? $dbinfo["dbname"] : $this->dbname);
         $this->dbuser = (isset($dbinfo["dbuser"]) ? $dbinfo["dbuser"] : $this->dbuser);
         $this->dbpass = (isset($dbinfo["dbpass"]) ? $dbinfo["dbpass"] : $this->dbpass);
+
+        $this->connection->close();
+        if (!$this->connect())
+            System::debug(array("Attempt to connect to mysql database failed. Error:" => $this->connection), array());
     }
 
     // Returns all current connection information.
-    public function getInfo() {
+    public function getinfo() {
         return (object) array(
                     "dbhost" => $this->dbhost,
                     "dbname" => $this->dbname,
@@ -107,9 +127,6 @@ class Mysql {
      */
 
     public function query($sql) {
-        if (!$this->connect())
-            System::debug(array("Attempt to connect to mysql database failed. Error:" => $this->connection), array());
-
         $res = $this->connection->query($sql);
 
         if ($this->connection->errno) {
@@ -128,25 +145,25 @@ class Mysql {
 
         $this->cnnInfo = (object) get_object_vars($this->connection);
 
-        $this->connection->close();
         return $ret;
     }
 
-    // Escape string var
+    // Escape data properly for mysql statements.
     public function escapevar($dataset) {
-        if (!$this->connect())
-            System::debug(array("Attempt to connect to mysql database failed. Error:" => $this->connection), array());
-
         if (is_array($dataset)) {
             foreach ($dataset as $key => $data) {
                 if (!is_numeric($data))
                     $dataset[$key] = mysqli_real_escape_string($this->connection, $data);
             }
-        } else {
+        } elseif (is_object($dataset)) {
+            foreach ($dataset as $key => $data) {
+                if (!is_numeric($data))
+                    $dataset->$key = mysqli_real_escape_string($this->connection, $data);
+            }
+        } elseif (!is_numeric($dataset)) {
             $dataset = mysqli_real_escape_string($this->connection, $dataset);
         }
 
-        $this->connection->close();
         return $dataset;
     }
 
