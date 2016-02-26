@@ -22,7 +22,8 @@ class _CLASS_NAME_ extends Controller {
 
     public function save($dataset) {
         _SAVE_FILE_HANDLER_
-        $conditions = (empty($dataset[$this->model->primarykey]) ? array() : array($this->model->primarykey => $dataset[$this->model->primarykey]));
+        $primarykey = $this->model->_get_primary_key();
+        $conditions = (empty($dataset[$primarykey]) ? array() : array($primarykey => $dataset[$primarykey]));
         
         if ($this->model->save($dataset, $conditions)) {
             System::setAlert("The data was successfully saved!", ALERT_SUCCESS);
@@ -40,7 +41,7 @@ class _CLASS_NAME_ extends Controller {
             return false;
         }
         
-        if ($this->model->delete(array($this->model->primarykey => $list))) {
+        if ($this->model->delete(array($this->model->_get_primary_key() => $list))) {
             System::setAlert("The registers were deleted successfully!", ALERT_SUCCESS);
         } else {
             System::setAlert("Attempt to delete registers failed!", ALERT_FAILURE);

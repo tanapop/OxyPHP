@@ -3,11 +3,11 @@
 class Model {
 
     // The name of main table of this module. By default, it has the same name of the module itself.
-    public $table;
+    private $table;
     // An instance of the class Mysql.
     protected $mysql;
     // The name of table's primary key.
-    public $primarykey;
+    private $primarykey;
 
     // It sets the main table name, instantiate class Mysql and defines the table's primary key.
     public function __construct($table) {
@@ -15,13 +15,31 @@ class Model {
 
         if (MYSQL_DATABASE_ON)
             $this->mysql = System::loadClass($_SERVER["DOCUMENT_ROOT"] . "/engine/databaseclasses/class.mysql.php", "Mysql");
+        
+        $this->set_primary_key();
+    }
 
+    private function set_primary_key() {
         foreach ($this->mysql->query("DESCRIBE " . $this->table) as $row) {
             if ($row->Key == "PRI") {
                 $this->primarykey = $row->Field;
                 break;
             }
         }
+    }
+    
+    public function _get_primary_key(){
+        return $this->primarykey;
+    }
+    
+    public function _set_table($tablename){
+        $this->table = $tablename;
+        
+        $this->set_primary_key();
+    }
+    
+    public function _get_table(){
+        return $this->table;
     }
 
     // This function is called from any model to build the query based on argument passed in type.
