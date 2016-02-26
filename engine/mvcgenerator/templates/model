@@ -9,8 +9,7 @@ class _CLASS_NAME_ extends Model {
 
     // Return the first row from this::_get() result
     public function row($fields, $conditions = array(), $debug = false) {
-        $return = $this->_get($fields, $conditions, $debug);
-        return $return[0];
+        return $this->_get($fields, $conditions, $debug)[0];
     }
 
     // An alias for this::_save()

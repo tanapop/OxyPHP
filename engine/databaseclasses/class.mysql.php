@@ -23,21 +23,15 @@ class Mysql {
 
     public function __construct($dbinfo = array()) {
         $this->error = 0;
-        if (!is_array($dbinfo)) {
-            System::debug(array("class.myswql: Argument Error: Invalid argument supplied for method __construct. It must be an array."), array('$dbinfo' => $dbinfo));
-        }
 
-        if (!empty($dbinfo)) {
-            foreach ($dbinfo as $key => $data) {
-                if ($key != "dbhost" && $key != "dbname" && $key != "dbuser" && $key != "dbpass")
-                    System::debug(array('class.myswql: Argument Error: Invalid argument keyname for method __construct. Valid names: "dbhost", "dbname", "dbuser", "dbpass"'), array('$dbinfo' => $dbinfo));
-            }
+        try {
+            $this->dbhost = (isset($dbinfo["dbhost"]) ? $dbinfo["dbhost"] : MYSQL_DBHOST);
+            $this->dbname = (isset($dbinfo["dbname"]) ? $dbinfo["dbname"] : MYSQL_DBNAME);
+            $this->dbuser = (isset($dbinfo["dbuser"]) ? $dbinfo["dbuser"] : MYSQL_DBUSER);
+            $this->dbpass = (isset($dbinfo["dbpass"]) ? $dbinfo["dbpass"] : MYSQL_DBPASS);
+        } catch (Exception $ex) {
+            System::debug(array("Error message" => $ex->getMessage() . '. In ' . $ex->getFile() . ' on line ' . $ex->getLine() . '.'), array('Parameter dbinfo' => $dbinfo));
         }
-
-        $this->dbhost = (isset($dbinfo["dbhost"]) ? $dbinfo["dbhost"] : MYSQL_DBHOST);
-        $this->dbname = (isset($dbinfo["dbname"]) ? $dbinfo["dbname"] : MYSQL_DBNAME);
-        $this->dbuser = (isset($dbinfo["dbuser"]) ? $dbinfo["dbuser"] : MYSQL_DBUSER);
-        $this->dbpass = (isset($dbinfo["dbpass"]) ? $dbinfo["dbpass"] : MYSQL_DBPASS);
 
         $this->cnnInfo = new stdClass();
         $this->cnnInfo->info = "No connection info.";
@@ -90,21 +84,14 @@ class Mysql {
      */
 
     public function setconnection($dbinfo) {
-        if (!is_array($dbinfo)) {
-            System::debug(array("class.myswql: Argument Error: Invalid argument supplied for method setInfo. It must be an array."), array('$dbinfo' => $dbinfo));
+        try {
+            $this->dbhost = (isset($dbinfo["dbhost"]) ? $dbinfo["dbhost"] : $this->dbhost);
+            $this->dbname = (isset($dbinfo["dbname"]) ? $dbinfo["dbname"] : $this->dbname);
+            $this->dbuser = (isset($dbinfo["dbuser"]) ? $dbinfo["dbuser"] : $this->dbuser);
+            $this->dbpass = (isset($dbinfo["dbpass"]) ? $dbinfo["dbpass"] : $this->dbpass);
+        } catch (Exception $ex) {
+            System::debug(array("Error message" => $ex->getMessage() . '. In ' . $ex->getFile() . ' on line ' . $ex->getLine() . '.'), array('Parameter dbinfo' => $dbinfo));
         }
-
-        if (!empty($dbinfo)) {
-            foreach ($dbinfo as $key => $data) {
-                if ($key != "dbhost" && $key != "dbname" && $key != "dbuser" && $key != "dbpass")
-                    System::debug(array('class.myswql: Argument Error: Invalid argument keyname for method setInfo. Valid names: "dbhost", "dbname", "dbuser", "dbpass"'), array('$dbinfo' => $dbinfo));
-            }
-        }
-
-        $this->dbhost = (isset($dbinfo["dbhost"]) ? $dbinfo["dbhost"] : $this->dbhost);
-        $this->dbname = (isset($dbinfo["dbname"]) ? $dbinfo["dbname"] : $this->dbname);
-        $this->dbuser = (isset($dbinfo["dbuser"]) ? $dbinfo["dbuser"] : $this->dbuser);
-        $this->dbpass = (isset($dbinfo["dbpass"]) ? $dbinfo["dbpass"] : $this->dbpass);
 
         $this->connection->close();
         if (!$this->connect())

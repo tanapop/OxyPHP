@@ -10,3 +10,37 @@ At 2016/02/26 - 17:06:26: Warning: filesize(): stat failed for /var/www/html/oxy
 
 At 2016/02/26 - 17:06:26: Warning: filesize(): stat failed for /var/www/html/oxyphp//controllers/accessories.php In /home/gabriel/Projects/oxyphp/engine/class.objloader.php on line 14
 
+At 2016/02/26 - 17:27:25: Warning: include(/var/www/html/oxyphp/views/cliente/registere.php): failed to open stream: No such file or directory In /home/gabriel/Projects/oxyphp/engine/class.controller.php on line 34
+
+At 2016/02/26 - 17:27:26: Warning: filesize(): stat failed for /var/www/html/oxyphp//controllers/accessories.php In /home/gabriel/Projects/oxyphp/engine/class.objloader.php on line 14
+
+At 2016/02/26 - 17:27:26: Warning: filesize(): stat failed for /var/www/html/oxyphp//controllers/accessories.php In /home/gabriel/Projects/oxyphp/engine/class.objloader.php on line 14
+
+At 2016/02/26 - 19:31:21: Warning: file_get_contents(): Filename cannot be empty In /home/gabriel/Projects/oxyphp/controllers/cliente.php on line 26
+
+At 2016/02/26 - 19:31:21: Warning: require_once(/var/www/html/oxyphp//controllers/accessories.php): failed to open stream: No such file or directory In /home/gabriel/Projects/oxyphp/engine/class.objloader.php on line 18
+
+At 2016/02/26 - 19:31:21: Warning: require_once(/var/www/html/oxyphp//controllers/accessories.php): failed to open stream: No such file or directory In /home/gabriel/Projects/oxyphp/engine/class.objloader.php on line 18
+
+At 2016/02/26 - 19:32:33: Warning: file_get_contents(): Filename cannot be empty In /home/gabriel/Projects/oxyphp/controllers/cliente.php on line 26
+
+At 2016/02/26 - 19:32:34: Warning: require_once(/var/www/html/oxyphp//controllers/accessories.php): failed to open stream: No such file or directory In /home/gabriel/Projects/oxyphp/engine/class.objloader.php on line 18
+
+At 2016/02/26 - 19:32:34: Warning: require_once(/var/www/html/oxyphp//controllers/accessories.php): failed to open stream: No such file or directory In /home/gabriel/Projects/oxyphp/engine/class.objloader.php on line 18
+
+At 2016/02/26 - 19:33:47: Warning: file_get_contents(): Filename cannot be empty In /home/gabriel/Projects/oxyphp/controllers/cliente.php on line 26
+
+At 2016/02/26 - 19:33:48: Warning: require_once(/var/www/html/oxyphp//controllers/accessories.php): failed to open stream: No such file or directory In /home/gabriel/Projects/oxyphp/engine/class.objloader.php on line 18
+
+At 2016/02/26 - 19:33:48: Warning: require_once(/var/www/html/oxyphp//controllers/accessories.php): failed to open stream: No such file or directory In /home/gabriel/Projects/oxyphp/engine/class.objloader.php on line 18
+
+At 2016/02/26 - 19:34:20: Warning: file_get_contents(): Filename cannot be empty In /home/gabriel/Projects/oxyphp/controllers/cliente.php on line 26
+
+At 2016/02/26 - 19:34:20: Warning: require_once(/var/www/html/oxyphp//controllers/accessories.php): failed to open stream: No such file or directory In /home/gabriel/Projects/oxyphp/engine/class.objloader.php on line 18
+
+At 2016/02/26 - 19:34:20: Warning: require_once(/var/www/html/oxyphp//controllers/accessories.php): failed to open stream: No such file or directory In /home/gabriel/Projects/oxyphp/engine/class.objloader.php on line 18
+
+At 2016/02/26 - 19:34:23: Warning: require_once(/var/www/html/oxyphp//controllers/accessories.php): failed to open stream: No such file or directory In /home/gabriel/Projects/oxyphp/engine/class.objloader.php on line 18
+
+At 2016/02/26 - 19:34:23: Warning: require_once(/var/www/html/oxyphp//controllers/accessories.php): failed to open stream: No such file or directory In /home/gabriel/Projects/oxyphp/engine/class.objloader.php on line 18
+

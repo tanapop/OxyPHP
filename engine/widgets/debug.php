@@ -46,8 +46,8 @@ unset($_SESSION['debug']);
         <h5>ARGUMENTS PASSED ON CALLER FUNCTION "<?php echo $backtrace[1]['class']; ?>::<?php echo $backtrace[1]['function']; ?>()": </h5>
         <?php Krumo($args); ?>
         <br>
+        <hr>
     <?php endif; ?>
-    <hr>
     <!--Printing the current session data-->
     <h5>CURRENT SESSION: </h5>
     <?php

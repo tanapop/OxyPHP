@@ -54,16 +54,12 @@ class Mvcgenerator {
 
     // Include mvcgenerator index page and show its contents, passing the tables list to it.
     public function index() {
-        $path = $_SERVER['DOCUMENT_ROOT'] . "engine/mvcgenerator/index.php";
-
         extract(array("tables" => $this->tables));
 
         ob_start();
-        include $path;
+        include $_SERVER['DOCUMENT_ROOT'] . "engine/mvcgenerator/index.php";
 
-        $contents = ob_get_clean();
-
-        echo $contents;
+        echo ob_get_clean();
         System::showAlerts();
     }
 
@@ -113,8 +109,8 @@ class Mvcgenerator {
         foreach ($fields as $field) {
             $tablekey = preg_replace('/\([^)]*\)|[()]/', '', $field->Type);
             if ($this->datatypes[$tablekey] == "file") {
-                $file_handler = 'if(!empty($_FILES)){' . $breakline .
-                        'foreach($_FILES as $k => $f){' . $breakline .
+                $file_handler = 'foreach($_FILES as $k => $f){' . $breakline .
+                        'if ($_FILES[$k]["size"]) {'. $breakline .
                         '$dataset[$k] = $_FILES[$k]["type"].";".file_get_contents($_FILES[$k]["tmp_name"]);' . $breakline .
                         '}' . $breakline .
                         '}';

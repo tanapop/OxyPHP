@@ -25,10 +25,10 @@ class Controller {
             try {
                 extract($varlist);
             } catch (Exception $ex) {
-                System::debug(array("Error message" => $ex->getMessage() . '. In ' . $ex->getFile() . ' on line ' . $ex->getLine() . '.'));
+                System::debug(array("Error message" => $ex->getMessage() . '. In ' . $ex->getFile() . ' on line ' . $ex->getLine() . '.'),array('Parameter varlist'=>$varlist));
             }
         }
-        
+
         ob_start();
         try {
             include $_SERVER['DOCUMENT_ROOT'] . "views/" . (empty($module) ? $this->module : $module) . "/" . $file . ".php";
@@ -50,8 +50,7 @@ class Controller {
                 header('Pragma: no-cache');
                 readfile($args);
             } elseif (is_array($args)) {
-                $db = $this->model->_get($args['field'], $args['conditions'])[0];
-                foreach ($db as $value) {
+                foreach ($this->model->_get($args['field'], $args['conditions'])[0] as $value) {
                     $filedata = explode(";", $value, 2);
                     break;
                 }
@@ -60,13 +59,13 @@ class Controller {
                 header("Cache-Control: no-cache");
                 ob_clean();
                 echo $filedata[1];
-                exit;
             } else {
-                throw new Exception("Wrong argument type. It must be a string or an array.", 1);
+                trigger_error("Wrong argument type. It must be a string or an array.", E_WARNING);
             }
         } catch (Exception $e) {
-            System::debug(array("Error message" => $e->message));
+            System::debug(array("Error message" => $ex->getMessage() . '. In ' . $ex->getFile() . ' on line ' . $ex->getLine() . '.'),array('Paramater args'=>$args,'Parameter filename'=>$filename));
         }
+        exit;
     }
 
 }

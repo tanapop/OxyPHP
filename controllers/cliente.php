@@ -12,8 +12,7 @@ class Cliente extends Controller {
     }
 
     public function register($id = null) {
-//        $this->_view("register", "string de teste");
-        $this->_view("registere", array("dataset" => (!empty($id) ? $this->model->row("*", array("id" => $id)) : array())));
+        $this->_view("register", array("dataset" => (!empty($id) ? $this->model->row("*", array("id" => $id)) : array())));
         System::showAlerts();
     }
 
@@ -22,15 +21,14 @@ class Cliente extends Controller {
     }
 
     public function save($dataset) {
-        if(!empty($_FILES)){
-foreach($_FILES as $k => $f){
-$dataset[$k] = $_FILES[$k]["type"].";".file_get_contents($_FILES[$k]["tmp_name"]);
-}
-}
+        foreach ($_FILES as $k => $f) {
+            if ($_FILES[$k]["size"]) {
+                $dataset[$k] = $_FILES[$k]["type"] . ";" . file_get_contents($_FILES[$k]["tmp_name"]);
+            }
+        }
         $primarykey = $this->model->_get_primary_key();
-        $conditions = (empty($dataset[$primarykey]) ? array() : array($primarykey => $dataset[$primarykey]));
-        
-        if ($this->model->save($dataset, $conditions)) {
+
+        if ($this->model->save($dataset, (empty($dataset[$primarykey]) ? array() : array($primarykey => $dataset[$primarykey])))) {
             System::setAlert("The data was successfully saved!", ALERT_SUCCESS);
         } else {
             System::setAlert("Attempt to save data failed!", ALERT_FAILURE);
@@ -43,9 +41,9 @@ $dataset[$k] = $_FILES[$k]["type"].";".file_get_contents($_FILES[$k]["tmp_name"]
         if (is_numeric($list)) {
             $list = array($list);
         } elseif (!is_array($list)) {
-            return false;
+            System::debug(array('Argument type error' => 'Argument "list" must be an integer or an array.'));
         }
-        
+
         if ($this->model->delete(array($this->model->_get_primary_key() => $list))) {
             System::setAlert("The registers were deleted successfully!", ALERT_SUCCESS);
         } else {
@@ -54,8 +52,8 @@ $dataset[$k] = $_FILES[$k]["type"].";".file_get_contents($_FILES[$k]["tmp_name"]
 
         header('Location: /cliente');
     }
-    
-    public function download($args){
+
+    public function download($args) {
         $this->_downloadfile($args, uniqid());
     }
 

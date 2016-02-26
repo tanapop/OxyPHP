@@ -2,3 +2,13 @@ At 2016/02/26 - 17:06:08: Debug called from Controller::_view() in /home/gabriel
 
 At 2016/02/26 - 17:06:26: Debug called from Controller::_view() in /home/gabriel/Projects/oxyphp/engine/class.controller.php on line 36.
 
+At 2016/02/26 - 17:27:25: Debug called from Controller::_view() in /home/gabriel/Projects/oxyphp/engine/class.controller.php on line 36.
+
+At 2016/02/26 - 19:31:21: Debug called from System::execute() in /home/gabriel/Projects/oxyphp/engine/class.system.php on line 88.
+
+At 2016/02/26 - 19:32:33: Debug called from System::execute() in /home/gabriel/Projects/oxyphp/engine/class.system.php on line 88.
+
+At 2016/02/26 - 19:33:47: Debug called from System::execute() in /home/gabriel/Projects/oxyphp/engine/class.system.php on line 88.
+
+At 2016/02/26 - 19:34:20: Debug called from System::execute() in /home/gabriel/Projects/oxyphp/engine/class.system.php on line 88.
+

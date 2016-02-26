@@ -82,14 +82,10 @@ class System extends ObjLoader{
     public function execute($controller = null, $method = null, $args = null) {
         $this->controller = (empty($controller) ? $this->controller : $controller);
 
-        if (!empty($args) && !is_array($args)) {
-            self::debug(array('class.system: Argument Error: args must be an array.'), array('args' => $args));
-        }
-
         try {
             return call_user_func_array(array(self::loadClass($this->cpath . $this->controller . ".php", $this->controller, array($this->controller)), (empty($method) ? $this->method : $method)), (empty($args) ? $this->args : $args));
         } catch (Exception $ex) {
-            exit($ex->getMessage());
+            System::debug(array("Error message" => $ex->getMessage() . '. In ' . $ex->getFile() . ' on line ' . $ex->getLine() . '.'));
         }
     }
 
@@ -135,9 +131,8 @@ class System extends ObjLoader{
     }
     
     public static function log($logname,$logmsg){
-        $breakline = (PATH_SEPARATOR == ":" ? "\r\n" : "\n");
         $log = fopen(LOG_FILE_PATH . $logname .'.log', 'a');
-        fwrite($log, $logmsg.str_repeat($breakline,2));
+        fwrite($log, $logmsg.str_repeat((PATH_SEPARATOR == ":" ? "\r\n" : "\n"),2));
         fclose($log);
     }
 

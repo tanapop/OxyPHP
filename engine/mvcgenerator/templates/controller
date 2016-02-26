@@ -23,9 +23,8 @@ class _CLASS_NAME_ extends Controller {
     public function save($dataset) {
         _SAVE_FILE_HANDLER_
         $primarykey = $this->model->_get_primary_key();
-        $conditions = (empty($dataset[$primarykey]) ? array() : array($primarykey => $dataset[$primarykey]));
         
-        if ($this->model->save($dataset, $conditions)) {
+        if ($this->model->save($dataset, (empty($dataset[$primarykey]) ? array() : array($primarykey => $dataset[$primarykey])))) {
             System::setAlert("The data was successfully saved!", ALERT_SUCCESS);
         } else {
             System::setAlert("Attempt to save data failed!", ALERT_FAILURE);
@@ -38,7 +37,7 @@ class _CLASS_NAME_ extends Controller {
         if (is_numeric($list)) {
             $list = array($list);
         } elseif (!is_array($list)) {
-            return false;
+            System::debug(array('Argument type error'=>'Argument "list" must be an integer or an array.'));
         }
         
         if ($this->model->delete(array($this->model->_get_primary_key() => $list))) {

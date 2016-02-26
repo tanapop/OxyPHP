@@ -15,7 +15,7 @@ class Model {
 
         if (MYSQL_DATABASE_ON)
             $this->mysql = System::loadClass($_SERVER["DOCUMENT_ROOT"] . "/engine/databaseclasses/class.mysql.php", "Mysql");
-        
+
         $this->set_primary_key();
     }
 
@@ -27,34 +27,34 @@ class Model {
             }
         }
     }
-    
-    public function _get_primary_key(){
+
+    public function _get_primary_key() {
         return $this->primarykey;
     }
-    
-    public function _set_table($tablename){
+
+    public function _set_table($tablename) {
         $this->table = $tablename;
-        
+
         $this->set_primary_key();
     }
-    
-    public function _get_table(){
+
+    public function _get_table() {
         return $this->table;
     }
 
     // This function is called from any model to build the query based on argument passed in type.
     protected function _buildquery($type, $data) {
-        if (!is_array($data)) {
-            System::debug(array("class.model: Argument Error: data must be an array. In method build."), array($data));
+        try {
+            return call_user_func_array(array($this, $type . "_query"), $data);
+        } catch (Exception $ex) {
+            System::debug(array("Error message" => $ex->getMessage() . '. In ' . $ex->getFile() . ' on line ' . $ex->getLine() . '.'),array('Parameter type'=>$type,'Parameter data'=>$data));
         }
-        return call_user_func_array(array($this, $type . "_query"), $data);
     }
 
     // Build a insert type query string with argument passed in dataset and return it.
     private function insert_query($dataset) {
         $dataset = $this->mysql->escapevar($dataset);
 
-        $sql = "INSERT INTO " . $this->table . " (";
         $fields = "";
         $values = " VALUES (";
 
@@ -67,8 +67,7 @@ class Model {
         $fields = rtrim($fields, ",") . ")";
         $values = rtrim($values, ",") . ")";
 
-        $sql .= $fields . $values;
-        return $sql;
+        return "INSERT INTO " . $this->table . " (" . $fields . $values;
     }
 
     // Build a update type query string with argument passed in dataset and return it.
@@ -84,9 +83,7 @@ class Model {
         }
         $sql = rtrim($sql, ",");
 
-        $sql .= $this->_whereClause($conditions, $join, $operator);
-
-        return $sql;
+        return $sql . $this->_whereClause($conditions, $join, $operator);
     }
 
     // Build a select type query string with argument passed in dataset and return it.
@@ -100,18 +97,14 @@ class Model {
         }
         $sql = rtrim($sql, ",");
 
-        $sql .= " FROM " . $this->table . $this->_whereClause($conditions, $join, $operator);
-
-        return $sql;
+        return $sql . " FROM " . $this->table . $this->_whereClause($conditions, $join, $operator);
     }
 
     // Build a delete type query string with argument passed in dataset and return it.
     private function delete_query($conditions, $join = "AND", $operator = "=") {
         $conditions = $this->escapeParams($conditions);
 
-        $sql = "DELETE FROM " . $this->table . $this->_whereClause($conditions, $join, $operator);
-
-        return $sql;
+        return "DELETE FROM " . $this->table . $this->_whereClause($conditions, $join, $operator);
     }
 
     private function escapeParams($params) {
@@ -132,27 +125,23 @@ class Model {
                 $_conditions = array();
                 foreach ($params as $key => $val) {
                     if (strtoupper($operator) == "LIKE") {
-                        $_conditions[] = "{$key} LIKE '%{$val}%'";
+                        $_conditions[] = $key . ' LIKE "%' . $val . '%"';
                     } else if (is_array($val) && !empty($val)) {
                         $joined_values = array();
 
                         foreach ($val as $in_val) {
-                            $joined_values[] = is_numeric($in_val) ? $in_val : "'{$in_val}'";
+                            $joined_values[] = is_numeric($in_val) ? $in_val : '"' . $in_val . '"';
                         }
 
-                        $joined_values = join(',', $joined_values);
-
-                        $_conditions[] = "{$key} IN ({$joined_values})";
+                        $_conditions[] = $key . ' IN (' . join(',', $joined_values) . ')';
                     } else {
-                        $_conditions[] = "{$key} {$operator} {$val}";
+                        $_conditions[] = $key . $operator . (is_numeric($val) ? $val : '"' . $val . '"');
                     }
                 }
                 $join = strtoupper($join);
                 $join = 'AND' == $join || 'OR' == $join ? " {$join} " : null;
 
-                $prefix = ' WHERE ';
-
-                $where = $join !== null ? $prefix . join($join, $_conditions) : '';
+                $where = $join !== null ? ' WHERE ' . join($join, $_conditions) : '';
             } else {
                 $where = (string) $params;
             }
