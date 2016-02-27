@@ -3,7 +3,7 @@
 class Mvcgenerator {
 
     // An instance of Mysql class
-    private $mysql;
+    private $dbclass;
     // A tables list from database
     private $tables;
     // A dictionary to translate database datatypes to form input's type.
@@ -14,11 +14,13 @@ class Mvcgenerator {
     // Include Mysql class file and instantiate it on this->mysql, write database tables list and set the datatypes dictionary.
     public function __construct() {
         if (MYSQL_DATABASE_ON)
-            $this->mysql = System::loadClass($_SERVER["DOCUMENT_ROOT"] . "/engine/databaseclasses/class.mysql.php", "Mysql");
+            $this->dbclass = System::loadClass($_SERVER["DOCUMENT_ROOT"] . "/engine/databaseclasses/class.mysql.php", "Mysql");
+        else
+            $this->dbclass = System::loadClass($_SERVER["DOCUMENT_ROOT"] . "/engine/databaseclasses/class.pdo.php", "Pdo");
 
-        $tables = $this->mysql->query("SHOW TABLES");
+        $tables = $this->dbclass->query("SHOW TABLES");
 
-        $keyname = "Tables_in_" . MYSQL_DBNAME;
+        $keyname = "Tables_in_" . DBNAME;
         foreach ($tables as $t) {
             $this->tables[] = $t->$keyname;
         }
@@ -64,7 +66,7 @@ class Mvcgenerator {
     }
 
     public function createmvc($modulename, $fileset) {
-        $fields = $this->mysql->query("DESCRIBE " . $modulename);
+        $fields = $this->dbclass->query("DESCRIBE " . $modulename);
         foreach ($fields as $row) {
             if ($row->Key == "PRI") {
                 $this->primarykey = $row->Field;
@@ -110,7 +112,7 @@ class Mvcgenerator {
             $tablekey = preg_replace('/\([^)]*\)|[()]/', '', $field->Type);
             if ($this->datatypes[$tablekey] == "file") {
                 $file_handler = 'foreach($_FILES as $k => $f){' . $breakline .
-                        'if ($_FILES[$k]["size"]) {'. $breakline .
+                        'if ($_FILES[$k]["size"]) {' . $breakline .
                         '$dataset[$k] = $_FILES[$k]["type"].";".file_get_contents($_FILES[$k]["tmp_name"]);' . $breakline .
                         '}' . $breakline .
                         '}';
@@ -137,19 +139,19 @@ class Mvcgenerator {
     }
 
     // Returns a well formated HTML table row string, based on field type.
-    private function tableListing($f,$modulename, $header = false) {
+    private function tableListing($f, $modulename, $header = false) {
         $breakline = (PATH_SEPARATOR == ":" ? "\r\n" : "\n");
         if ($header)
-            return "<th>" . ucfirst($f->Field) .($f->Type == "tinyint(1)" ? "?" : ""). "</th>" . $breakline;
-        else{
-            if($f->Type == "tinyint(1)"){
+            return "<th>" . ucfirst($f->Field) . ($f->Type == "tinyint(1)" ? "?" : "") . "</th>" . $breakline;
+        else {
+            if ($f->Type == "tinyint(1)") {
                 $content = '<?php echo (empty($val->' . $f->Field . ') ? "No" : "Yes"); ?>';
-            } elseif($this->datatypes[preg_replace('/\([^)]*\)|[()]/', '', $f->Type)] == "file"){
-                $content = '<a href="/'.$modulename.'/download/?args[0][field]=' . $f->Field . '&args[0][conditions]['.$this->primarykey.']=<?php echo $val->' . $this->primarykey . '; ?>">Download file</a>';
-            }else{
+            } elseif ($this->datatypes[preg_replace('/\([^)]*\)|[()]/', '', $f->Type)] == "file") {
+                $content = '<a href="/' . $modulename . '/download/?args[0][field]=' . $f->Field . '&args[0][conditions][' . $this->primarykey . ']=<?php echo $val->' . $this->primarykey . '; ?>">Download file</a>';
+            } else {
                 $content = '<?php echo $val->' . $f->Field . '; ?>';
             }
-            return '<td>'.$content.'</td>' . $breakline;
+            return '<td>' . $content . '</td>' . $breakline;
         }
     }
 
@@ -207,8 +209,8 @@ class Mvcgenerator {
         $list_values = "";
         $form_fields = "";
         foreach ($fields as $f) {
-            $list_headers .= $this->tableListing($f,$modulename, true);
-            $list_values .= $this->tableListing($f,$modulename, false);
+            $list_headers .= $this->tableListing($f, $modulename, true);
+            $list_values .= $this->tableListing($f, $modulename, false);
             $form_fields .= $this->formField($f);
         }
 

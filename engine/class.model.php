@@ -5,7 +5,9 @@ class Model {
     // The name of main table of this module. By default, it has the same name of the module itself.
     private $table;
     // An instance of the class Mysql.
-    protected $mysql;
+    protected $dbclass;
+    // An instance of the class PDO.
+    protected $pdo;
     // The name of table's primary key.
     private $primarykey;
 
@@ -13,14 +15,16 @@ class Model {
     public function __construct($table) {
         $this->table = $table;
 
-        if (MYSQL_DATABASE_ON)
-            $this->mysql = System::loadClass($_SERVER["DOCUMENT_ROOT"] . "/engine/databaseclasses/class.mysql.php", "Mysql");
+        if (USE_MYSQLI_CLASS)
+            $this->dbclass = System::loadClass($_SERVER["DOCUMENT_ROOT"] . "/engine/databaseclasses/class.mysql.php", "Mysql");
+        else
+            $this->dbclass = System::loadClass($_SERVER["DOCUMENT_ROOT"] . "/engine/databaseclasses/class.pdo.php", "Pdo");
 
         $this->set_primary_key();
     }
 
     private function set_primary_key() {
-        foreach ($this->mysql->query("DESCRIBE " . $this->table) as $row) {
+        foreach ($this->dbclass->query("DESCRIBE " . $this->table) as $row) {
             if ($row->Key == "PRI") {
                 $this->primarykey = $row->Field;
                 break;
@@ -45,15 +49,16 @@ class Model {
     // This function is called from any model to build the query based on argument passed in type.
     protected function _buildquery($type, $data) {
         try {
-            return call_user_func_array(array($this, $type . "_query"), $data);
+            return call_user_func_array(array($this, $type . "_query" . (USE_MYSQLI_CLASS ? '_mysqli' : '')), $data);
         } catch (Exception $ex) {
-            System::debug(array("Error message" => $ex->getMessage() . '. In ' . $ex->getFile() . ' on line ' . $ex->getLine() . '.'),array('Parameter type'=>$type,'Parameter data'=>$data));
+            System::debug(array("Error message" => $ex->getMessage() . '. In ' . $ex->getFile() . ' on line ' . $ex->getLine() . '.'), array('Parameter type' => $type, 'Parameter data' => $data));
         }
     }
 
+    /**** DEPRECATED ****/
     // Build a insert type query string with argument passed in dataset and return it.
-    private function insert_query($dataset) {
-        $dataset = $this->mysql->escapevar($dataset);
+    private function insert_query_mysqli($dataset) { 
+        $dataset = $this->dbclass->escapevar($dataset);
 
         $fields = "";
         $values = " VALUES (";
@@ -70,9 +75,10 @@ class Model {
         return "INSERT INTO " . $this->table . " (" . $fields . $values;
     }
 
+    /**** DEPRECATED ****/
     // Build a update type query string with argument passed in dataset and return it.
-    private function update_query($dataset, $conditions, $join = "AND", $operator = "=") {
-        $dataset = $this->mysql->escapevar($dataset);
+    private function update_query_mysqli($dataset, $conditions, $join = "AND", $operator = "=") {
+        $dataset = $this->dbclass->escapevar($dataset);
         $conditions = $this->escapeParams($conditions);
 
         $sql = "UPDATE " . $this->table . " SET ";
@@ -86,9 +92,10 @@ class Model {
         return $sql . $this->_whereClause($conditions, $join, $operator);
     }
 
+    /**** DEPRECATED ****/
     // Build a select type query string with argument passed in dataset and return it.
-    private function select_query($fields, $conditions, $join = "AND", $operator = "=") {
-        $fields = $this->mysql->escapevar($fields);
+    private function select_query_mysqli($fields, $conditions, $join = "AND", $operator = "=") {
+        $fields = $this->dbclass->escapevar($fields);
         $conditions = $this->escapeParams($conditions);
 
         $sql = "SELECT ";
@@ -100,8 +107,9 @@ class Model {
         return $sql . " FROM " . $this->table . $this->_whereClause($conditions, $join, $operator);
     }
 
+    /**** DEPRECATED ****/
     // Build a delete type query string with argument passed in dataset and return it.
-    private function delete_query($conditions, $join = "AND", $operator = "=") {
+    private function delete_query_mysqli($conditions, $join = "AND", $operator = "=") {
         $conditions = $this->escapeParams($conditions);
 
         return "DELETE FROM " . $this->table . $this->_whereClause($conditions, $join, $operator);
@@ -109,16 +117,25 @@ class Model {
 
     private function escapeParams($params) {
         foreach ($params as $k => $p) {
-            $params[$k] = $this->mysql->escapevar($p);
+            $params[$k] = $this->dbclass->escapevar($p);
         }
         return $params;
     }
-
+    
     /* Build a where clause string based on conditions passed on params,
      * the join OR or AND and operator as = or LIKE, then return the string.
      */
+    protected function _whereClause($params = array(), $join = 'AND', $operator = '='){
+        if(USE_MYSQLI_CLASS)
+            return $this->_whereClause_mysqli ($params,$join,$operator);
+    }
 
-    protected function _whereClause($params = array(), $join = 'AND', $operator = '=') {
+    /**** DEPRECATED ****/
+    /* Build a Mysql where clause string based on conditions passed on params,
+     * the join OR or AND and operator as = or LIKE, then return the string.
+     */
+
+    private function _whereClause_mysqli($params = array(), $join = 'AND', $operator = '=') {
         $where = '';
         if (!empty($params)) {
             if (is_array($params)) {
@@ -165,7 +182,7 @@ class Model {
         if ($debug) {
             System::debug(array("Mysql Query" => $this->_buildquery("select", array($fields, $conditions))), array());
         } else {
-            if ($result = $this->mysql->query($this->_buildquery("select", array($fields, $conditions)))) {
+            if ($result = $this->dbclass->query($this->_buildquery("select", array($fields, $conditions)))) {
                 return $result;
             } else
                 return false;
@@ -186,7 +203,7 @@ class Model {
         if ($debug) {
             System::debug(array("Mysql Query" => $sql), array());
         } else {
-            return $this->mysql->query($sql);
+            return $this->dbclass->query($sql);
         }
     }
 
@@ -195,7 +212,7 @@ class Model {
         if ($debug) {
             System::debug(array("Mysql Query" => $this->_buildquery("delete", array($fields, $conditions))), array());
         } else {
-            return $this->mysql->query($this->_buildquery("delete", array($conditions)));
+            return $this->dbclass->query($this->_buildquery("delete", array($conditions)));
         }
     }
 

@@ -12,3 +12,13 @@ At 2016/02/26 - 19:33:47: Debug called from System::execute() in /home/gabriel/P
 
 At 2016/02/26 - 19:34:20: Debug called from System::execute() in /home/gabriel/Projects/oxyphp/engine/class.system.php on line 88.
 
+At 2016/02/27 - 15:38:42: Debug called from ObjLoader::load() in /home/gabriel/Projects/oxyphp/engine/class.objloader.php on line 23.
+
+At 2016/02/27 - 15:38:43: Debug called from ObjLoader::load() in /home/gabriel/Projects/oxyphp/engine/class.objloader.php on line 23.
+
+At 2016/02/27 - 15:38:43: Debug called from ObjLoader::load() in /home/gabriel/Projects/oxyphp/engine/class.objloader.php on line 23.
+
+At 2016/02/27 - 15:38:43: Debug called from ObjLoader::load() in /home/gabriel/Projects/oxyphp/engine/class.objloader.php on line 23.
+
+At 2016/02/27 - 15:39:31: Debug called from ObjLoader::load() in /home/gabriel/Projects/oxyphp/engine/class.objloader.php on line 23.
+

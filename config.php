@@ -1,12 +1,13 @@
 <?php
 //< DATABASE CONFIGS:
 
-define("MYSQL_DATABASE_ON", true);
-define("MYSQL_DBNAME", "marmitao");
-define("MYSQL_DBHOST", "localhost");
-define("MYSQL_DBUSER", "root");
-define("MYSQL_DBPASS", "h7t846m2");
-define("MYSQL_CONNECTION_MAX_TRIES", 5);
+define("DBNAME", "marmitao");
+define("DBHOST", "localhost");
+define("DBUSER", "root");
+define("DBPASS", "h7t846m2");
+define("DBTYPE", 'mysql');
+define("DBCONNECTION_MAX_TRIES", 5);
+define("USE_MYSQLI_CLASS", true);  /*MYSQLI CLASS IS DEPRECATED. DEFAULT IS SET TO PDO.*/
 
 //>
 
