@@ -27,7 +27,7 @@ class Errorhandler {
 
     public function handler($errno, $errstr, $errfile, $errline) {
         System::log('oxyerror', 'At ' . date("Y/m/d - H:i:s", mktime()) . ': ' . $this->errortypes[$errno] . ': ' . $errstr . ' In ' . $errfile . ' on line ' . $errline);
-        $this->exception = System::loadClass($_SERVER['DOCUMENT_ROOT'] . 'engine/class.oxyerror.php', 'oxyerror', array($errfile, $errline, $this->errortypes[$errno] . ': ' . $errstr, $errno));
+        $this->exception = System::loadClass($_SERVER['DOCUMENT_ROOT'] . 'engine/class.oxyexception.php', 'oxyexception', array($errfile, $errline, $this->errortypes[$errno] . ': ' . $errstr, $errno));
         throw $this->exception;
     }
 
