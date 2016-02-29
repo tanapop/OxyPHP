@@ -13,10 +13,7 @@ class Mvcgenerator {
 
     // Include Mysql class file and instantiate it on this->mysql, write database tables list and set the datatypes dictionary.
     public function __construct() {
-        if (MYSQL_DATABASE_ON)
-            $this->dbclass = System::loadClass($_SERVER["DOCUMENT_ROOT"] . "/engine/databaseclasses/class.mysql.php", "Mysql");
-        else
-            $this->dbclass = System::loadClass($_SERVER["DOCUMENT_ROOT"] . "/engine/databaseclasses/class.pdo.php", "Pdo");
+        $this->dbclass = System::loadClass($_SERVER["DOCUMENT_ROOT"] . "/engine/databaseclasses/class." . DBCLASS . ".php", "oxy".DBCLASS);
 
         $tables = $this->dbclass->query("SHOW TABLES");
 

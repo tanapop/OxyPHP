@@ -13,9 +13,10 @@ class System extends ObjLoader{
     // The path to controllers directory
     private $cpath;
 
-    // Include global Controller and Model classs and uses data passed on POST, GET or URI to set running controller, action and args.
+    // Include some global core classes and uses data passed on POST, GET or URI to set running controller, action and args.
     public function __construct() {
         require_once "engine/class.controller.php";
+        require_once "engine/class.".DBCLASS."querybuilder.php";
         require_once "engine/class.model.php";
         self::loadClass($_SERVER['DOCUMENT_ROOT'].'engine/class.errorhandler.php', 'errorhandler');
 

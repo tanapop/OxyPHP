@@ -1,6 +1,6 @@
 <?php
 
-class Mysql {
+class Oxymysqli {
 
     // Mysql database host server. Example: "localhost".
     private $dbhost;
@@ -83,7 +83,7 @@ class Mysql {
      * reconnect to mysql server with the new information.
      */
 
-    public function setconnection($dbinfo) {
+    public function reconnect($dbinfo) {
         try {
             $this->dbhost = (isset($dbinfo["dbhost"]) ? $dbinfo["dbhost"] : $this->dbhost);
             $this->dbname = (isset($dbinfo["dbname"]) ? $dbinfo["dbname"] : $this->dbname);
@@ -99,7 +99,7 @@ class Mysql {
     }
 
     // Returns all current connection information.
-    public function getinfo() {
+    public function info() {
         return (object) array(
                     "dbhost" => $this->dbhost,
                     "dbname" => $this->dbname,

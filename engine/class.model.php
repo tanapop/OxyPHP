@@ -1,13 +1,7 @@
 <?php
 
-class Model {
+class Model extends Querybuilder{
 
-    // The name of main table of this module. By default, it has the same name of the module itself.
-    private $table;
-    // An instance of the class Mysql.
-    protected $dbclass;
-    // An instance of the class PDO.
-    protected $pdo;
     // The name of table's primary key.
     private $primarykey;
 
@@ -15,10 +9,7 @@ class Model {
     public function __construct($table) {
         $this->table = $table;
 
-        if (USE_MYSQLI_CLASS)
-            $this->dbclass = System::loadClass($_SERVER["DOCUMENT_ROOT"] . "/engine/databaseclasses/class.mysql.php", "Mysql");
-        else
-            $this->dbclass = System::loadClass($_SERVER["DOCUMENT_ROOT"] . "/engine/databaseclasses/class.pdo.php", "Pdo");
+        $this->dbclass = System::loadClass($_SERVER["DOCUMENT_ROOT"] . "/engine/databaseclasses/class." . DBCLASS . ".php", 'oxy'.DBCLASS);
 
         $this->set_primary_key();
     }
@@ -44,127 +35,6 @@ class Model {
 
     public function _get_table() {
         return $this->table;
-    }
-
-    // This function is called from any model to build the query based on argument passed in type.
-    protected function _buildquery($type, $data) {
-        try {
-            return call_user_func_array(array($this, $type . "_query" . (USE_MYSQLI_CLASS ? '_mysqli' : '')), $data);
-        } catch (Exception $ex) {
-            System::debug(array("Error message" => $ex->getMessage() . '. In ' . $ex->getFile() . ' on line ' . $ex->getLine() . '.'), array('Parameter type' => $type, 'Parameter data' => $data));
-        }
-    }
-
-    /**** DEPRECATED ****/
-    // Build a insert type query string with argument passed in dataset and return it.
-    private function insert_query_mysqli($dataset) { 
-        $dataset = $this->dbclass->escapevar($dataset);
-
-        $fields = "";
-        $values = " VALUES (";
-
-        foreach ($dataset as $key => $val) {
-            if (!empty($val)) {
-                $fields .= $key . ",";
-                $values .= (is_numeric($val) ? $val : "'" . $val . "'") . ",";
-            }
-        }
-        $fields = rtrim($fields, ",") . ")";
-        $values = rtrim($values, ",") . ")";
-
-        return "INSERT INTO " . $this->table . " (" . $fields . $values;
-    }
-
-    /**** DEPRECATED ****/
-    // Build a update type query string with argument passed in dataset and return it.
-    private function update_query_mysqli($dataset, $conditions, $join = "AND", $operator = "=") {
-        $dataset = $this->dbclass->escapevar($dataset);
-        $conditions = $this->escapeParams($conditions);
-
-        $sql = "UPDATE " . $this->table . " SET ";
-        foreach ($dataset as $key => $val) {
-            if (!is_null($val) && $val !== false) {
-                $sql .= $key . "=" . (is_numeric($val) ? $val : "'" . $val . "'") . ",";
-            }
-        }
-        $sql = rtrim($sql, ",");
-
-        return $sql . $this->_whereClause($conditions, $join, $operator);
-    }
-
-    /**** DEPRECATED ****/
-    // Build a select type query string with argument passed in dataset and return it.
-    private function select_query_mysqli($fields, $conditions, $join = "AND", $operator = "=") {
-        $fields = $this->dbclass->escapevar($fields);
-        $conditions = $this->escapeParams($conditions);
-
-        $sql = "SELECT ";
-        foreach ($fields as $f) {
-            $sql .= $f . ",";
-        }
-        $sql = rtrim($sql, ",");
-
-        return $sql . " FROM " . $this->table . $this->_whereClause($conditions, $join, $operator);
-    }
-
-    /**** DEPRECATED ****/
-    // Build a delete type query string with argument passed in dataset and return it.
-    private function delete_query_mysqli($conditions, $join = "AND", $operator = "=") {
-        $conditions = $this->escapeParams($conditions);
-
-        return "DELETE FROM " . $this->table . $this->_whereClause($conditions, $join, $operator);
-    }
-
-    private function escapeParams($params) {
-        foreach ($params as $k => $p) {
-            $params[$k] = $this->dbclass->escapevar($p);
-        }
-        return $params;
-    }
-    
-    /* Build a where clause string based on conditions passed on params,
-     * the join OR or AND and operator as = or LIKE, then return the string.
-     */
-    protected function _whereClause($params = array(), $join = 'AND', $operator = '='){
-        if(USE_MYSQLI_CLASS)
-            return $this->_whereClause_mysqli ($params,$join,$operator);
-    }
-
-    /**** DEPRECATED ****/
-    /* Build a Mysql where clause string based on conditions passed on params,
-     * the join OR or AND and operator as = or LIKE, then return the string.
-     */
-
-    private function _whereClause_mysqli($params = array(), $join = 'AND', $operator = '=') {
-        $where = '';
-        if (!empty($params)) {
-            if (is_array($params)) {
-                $_conditions = array();
-                foreach ($params as $key => $val) {
-                    if (strtoupper($operator) == "LIKE") {
-                        $_conditions[] = $key . ' LIKE "%' . $val . '%"';
-                    } else if (is_array($val) && !empty($val)) {
-                        $joined_values = array();
-
-                        foreach ($val as $in_val) {
-                            $joined_values[] = is_numeric($in_val) ? $in_val : '"' . $in_val . '"';
-                        }
-
-                        $_conditions[] = $key . ' IN (' . join(',', $joined_values) . ')';
-                    } else {
-                        $_conditions[] = $key . $operator . (is_numeric($val) ? $val : '"' . $val . '"');
-                    }
-                }
-                $join = strtoupper($join);
-                $join = 'AND' == $join || 'OR' == $join ? " {$join} " : null;
-
-                $where = $join !== null ? ' WHERE ' . join($join, $_conditions) : '';
-            } else {
-                $where = (string) $params;
-            }
-        }
-
-        return $where;
     }
 
     // Select fields from the table under the rules specified in conditions. Return a list of results.

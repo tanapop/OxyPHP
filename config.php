@@ -7,7 +7,7 @@ define("DBUSER", "root");
 define("DBPASS", "h7t846m2");
 define("DBTYPE", 'mysql');
 define("DBCONNECTION_MAX_TRIES", 5);
-define("USE_MYSQLI_CLASS", true);  /*MYSQLI CLASS IS DEPRECATED. DEFAULT IS SET TO PDO.*/
+define("DBCLASS", "mysqli");  /* We suggest to not use "mysqli". It is deprecated. */
 
 //>
 

@@ -16,7 +16,8 @@ class Controller {
 
         $this->module = $module;
 
-        $this->model = System::loadClass($_SERVER['DOCUMENT_ROOT'] . "/models/" . $this->module . ".php", "Model" . ucfirst($this->module), array($this->module));
+        if (is_file($_SERVER['DOCUMENT_ROOT'] . "/models/" . $this->module . ".php"))
+            $this->model = System::loadClass($_SERVER['DOCUMENT_ROOT'] . "/models/" . $this->module . ".php", "Model" . ucfirst($this->module), array($this->module));
     }
 
     // Show or return the contents of a view file, passing specified variables for this file, if they're supplied.
@@ -25,7 +26,7 @@ class Controller {
             try {
                 extract($varlist);
             } catch (Exception $ex) {
-                System::debug(array("Error message" => $ex->getMessage() . '. In ' . $ex->getFile() . ' on line ' . $ex->getLine() . '.'),array('Parameter varlist'=>$varlist));
+                System::debug(array("Error message" => $ex->getMessage() . '. In ' . $ex->getFile() . ' on line ' . $ex->getLine() . '.'), array('Parameter varlist' => $varlist));
             }
         }
 
@@ -63,7 +64,7 @@ class Controller {
                 trigger_error("Wrong argument type. It must be a string or an array.", E_WARNING);
             }
         } catch (Exception $e) {
-            System::debug(array("Error message" => $ex->getMessage() . '. In ' . $ex->getFile() . ' on line ' . $ex->getLine() . '.'),array('Paramater args'=>$args,'Parameter filename'=>$filename));
+            System::debug(array("Error message" => $ex->getMessage() . '. In ' . $ex->getFile() . ' on line ' . $ex->getLine() . '.'), array('Paramater args' => $args, 'Parameter filename' => $filename));
         }
         exit;
     }

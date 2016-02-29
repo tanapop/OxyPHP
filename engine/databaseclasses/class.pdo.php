@@ -1,6 +1,6 @@
 <?php
 
-class Pdo {
+class Oxypdo {
 
     // Database host server. Example: "localhost".
     private $dbhost;
