@@ -46,7 +46,7 @@ class Oxymysqli {
     }
 
     /* Tries to connect to mysql database much times as configured. If all attempts fails, 
-     * write error to property and returns false. Returns true on first success.
+     * write an error to property and returns false. Returns true on first success.
      */
 
     private function connect() {
@@ -114,6 +114,7 @@ class Oxymysqli {
      */
 
     public function query($sql) {
+        $sql = is_array($sql) ? $sql[0] : $sql;
         $res = $this->connection->query($sql);
 
         if ($this->connection->errno) {

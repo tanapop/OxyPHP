@@ -58,7 +58,7 @@ class Oxypdo {
     }
 
     /* Tries to connect to database server much times as configured. If all attempts fails, 
-     * write error to property and returns false. Returns true on first success.
+     * write an error to property and returns false. Returns true on first success.
      */
 
     private function connect($count) {
@@ -113,17 +113,21 @@ class Oxypdo {
         );
     }
 
-    public function query($presql, $values) {
+    public function query($sqldata) {
+        list($presql, $values) = $sqldata;
+
         try {
             $presql = $this->connection->prepare($presql);
-            foreach ($values as $key => $val) {
-                $presql->bindParam((is_numeric($key) ? $key + 1 : $key), $val, $this->datatypes[gettype($val)]);
+            if (!empty($values)) {
+                foreach ($values as $key => $val) {
+                    $presql->bindParam((is_numeric($key) ? $key + 1 : $key), $val, $this->datatypes[gettype($val)]);
+                }
             }
             $res = $presql->execute();
-            
-            if(!$res){
+
+            if (!$res) {
                 $this->queryerror = $this->connection->errorInfo();
-                System::debug(array("SQL" => $presql,'Error Message'=>"While executing query, an error occured. More info listed bellow"), array('Values'=>$values,'Query Error'=>$this->queryerror));
+                System::debug(array("SQL" => $sqldata[0], 'Error Message' => "While executing query, an error occured. More info listed bellow"), array('Values' => $values, 'Query Error' => $this->queryerror));
                 return false;
             }
 

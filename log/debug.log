@@ -28,3 +28,7 @@ At 2016/02/29 - 16:28:25: Debug called from Oxymysqli::query() in /home/gabriel/
 
 At 2016/02/29 - 16:35:26: Debug called from Oxymysqli::query() in /home/gabriel/Projects/oxyphp/engine/databaseclasses/class.mysqli.php on line 121.
 
+At 2016/03/03 - 23:55:45: Debug called from Oxymysqli::query() in /home/gabriel/Projects/oxyphp/engine/databaseclasses/class.mysqli.php on line 122.
+
+At 2016/03/04 - 00:12:29: Debug called from ObjLoader::load() in /home/gabriel/Projects/oxyphp/engine/class.objloader.php on line 23.
+

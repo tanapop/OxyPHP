@@ -15,7 +15,7 @@ class Mvcgenerator {
     public function __construct() {
         $this->dbclass = System::loadClass($_SERVER["DOCUMENT_ROOT"] . "/engine/databaseclasses/class." . DBCLASS . ".php", "oxy".DBCLASS);
 
-        $tables = $this->dbclass->query("SHOW TABLES");
+        $tables = $this->dbclass->query(array("SHOW TABLES"));
 
         $keyname = "Tables_in_" . DBNAME;
         foreach ($tables as $t) {
@@ -63,7 +63,7 @@ class Mvcgenerator {
     }
 
     public function createmvc($modulename, $fileset) {
-        $fields = $this->dbclass->query("DESCRIBE " . $modulename);
+        $fields = $this->dbclass->query(array("DESCRIBE " . $modulename));
         foreach ($fields as $row) {
             if ($row->Key == "PRI") {
                 $this->primarykey = $row->Field;

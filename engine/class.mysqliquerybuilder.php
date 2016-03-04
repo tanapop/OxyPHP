@@ -1,21 +1,31 @@
 <?php
-class Querybuilder{
+
+class Querybuilder {
+
     // The name of main table of this module. By default, it has the same name of the module itself.
-    protected $table;
+    private $table;
     // An instance of the class Mysql.
-    protected $dbclass;
-    
+    private $dbclass;
+
+    public function __construct() {
+        list($table, $dbclass) = func_get_args();
+        $this->table = $table;
+        $this->dbclass = $dbclass;
+    }
+
     // This function is called from any model to build the query based on argument passed in type.
-    protected function _buildquery($type, $data) {
+    public function build($type, $data, $table = null) {
         try {
+            if ($table != null)
+                $this->table = $table;
             return call_user_func_array(array($this, $type . "_query"), $data);
         } catch (Exception $ex) {
             System::debug(array("Error message" => $ex->getMessage() . '. In ' . $ex->getFile() . ' on line ' . $ex->getLine() . '.'), array('Parameter type' => $type, 'Parameter data' => $data));
         }
     }
-    
+
     // Build a insert type query string with argument passed in dataset and return it.
-    private function insert_query($dataset) { 
+    private function insert_query($dataset) {
         $dataset = $this->dbclass->escapevar($dataset);
 
         $fields = "";
@@ -69,12 +79,12 @@ class Querybuilder{
 
         return "DELETE FROM " . $this->table . $this->_whereClause($conditions, $join, $operator);
     }
-    
+
     /* Build a Mysql where clause string based on conditions passed on params,
      * the join OR or AND and operator as = or LIKE, then return the string.
      */
 
-    protected function _whereClause($params = array(), $join = 'AND', $operator = '=') {
+    public function _whereClause($params = array(), $join = 'AND', $operator = '=') {
         $where = '';
         if (!empty($params)) {
             if (is_array($params)) {
@@ -105,12 +115,14 @@ class Querybuilder{
 
         return $where;
     }
-    
-    private function escapeParams($params) {
+
+    public function escapeParams($params) {
         foreach ($params as $k => $p) {
             $params[$k] = $this->dbclass->escapevar($p);
         }
         return $params;
     }
+
 }
+
 ?>

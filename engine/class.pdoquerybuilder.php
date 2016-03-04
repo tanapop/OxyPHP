@@ -1,43 +1,47 @@
 <?php
-class Querybuilder{
+
+class Querybuilder {
+
     // The name of main table of this module. By default, it has the same name of the module itself.
-    protected $table;
-    // An instance of the class Mysql.
-    protected $dbclass;
-    
+    private $table;
+
+    public function __construct() {
+        $table = func_get_arg(0);
+        $this->table = $table;
+    }
+
     // This function is called from any model to build the query based on argument passed in type.
-    protected function _buildquery($type, $data) {
+    public function build($type, $data, $table = null) {
         try {
+            if ($table != null)
+                $this->table = $table;
             return call_user_func_array(array($this, $type . "_query"), $data);
         } catch (Exception $ex) {
             System::debug(array("Error message" => $ex->getMessage() . '. In ' . $ex->getFile() . ' on line ' . $ex->getLine() . '.'), array('Parameter type' => $type, 'Parameter data' => $data));
         }
     }
-    
+
     // Build a insert type query string with argument passed in dataset and return it.
     private function insert_query($dataset) {
-        $dataset = $this->dbclass->escapevar($dataset);
-
         $fields = "";
         $values = " VALUES (";
+        $arrVals = array();
 
         foreach ($dataset as $key => $val) {
             if (!empty($val)) {
                 $fields .= $key . ",";
-                $values .= (is_numeric($val) ? $val : "'" . $val . "'") . ",";
+                $values .= "?,";
+                $arrVals[] = $val;
             }
         }
         $fields = rtrim($fields, ",") . ")";
         $values = rtrim($values, ",") . ")";
 
-        return "INSERT INTO " . $this->table . " (" . $fields . $values;
+        return array("INSERT INTO " . $this->table . " (" . $fields . $values,$arrVals);
     }
 
     // Build a update type query string with argument passed in dataset and return it.
     private function update_query($dataset, $conditions, $join = "AND", $operator = "=") {
-        $dataset = $this->dbclass->escapevar($dataset);
-        $conditions = $this->escapeParams($conditions);
-
         $sql = "UPDATE " . $this->table . " SET ";
         foreach ($dataset as $key => $val) {
             if (!is_null($val) && $val !== false) {
@@ -51,9 +55,6 @@ class Querybuilder{
 
     // Build a select type query string with argument passed in dataset and return it.
     private function select_query($fields, $conditions, $join = "AND", $operator = "=") {
-        $fields = $this->dbclass->escapevar($fields);
-        $conditions = $this->escapeParams($conditions);
-
         $sql = "SELECT ";
         foreach ($fields as $f) {
             $sql .= $f . ",";
@@ -65,16 +66,15 @@ class Querybuilder{
 
     // Build a delete type query string with argument passed in dataset and return it.
     private function delete_query($conditions, $join = "AND", $operator = "=") {
-        $conditions = $this->escapeParams($conditions);
 
         return "DELETE FROM " . $this->table . $this->_whereClause($conditions, $join, $operator);
     }
-    
+
     /* Build a Mysql where clause string based on conditions passed on params,
      * the join OR or AND and operator as = or LIKE, then return the string.
      */
 
-    protected function _whereClause($params = array(), $join = 'AND', $operator = '=') {
+    public function _whereClause($params = array(), $join = 'AND', $operator = '=') {
         $where = '';
         if (!empty($params)) {
             if (is_array($params)) {
@@ -106,4 +106,5 @@ class Querybuilder{
         return $where;
     }
 }
+
 ?>
