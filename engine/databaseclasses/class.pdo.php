@@ -112,15 +112,25 @@ class Oxypdo {
                     "info" => $this->cnnInfo
         );
     }
-    
-    public function dbtables($dbname = DBNAME){
+
+    public function describeTable($tablename) {
+        $res = $this->connection->query("DESCRIBE " . $tablename);
+        $ret = array();
+        while ($row = $res->fetch(PDO::FETCH_OBJ)) {
+            $ret[] = $row;
+        }
+
+        return $ret;
+    }
+
+    public function dbtables() {
         $res = $this->connection->query("SHOW TABLES");
         $ret = array();
-        $keyname = "Tables_in_" . $dbname;
+        $keyname = "Tables_in_" . DBNAME;
         foreach ($res as $t) {
             $ret[] = $t[$keyname];
         }
-        
+
         return $ret;
     }
 

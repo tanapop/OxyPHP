@@ -22,7 +22,7 @@ class Model extends Querybuilder{
     }
 
     private function set_primary_key() {
-        foreach ($this->dbclass->query("DESCRIBE " . $this->table) as $row) {
+        foreach ($this->dbclass->describeTable($this->table) as $row) {
             if ($row->Key == "PRI") {
                 $this->primarykey = $row->Field;
                 break;

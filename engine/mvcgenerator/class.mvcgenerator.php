@@ -58,7 +58,7 @@ class Mvcgenerator {
     }
 
     public function createmvc($modulename, $fileset) {
-        $fields = $this->dbclass->query(array("DESCRIBE " . $modulename));
+        $fields = $this->dbclass->describeTable($modulename);
         foreach ($fields as $row) {
             if ($row->Key == "PRI") {
                 $this->primarykey = $row->Field;
