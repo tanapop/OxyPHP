@@ -112,6 +112,17 @@ class Oxypdo {
                     "info" => $this->cnnInfo
         );
     }
+    
+    public function dbtables($dbname = DBNAME){
+        $res = $this->connection->query("SHOW TABLES");
+        $ret = array();
+        $keyname = "Tables_in_" . $dbname;
+        foreach ($res as $t) {
+            $ret[] = $t[$keyname];
+        }
+        
+        return $ret;
+    }
 
     public function query($sqldata) {
         list($presql, $values) = $sqldata;

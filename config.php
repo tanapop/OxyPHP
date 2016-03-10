@@ -7,7 +7,7 @@ define("DBUSER", "root");
 define("DBPASS", "h7t846m2");
 define("DBTYPE", 'mysql');
 define("DBCONNECTION_MAX_TRIES", 5);
-define("DBCLASS", "mysqli");  /* Built in, ready for use classes: pdo, mysqli(DEPRECATED). */
+define("DBCLASS", "pdo");  /* Built in, ready for use classes: pdo, mysqli(DEPRECATED). */
 
 //>
 

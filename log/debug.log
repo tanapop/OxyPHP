@@ -32,3 +32,19 @@ At 2016/03/03 - 23:55:45: Debug called from Oxymysqli::query() in /home/gabriel/
 
 At 2016/03/04 - 00:12:29: Debug called from ObjLoader::load() in /home/gabriel/Projects/oxyphp/engine/class.objloader.php on line 23.
 
+At 2016/03/09 - 21:30:30: Debug called from ObjLoader::load() in /home/gabriel/Projects/oxyphp/engine/class.objloader.php on line 23.
+
+At 2016/03/09 - 21:32:05: Debug called from Mvcgenerator::__construct() in /home/gabriel/Projects/oxyphp/engine/mvcgenerator/class.mvcgenerator.php on line 19.
+
+At 2016/03/09 - 21:33:06: Debug called from Mvcgenerator::__construct() in /home/gabriel/Projects/oxyphp/engine/mvcgenerator/class.mvcgenerator.php on line 19.
+
+At 2016/03/09 - 22:10:41: Debug called from Mvcgenerator::__construct() in /home/gabriel/Projects/oxyphp/engine/mvcgenerator/class.mvcgenerator.php on line 19.
+
+At 2016/03/09 - 22:12:00: Debug called from Mvcgenerator::__construct() in /home/gabriel/Projects/oxyphp/engine/mvcgenerator/class.mvcgenerator.php on line 19.
+
+At 2016/03/09 - 22:12:56: Debug called from Mvcgenerator::__construct() in /home/gabriel/Projects/oxyphp/engine/mvcgenerator/class.mvcgenerator.php on line 19.
+
+At 2016/03/09 - 22:13:34: Debug called from Mvcgenerator::__construct() in /home/gabriel/Projects/oxyphp/engine/mvcgenerator/class.mvcgenerator.php on line 19.
+
+At 2016/03/09 - 22:14:27: Debug called from Mvcgenerator::__construct() in /home/gabriel/Projects/oxyphp/engine/mvcgenerator/class.mvcgenerator.php on line 19.
+

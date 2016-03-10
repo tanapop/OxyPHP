@@ -108,6 +108,17 @@ class Oxymysqli {
                     "info" => $this->cnnInfo
         );
     }
+    
+    public function dbtables($dbname = DBNAME){
+        $res = $this->connection->query("SHOW TABLES");
+        $ret = array();
+        $keyname = "Tables_in_" . $dbname;
+        foreach ($res as $t) {
+            $ret[] = $t[$keyname];
+        }
+        
+        return $ret;
+    }
 
     /* Triggers the sql query, save current connection information, then returns result data.
      * If it's a mysql resource, process it into an array of objects before returning.
