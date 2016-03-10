@@ -1,6 +1,10 @@
 <?php
 
-class Oxypdo {
+/* //////////////////////
+  PDO DATABASE CLASS//
+ *///////////////////////
+
+class Dbclass {
 
     // Database host server. Example: "localhost".
     private $dbhost;
@@ -20,6 +24,8 @@ class Oxypdo {
     public $queryerror;
     // Data types constants
     private $datatypes;
+    // An instance of class Querybuilder.
+    public $querybuilder;
 
     /* Verifies if database connection data is valid, then sets the properties with those values.
      * Connect to database server and save the connection in a property.
@@ -47,6 +53,8 @@ class Oxypdo {
 
         $this->cnnInfo = new stdClass();
         $this->cnnInfo->info = "No connection info.";
+        
+        $this->querybuilder = System::loadClass($_SERVER["DOCUMENT_ROOT"] . "/engine/databasemodules/".DBCLASS ."/class.querybuilder.php", "querybuilder");
 
         if (!$this->connect(1))
             System::debug(array("Attempt to connect to database server failed. Error:" => $this->connection), array());
@@ -134,9 +142,7 @@ class Oxypdo {
         return $ret;
     }
 
-    public function query($sqldata) {
-        list($presql, $values) = $sqldata;
-
+    public function query($presql, $values) {
         try {
             $presql = $this->connection->prepare($presql);
             if (!empty($values)) {

@@ -1,6 +1,10 @@
 <?php
 
-class Oxymysqli {
+/* //////////////////////
+  MYSQLI DATABASE CLASS//
+ *///////////////////////
+
+class Dbclass {
 
     // Mysql database host server. Example: "localhost".
     private $dbhost;
@@ -16,6 +20,8 @@ class Oxymysqli {
     private $connection;
     // Stores a query error, if it occurs.
     public $error;
+    // An instance of class Querybuilder.
+    public $querybuilder;
 
     /* Verifies if database connection data is valid, then sets the properties with those values.
      * Connect to mysql server and save the connection in a property.
@@ -35,6 +41,8 @@ class Oxymysqli {
 
         $this->cnnInfo = new stdClass();
         $this->cnnInfo->info = "No connection info.";
+
+        $this->querybuilder = System::loadClass($_SERVER["DOCUMENT_ROOT"] . "/engine/databasemodules/" . DBCLASS . "/class.querybuilder.php", "querybuilder", array($this));
 
         if (!$this->connect())
             System::debug(array("Attempt to connect to mysql database failed. Error:" => $this->connection), array());
@@ -135,7 +143,6 @@ class Oxymysqli {
      */
 
     public function query($sql) {
-        $sql = is_array($sql) ? $sql[0] : $sql;
         $res = $this->connection->query($sql);
 
         if ($this->connection->errno) {

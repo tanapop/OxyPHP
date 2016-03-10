@@ -17,7 +17,7 @@ class Controller {
         $this->module = $module;
 
         if (is_file($_SERVER['DOCUMENT_ROOT'] . "/models/" . $this->module . ".php"))
-            $this->model = System::loadClass($_SERVER['DOCUMENT_ROOT'] . "/models/" . $this->module . ".php", "Model" . ucfirst($this->module), array($this->module));
+            $this->_loadmodel($this->module);
     }
 
     // Show or return the contents of a view file, passing specified variables for this file, if they're supplied.
@@ -67,6 +67,10 @@ class Controller {
             System::debug(array("Error message" => $ex->getMessage() . '. In ' . $ex->getFile() . ' on line ' . $ex->getLine() . '.'), array('Paramater args' => $args, 'Parameter filename' => $filename));
         }
         exit;
+    }
+    
+    protected function _loadmodel($modelname){
+        $this->model = System::loadClass($_SERVER['DOCUMENT_ROOT'] . "/models/" . $modelname . ".php", "Model" . ucfirst($modelname), array($modelname));
     }
 
 }

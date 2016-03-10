@@ -1,22 +1,20 @@
 <?php
 
-class Model extends Querybuilder{
+class Model {
 
     // The name of table's primary key.
     private $primarykey;
     // The name of main table of this module. By default, it has the same name of the module itself.
     private $table;
     // An instance of the class Mysql.
-    protected $dbclass;
-    // An instance of class Querybuilder.
-    protected $querybuilder;
+    private $dbclass;
+    
 
     // It sets the main table name, instantiate class Mysql and defines the table's primary key.
     public function __construct($table) {
         $this->table = $table;
 
-        $this->dbclass = System::loadClass($_SERVER["DOCUMENT_ROOT"] . "/engine/databaseclasses/class." . DBCLASS . ".php", 'oxy'.DBCLASS);
-        $this->querybuilder = System::loadClass($_SERVER["DOCUMENT_ROOT"] . "/engine/class." . DBCLASS . "querybuilder.php", "querybuilder", array($this->table,$this->dbclass));
+        $this->dbclass = System::loadClass($_SERVER["DOCUMENT_ROOT"] . "/engine/databasemodules/".DBCLASS."/class.dbclass.php", 'dbclass');
 
         $this->set_primary_key();
     }
@@ -44,6 +42,12 @@ class Model extends Querybuilder{
         return $this->table;
     }
 
+    protected function dbquery($args) {
+       if(is_string($args))
+           $args = array($args);
+        return call_user_func_array(array($this->dbclass, 'query'), $args);
+    }
+
     // Select fields from the table under the rules specified in conditions. Return a list of results.
     public function _get($fields, $conditions = array(), $debug = false) {
         if (is_string($fields)) {
@@ -57,9 +61,9 @@ class Model extends Querybuilder{
         }
 
         if ($debug) {
-            System::debug(array("Mysql Query" => $this->querybuilder->build("select", array($fields, $conditions))), array());
+            System::debug(array(), array("SQL" => $this->dbclass->querybuilder->build("select", array($fields, $conditions),$this->table)));
         } else {
-            if ($result = $this->dbclass->query($this->querybuilder->build("select", array($fields, $conditions)))) {
+            if ($result = $this->dbquery($this->dbclass->querybuilder->build("select", array($fields, $conditions),$this->table))) {
                 return $result;
             } else
                 return false;
@@ -70,26 +74,26 @@ class Model extends Querybuilder{
     public function _save($dataset, $conditions = array(), $debug = false) {
         $dataset = (array) $dataset;
         if (!empty($conditions)) {
-            $sql = $this->querybuilder->build("update", array($dataset, $conditions));
+            $sql = $this->dbclass->querybuilder->build("update", array($dataset, $conditions),$this->table);
         } else {
             if (isset($dataset[$this->primarykey]))
                 unset($dataset[$this->primarykey]);
-            $sql = $this->querybuilder->build("insert", array($dataset));
+            $sql = $this->dbclass->querybuilder->build("insert", array($dataset),$this->table);
         }
 
         if ($debug) {
-            System::debug(array("Mysql Query" => $sql), array());
+            System::debug(array(), array("SQL" => $sql));
         } else {
-            return $this->dbclass->query($sql);
+            return $this->dbquery($sql);
         }
     }
 
     // Delete data from table under the rules specified in conditions.
     public function _delete($conditions, $debug = false) {
         if ($debug) {
-            System::debug(array("Mysql Query" => $this->querybuilder->build("delete", array($fields, $conditions))), array());
+            System::debug(array(), array("SQL" => $this->dbclass->querybuilder->build("delete", array($fields, $conditions),$this->table)));
         } else {
-            return $this->dbclass->query($this->querybuilder->build("delete", array($conditions)));
+            return $this->dbquery($this->dbclass->querybuilder->build("delete", array($conditions),$this->table));
         }
     }
 

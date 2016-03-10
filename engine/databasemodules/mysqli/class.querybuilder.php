@@ -1,5 +1,9 @@
 <?php
 
+/* //////////////////////////
+  MYSQLI QUERYBUILDER CLASS//
+ *///////////////////////////
+
 class Querybuilder {
 
     // The name of main table of this module. By default, it has the same name of the module itself.
@@ -7,17 +11,14 @@ class Querybuilder {
     // An instance of the class Mysql.
     private $dbclass;
 
-    public function __construct() {
-        list($table, $dbclass) = func_get_args();
-        $this->table = $table;
+    public function __construct($dbclass) {
         $this->dbclass = $dbclass;
     }
 
     // This function is called from any model to build the query based on argument passed in type.
-    public function build($type, $data, $table = null) {
+    public function build($type, $data, $table) {
         try {
-            if ($table != null)
-                $this->table = $table;
+            $this->table = $table;
             return call_user_func_array(array($this, $type . "_query"), $data);
         } catch (Exception $ex) {
             System::debug(array("Error message" => $ex->getMessage() . '. In ' . $ex->getFile() . ' on line ' . $ex->getLine() . '.'), array('Parameter type' => $type, 'Parameter data' => $data));

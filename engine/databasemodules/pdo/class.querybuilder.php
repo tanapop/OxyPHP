@@ -1,20 +1,22 @@
 <?php
 
+/* ///////////////////////
+  PDO QUERYBUILDER CLASS//
+ *////////////////////////
+
 class Querybuilder {
 
     // The name of main table of this module. By default, it has the same name of the module itself.
     private $table;
 
     public function __construct() {
-        $table = func_get_arg(0);
-        $this->table = $table;
+        
     }
 
     // This function is called from any model to build the query based on argument passed in type.
-    public function build($type, $data, $table = null) {
+    public function build($type, $data, $table) {
         try {
-            if ($table != null)
-                $this->table = $table;
+            $this->table = $table;
             return call_user_func_array(array($this, $type . "_query"), $data);
         } catch (Exception $ex) {
             System::debug(array("Error message" => $ex->getMessage() . '. In ' . $ex->getFile() . ' on line ' . $ex->getLine() . '.'), array('Parameter type' => $type, 'Parameter data' => $data));
@@ -37,7 +39,7 @@ class Querybuilder {
         $fields = rtrim($fields, ",") . ")";
         $values = rtrim($values, ",") . ")";
 
-        return array("INSERT INTO " . $this->table . " (" . $fields . $values,$arrVals);
+        return array("INSERT INTO " . $this->table . " (" . $fields . $values, $arrVals);
     }
 
     // Build a update type query string with argument passed in dataset and return it.
@@ -105,6 +107,7 @@ class Querybuilder {
 
         return $where;
     }
+
 }
 
 ?>
