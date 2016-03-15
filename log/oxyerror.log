@@ -155,3 +155,411 @@ At 2016/03/09 - 23:18:49: Warning: extract() expects parameter 1 to be array, nu
 
 At 2016/03/09 - 23:36:52: Warning: Invalid argument supplied for foreach() In /home/gabriel/Projects/oxyphp/engine/databaseclasses/class.pdo.php on line 143
 
+At 2016/03/11 - 05:06:56: Warning: Missing argument 2 for Dbclass::query() In /home/gabriel/Projects/oxyphp/engine/databasemodules/pdo/class.dbclass.php on line 145
+
+At 2016/03/11 - 05:06:56: Warning: require_once(/var/www/html/oxyphp//controllers/accessories.php): failed to open stream: No such file or directory In /home/gabriel/Projects/oxyphp/engine/class.objloader.php on line 18
+
+At 2016/03/11 - 05:06:56: Warning: require_once(/var/www/html/oxyphp//controllers/accessories.php): failed to open stream: No such file or directory In /home/gabriel/Projects/oxyphp/engine/class.objloader.php on line 18
+
+At 2016/03/11 - 20:56:50: Warning: Missing argument 2 for Dbclass::query() In /home/gabriel/Projects/oxyphp/engine/databasemodules/pdo/class.dbclass.php on line 145
+
+At 2016/03/11 - 20:56:51: Warning: require_once(/var/www/html/oxyphp//controllers/accessories.php): failed to open stream: No such file or directory In /home/gabriel/Projects/oxyphp/engine/class.objloader.php on line 18
+
+At 2016/03/11 - 20:56:51: Warning: require_once(/var/www/html/oxyphp//controllers/accessories.php): failed to open stream: No such file or directory In /home/gabriel/Projects/oxyphp/engine/class.objloader.php on line 18
+
+At 2016/03/11 - 20:58:18: Warning: require_once(/var/www/html/oxyphp//controllers/accessories.php): failed to open stream: No such file or directory In /home/gabriel/Projects/oxyphp/engine/class.objloader.php on line 18
+
+At 2016/03/11 - 20:58:22: Warning: require_once(/var/www/html/oxyphp//controllers/accessories.php): failed to open stream: No such file or directory In /home/gabriel/Projects/oxyphp/engine/class.objloader.php on line 18
+
+At 2016/03/11 - 21:00:00: Warning: require_once(/var/www/html/oxyphp//controllers/accessories.php): failed to open stream: No such file or directory In /home/gabriel/Projects/oxyphp/engine/class.objloader.php on line 18
+
+At 2016/03/11 - 21:00:00: Warning: require_once(/var/www/html/oxyphp//controllers/accessories.php): failed to open stream: No such file or directory In /home/gabriel/Projects/oxyphp/engine/class.objloader.php on line 18
+
+At 2016/03/11 - 21:00:00: Warning: require_once(/var/www/html/oxyphp//controllers/accessories.php): failed to open stream: No such file or directory In /home/gabriel/Projects/oxyphp/engine/class.objloader.php on line 18
+
+At 2016/03/11 - 21:00:09: Warning: require_once(/var/www/html/oxyphp//controllers/accessories.php): failed to open stream: No such file or directory In /home/gabriel/Projects/oxyphp/engine/class.objloader.php on line 18
+
+At 2016/03/11 - 21:01:30: Warning: require_once(/var/www/html/oxyphp//controllers/accessories.php): failed to open stream: No such file or directory In /home/gabriel/Projects/oxyphp/engine/class.objloader.php on line 18
+
+At 2016/03/11 - 21:01:30: Warning: require_once(/var/www/html/oxyphp//controllers/accessories.php): failed to open stream: No such file or directory In /home/gabriel/Projects/oxyphp/engine/class.objloader.php on line 18
+
+At 2016/03/11 - 21:01:30: Warning: require_once(/var/www/html/oxyphp//controllers/accessories.php): failed to open stream: No such file or directory In /home/gabriel/Projects/oxyphp/engine/class.objloader.php on line 18
+
+At 2016/03/11 - 21:01:54: Warning: require_once(/var/www/html/oxyphp//controllers/accessories.php): failed to open stream: No such file or directory In /home/gabriel/Projects/oxyphp/engine/class.objloader.php on line 18
+
+At 2016/03/11 - 21:01:54: Warning: require_once(/var/www/html/oxyphp//controllers/accessories.php): failed to open stream: No such file or directory In /home/gabriel/Projects/oxyphp/engine/class.objloader.php on line 18
+
+At 2016/03/11 - 21:01:54: Warning: require_once(/var/www/html/oxyphp//controllers/accessories.php): failed to open stream: No such file or directory In /home/gabriel/Projects/oxyphp/engine/class.objloader.php on line 18
+
+At 2016/03/11 - 21:01:57: Warning: require_once(/var/www/html/oxyphp//controllers/accessories.php): failed to open stream: No such file or directory In /home/gabriel/Projects/oxyphp/engine/class.objloader.php on line 18
+
+At 2016/03/11 - 21:02:24: Warning: Missing argument 2 for Dbclass::query() In /home/gabriel/Projects/oxyphp/engine/databasemodules/pdo/class.dbclass.php on line 145
+
+At 2016/03/11 - 21:02:25: Warning: require_once(/var/www/html/oxyphp//controllers/accessories.php): failed to open stream: No such file or directory In /home/gabriel/Projects/oxyphp/engine/class.objloader.php on line 18
+
+At 2016/03/11 - 21:02:25: Warning: require_once(/var/www/html/oxyphp//controllers/accessories.php): failed to open stream: No such file or directory In /home/gabriel/Projects/oxyphp/engine/class.objloader.php on line 18
+
+At 2016/03/11 - 21:02:29: Warning: require_once(/var/www/html/oxyphp//controllers/accessories.php): failed to open stream: No such file or directory In /home/gabriel/Projects/oxyphp/engine/class.objloader.php on line 18
+
+At 2016/03/11 - 21:03:04: Warning: require_once(/var/www/html/oxyphp//controllers/accessories.php): failed to open stream: No such file or directory In /home/gabriel/Projects/oxyphp/engine/class.objloader.php on line 18
+
+At 2016/03/11 - 21:03:04: Warning: require_once(/var/www/html/oxyphp//controllers/accessories.php): failed to open stream: No such file or directory In /home/gabriel/Projects/oxyphp/engine/class.objloader.php on line 18
+
+At 2016/03/11 - 21:03:04: Warning: require_once(/var/www/html/oxyphp//controllers/accessories.php): failed to open stream: No such file or directory In /home/gabriel/Projects/oxyphp/engine/class.objloader.php on line 18
+
+At 2016/03/11 - 21:03:09: Warning: require_once(/var/www/html/oxyphp//controllers/accessories.php): failed to open stream: No such file or directory In /home/gabriel/Projects/oxyphp/engine/class.objloader.php on line 18
+
+At 2016/03/11 - 21:03:40: Warning: require_once(/var/www/html/oxyphp//controllers/accessories.php): failed to open stream: No such file or directory In /home/gabriel/Projects/oxyphp/engine/class.objloader.php on line 18
+
+At 2016/03/11 - 21:03:40: Warning: require_once(/var/www/html/oxyphp//controllers/accessories.php): failed to open stream: No such file or directory In /home/gabriel/Projects/oxyphp/engine/class.objloader.php on line 18
+
+At 2016/03/11 - 21:03:40: Warning: require_once(/var/www/html/oxyphp//controllers/accessories.php): failed to open stream: No such file or directory In /home/gabriel/Projects/oxyphp/engine/class.objloader.php on line 18
+
+At 2016/03/11 - 21:03:48: Warning: require_once(/var/www/html/oxyphp//controllers/accessories.php): failed to open stream: No such file or directory In /home/gabriel/Projects/oxyphp/engine/class.objloader.php on line 18
+
+At 2016/03/11 - 21:05:23: Warning: require_once(/var/www/html/oxyphp//controllers/accessories.php): failed to open stream: No such file or directory In /home/gabriel/Projects/oxyphp/engine/class.objloader.php on line 18
+
+At 2016/03/11 - 21:05:23: Warning: require_once(/var/www/html/oxyphp//controllers/accessories.php): failed to open stream: No such file or directory In /home/gabriel/Projects/oxyphp/engine/class.objloader.php on line 18
+
+At 2016/03/11 - 21:05:25: Warning: require_once(/var/www/html/oxyphp//controllers/accessories.php): failed to open stream: No such file or directory In /home/gabriel/Projects/oxyphp/engine/class.objloader.php on line 18
+
+At 2016/03/11 - 21:05:25: Warning: require_once(/var/www/html/oxyphp//controllers/accessories.php): failed to open stream: No such file or directory In /home/gabriel/Projects/oxyphp/engine/class.objloader.php on line 18
+
+At 2016/03/11 - 21:11:06: Warning: Missing argument 2 for Dbclass::query() In /home/gabriel/Projects/oxyphp/engine/databasemodules/pdo/class.dbclass.php on line 145
+
+At 2016/03/11 - 21:11:07: Warning: require_once(/var/www/html/oxyphp//controllers/accessories.php): failed to open stream: No such file or directory In /home/gabriel/Projects/oxyphp/engine/class.objloader.php on line 18
+
+At 2016/03/11 - 21:11:07: Warning: require_once(/var/www/html/oxyphp//controllers/accessories.php): failed to open stream: No such file or directory In /home/gabriel/Projects/oxyphp/engine/class.objloader.php on line 18
+
+At 2016/03/11 - 21:17:04: Warning: Invalid argument supplied for foreach() In /home/gabriel/Projects/oxyphp/views/cliente/listing.php on line 58
+
+At 2016/03/11 - 21:17:04: Warning: require_once(/var/www/html/oxyphp//controllers/accessories.php): failed to open stream: No such file or directory In /home/gabriel/Projects/oxyphp/engine/class.objloader.php on line 18
+
+At 2016/03/11 - 21:17:04: Warning: require_once(/var/www/html/oxyphp//controllers/accessories.php): failed to open stream: No such file or directory In /home/gabriel/Projects/oxyphp/engine/class.objloader.php on line 18
+
+At 2016/03/11 - 21:17:04: Warning: require_once(/var/www/html/oxyphp//controllers/accessories.php): failed to open stream: No such file or directory In /home/gabriel/Projects/oxyphp/engine/class.objloader.php on line 18
+
+At 2016/03/11 - 21:17:11: Warning: require_once(/var/www/html/oxyphp//controllers/accessories.php): failed to open stream: No such file or directory In /home/gabriel/Projects/oxyphp/engine/class.objloader.php on line 18
+
+At 2016/03/11 - 21:18:34: Warning: Invalid argument supplied for foreach() In /home/gabriel/Projects/oxyphp/views/cliente/listing.php on line 58
+
+At 2016/03/11 - 21:18:35: Warning: require_once(/var/www/html/oxyphp//controllers/accessories.php): failed to open stream: No such file or directory In /home/gabriel/Projects/oxyphp/engine/class.objloader.php on line 18
+
+At 2016/03/11 - 21:18:35: Warning: require_once(/var/www/html/oxyphp//controllers/accessories.php): failed to open stream: No such file or directory In /home/gabriel/Projects/oxyphp/engine/class.objloader.php on line 18
+
+At 2016/03/11 - 21:18:35: Warning: require_once(/var/www/html/oxyphp//controllers/accessories.php): failed to open stream: No such file or directory In /home/gabriel/Projects/oxyphp/engine/class.objloader.php on line 18
+
+At 2016/03/11 - 21:18:41: Warning: require_once(/var/www/html/oxyphp//controllers/accessories.php): failed to open stream: No such file or directory In /home/gabriel/Projects/oxyphp/engine/class.objloader.php on line 18
+
+At 2016/03/15 - 07:09:46: Warning: Invalid argument supplied for foreach() In /home/gabriel/Projects/oxyphp/views/cliente/listing.php on line 58
+
+At 2016/03/15 - 07:09:47: Warning: require_once(/var/www/html/oxyphp//controllers/accessories.php): failed to open stream: No such file or directory In /home/gabriel/Projects/oxyphp/engine/class.objloader.php on line 18
+
+At 2016/03/15 - 07:09:47: Warning: require_once(/var/www/html/oxyphp//controllers/accessories.php): failed to open stream: No such file or directory In /home/gabriel/Projects/oxyphp/engine/class.objloader.php on line 18
+
+At 2016/03/15 - 07:10:49: Warning: require_once(/var/www/html/oxyphp//controllers/accessories.php): failed to open stream: No such file or directory In /home/gabriel/Projects/oxyphp/engine/class.objloader.php on line 18
+
+At 2016/03/15 - 07:10:49: Warning: require_once(/var/www/html/oxyphp//controllers/accessories.php): failed to open stream: No such file or directory In /home/gabriel/Projects/oxyphp/engine/class.objloader.php on line 18
+
+At 2016/03/15 - 07:12:15: Warning: require_once(/var/www/html/oxyphp//controllers/accessories.php): failed to open stream: No such file or directory In /home/gabriel/Projects/oxyphp/engine/class.objloader.php on line 18
+
+At 2016/03/15 - 07:12:15: Warning: require_once(/var/www/html/oxyphp//controllers/accessories.php): failed to open stream: No such file or directory In /home/gabriel/Projects/oxyphp/engine/class.objloader.php on line 18
+
+At 2016/03/15 - 07:13:33: Warning: require_once(/var/www/html/oxyphp//controllers/accessories.php): failed to open stream: No such file or directory In /home/gabriel/Projects/oxyphp/engine/class.objloader.php on line 18
+
+At 2016/03/15 - 07:13:33: Warning: require_once(/var/www/html/oxyphp//controllers/accessories.php): failed to open stream: No such file or directory In /home/gabriel/Projects/oxyphp/engine/class.objloader.php on line 18
+
+At 2016/03/15 - 07:14:36: Warning: require_once(/var/www/html/oxyphp//controllers/accessories.php): failed to open stream: No such file or directory In /home/gabriel/Projects/oxyphp/engine/class.objloader.php on line 18
+
+At 2016/03/15 - 07:14:36: Warning: require_once(/var/www/html/oxyphp//controllers/accessories.php): failed to open stream: No such file or directory In /home/gabriel/Projects/oxyphp/engine/class.objloader.php on line 18
+
+At 2016/03/15 - 07:17:10: Warning: require_once(/var/www/html/oxyphp//controllers/accessories.php): failed to open stream: No such file or directory In /home/gabriel/Projects/oxyphp/engine/class.objloader.php on line 18
+
+At 2016/03/15 - 07:17:11: Warning: require_once(/var/www/html/oxyphp//controllers/accessories.php): failed to open stream: No such file or directory In /home/gabriel/Projects/oxyphp/engine/class.objloader.php on line 18
+
+At 2016/03/15 - 07:17:30: Warning: require_once(/var/www/html/oxyphp//controllers/accessories.php): failed to open stream: No such file or directory In /home/gabriel/Projects/oxyphp/engine/class.objloader.php on line 18
+
+At 2016/03/15 - 07:17:30: Warning: require_once(/var/www/html/oxyphp//controllers/accessories.php): failed to open stream: No such file or directory In /home/gabriel/Projects/oxyphp/engine/class.objloader.php on line 18
+
+At 2016/03/15 - 07:17:30: Warning: require_once(/var/www/html/oxyphp//controllers/accessories.php): failed to open stream: No such file or directory In /home/gabriel/Projects/oxyphp/engine/class.objloader.php on line 18
+
+At 2016/03/15 - 07:17:32: Warning: require_once(/var/www/html/oxyphp//controllers/accessories.php): failed to open stream: No such file or directory In /home/gabriel/Projects/oxyphp/engine/class.objloader.php on line 18
+
+At 2016/03/15 - 07:18:30: Warning: require_once(/var/www/html/oxyphp//controllers/accessories.php): failed to open stream: No such file or directory In /home/gabriel/Projects/oxyphp/engine/class.objloader.php on line 18
+
+At 2016/03/15 - 07:18:31: Warning: require_once(/var/www/html/oxyphp//controllers/accessories.php): failed to open stream: No such file or directory In /home/gabriel/Projects/oxyphp/engine/class.objloader.php on line 18
+
+At 2016/03/15 - 07:18:31: Warning: require_once(/var/www/html/oxyphp//controllers/accessories.php): failed to open stream: No such file or directory In /home/gabriel/Projects/oxyphp/engine/class.objloader.php on line 18
+
+At 2016/03/15 - 07:18:33: Warning: require_once(/var/www/html/oxyphp//controllers/accessories.php): failed to open stream: No such file or directory In /home/gabriel/Projects/oxyphp/engine/class.objloader.php on line 18
+
+At 2016/03/15 - 07:22:32: Warning: require_once(/var/www/html/oxyphp//controllers/accessories.php): failed to open stream: No such file or directory In /home/gabriel/Projects/oxyphp/engine/class.objloader.php on line 18
+
+At 2016/03/15 - 07:22:32: Warning: require_once(/var/www/html/oxyphp//controllers/accessories.php): failed to open stream: No such file or directory In /home/gabriel/Projects/oxyphp/engine/class.objloader.php on line 18
+
+At 2016/03/15 - 07:22:32: Warning: require_once(/var/www/html/oxyphp//controllers/accessories.php): failed to open stream: No such file or directory In /home/gabriel/Projects/oxyphp/engine/class.objloader.php on line 18
+
+At 2016/03/15 - 07:22:34: Warning: require_once(/var/www/html/oxyphp//controllers/accessories.php): failed to open stream: No such file or directory In /home/gabriel/Projects/oxyphp/engine/class.objloader.php on line 18
+
+At 2016/03/15 - 07:31:19: Warning: require_once(/var/www/html/oxyphp//controllers/accessories.php): failed to open stream: No such file or directory In /home/gabriel/Projects/oxyphp/engine/class.objloader.php on line 18
+
+At 2016/03/15 - 07:31:19: Warning: require_once(/var/www/html/oxyphp//controllers/accessories.php): failed to open stream: No such file or directory In /home/gabriel/Projects/oxyphp/engine/class.objloader.php on line 18
+
+At 2016/03/15 - 07:31:19: Warning: require_once(/var/www/html/oxyphp//controllers/accessories.php): failed to open stream: No such file or directory In /home/gabriel/Projects/oxyphp/engine/class.objloader.php on line 18
+
+At 2016/03/15 - 10:22:48: Warning: require_once(/var/www/html/oxyphp//controllers/accessories.php): failed to open stream: No such file or directory In /home/gabriel/Projects/oxyphp/engine/class.objloader.php on line 18
+
+At 2016/03/15 - 10:22:48: Warning: require_once(/var/www/html/oxyphp//controllers/accessories.php): failed to open stream: No such file or directory In /home/gabriel/Projects/oxyphp/engine/class.objloader.php on line 18
+
+At 2016/03/15 - 10:22:48: Warning: require_once(/var/www/html/oxyphp//controllers/accessories.php): failed to open stream: No such file or directory In /home/gabriel/Projects/oxyphp/engine/class.objloader.php on line 18
+
+At 2016/03/15 - 10:22:53: Warning: require_once(/var/www/html/oxyphp//controllers/accessories.php): failed to open stream: No such file or directory In /home/gabriel/Projects/oxyphp/engine/class.objloader.php on line 18
+
+At 2016/03/15 - 10:30:11: Warning: require_once(/var/www/html/oxyphp//controllers/accessories.php): failed to open stream: No such file or directory In /home/gabriel/Projects/oxyphp/engine/class.objloader.php on line 18
+
+At 2016/03/15 - 10:30:11: Warning: require_once(/var/www/html/oxyphp//controllers/accessories.php): failed to open stream: No such file or directory In /home/gabriel/Projects/oxyphp/engine/class.objloader.php on line 18
+
+At 2016/03/15 - 10:30:11: Warning: require_once(/var/www/html/oxyphp//controllers/accessories.php): failed to open stream: No such file or directory In /home/gabriel/Projects/oxyphp/engine/class.objloader.php on line 18
+
+At 2016/03/15 - 10:30:51: Warning: Missing argument 1 for Cliente::save() In /home/gabriel/Projects/oxyphp/controllers/cliente.php on line 23
+
+At 2016/03/15 - 10:33:03: Warning: array_values() expects parameter 1 to be array, null given In /home/gabriel/Projects/oxyphp/engine/databasemodules/pdo/class.querybuilder.php on line 72
+
+At 2016/03/15 - 10:33:03: Warning: require_once(/var/www/html/oxyphp//controllers/accessories.php): failed to open stream: No such file or directory In /home/gabriel/Projects/oxyphp/engine/class.objloader.php on line 18
+
+At 2016/03/15 - 10:33:03: Warning: require_once(/var/www/html/oxyphp//controllers/accessories.php): failed to open stream: No such file or directory In /home/gabriel/Projects/oxyphp/engine/class.objloader.php on line 18
+
+At 2016/03/15 - 10:33:03: Warning: require_once(/var/www/html/oxyphp//controllers/accessories.php): failed to open stream: No such file or directory In /home/gabriel/Projects/oxyphp/engine/class.objloader.php on line 18
+
+At 2016/03/15 - 10:33:23: Warning: require_once(/var/www/html/oxyphp//controllers/accessories.php): failed to open stream: No such file or directory In /home/gabriel/Projects/oxyphp/engine/class.objloader.php on line 18
+
+At 2016/03/15 - 10:36:57: Warning: require_once(/var/www/html/oxyphp//controllers/accessories.php): failed to open stream: No such file or directory In /home/gabriel/Projects/oxyphp/engine/class.objloader.php on line 18
+
+At 2016/03/15 - 10:36:57: Warning: require_once(/var/www/html/oxyphp//controllers/accessories.php): failed to open stream: No such file or directory In /home/gabriel/Projects/oxyphp/engine/class.objloader.php on line 18
+
+At 2016/03/15 - 10:38:05: Warning: require_once(/var/www/html/oxyphp//controllers/accessories.php): failed to open stream: No such file or directory In /home/gabriel/Projects/oxyphp/engine/class.objloader.php on line 18
+
+At 2016/03/15 - 10:38:05: Warning: require_once(/var/www/html/oxyphp//controllers/accessories.php): failed to open stream: No such file or directory In /home/gabriel/Projects/oxyphp/engine/class.objloader.php on line 18
+
+At 2016/03/15 - 10:38:09: Warning: require_once(/var/www/html/oxyphp//controllers/accessories.php): failed to open stream: No such file or directory In /home/gabriel/Projects/oxyphp/engine/class.objloader.php on line 18
+
+At 2016/03/15 - 10:38:10: Warning: require_once(/var/www/html/oxyphp//controllers/accessories.php): failed to open stream: No such file or directory In /home/gabriel/Projects/oxyphp/engine/class.objloader.php on line 18
+
+At 2016/03/15 - 10:38:44: Warning: require_once(/var/www/html/oxyphp//controllers/accessories.php): failed to open stream: No such file or directory In /home/gabriel/Projects/oxyphp/engine/class.objloader.php on line 18
+
+At 2016/03/15 - 10:38:44: Warning: require_once(/var/www/html/oxyphp//controllers/accessories.php): failed to open stream: No such file or directory In /home/gabriel/Projects/oxyphp/engine/class.objloader.php on line 18
+
+At 2016/03/15 - 10:38:46: Warning: require_once(/var/www/html/oxyphp//controllers/accessories.php): failed to open stream: No such file or directory In /home/gabriel/Projects/oxyphp/engine/class.objloader.php on line 18
+
+At 2016/03/15 - 10:38:47: Warning: require_once(/var/www/html/oxyphp//controllers/accessories.php): failed to open stream: No such file or directory In /home/gabriel/Projects/oxyphp/engine/class.objloader.php on line 18
+
+At 2016/03/15 - 10:43:53: Warning: require_once(/var/www/html/oxyphp//controllers/accessories.php): failed to open stream: No such file or directory In /home/gabriel/Projects/oxyphp/engine/class.objloader.php on line 18
+
+At 2016/03/15 - 10:43:53: Warning: require_once(/var/www/html/oxyphp//controllers/accessories.php): failed to open stream: No such file or directory In /home/gabriel/Projects/oxyphp/engine/class.objloader.php on line 18
+
+At 2016/03/15 - 10:43:53: Warning: require_once(/var/www/html/oxyphp//controllers/accessories.php): failed to open stream: No such file or directory In /home/gabriel/Projects/oxyphp/engine/class.objloader.php on line 18
+
+At 2016/03/15 - 10:43:57: Warning: require_once(/var/www/html/oxyphp//controllers/accessories.php): failed to open stream: No such file or directory In /home/gabriel/Projects/oxyphp/engine/class.objloader.php on line 18
+
+At 2016/03/15 - 10:54:59: Warning: require_once(/var/www/html/oxyphp//controllers/accessories.php): failed to open stream: No such file or directory In /home/gabriel/Projects/oxyphp/engine/class.objloader.php on line 18
+
+At 2016/03/15 - 10:54:59: Warning: require_once(/var/www/html/oxyphp//controllers/accessories.php): failed to open stream: No such file or directory In /home/gabriel/Projects/oxyphp/engine/class.objloader.php on line 18
+
+At 2016/03/15 - 10:55:01: Warning: require_once(/var/www/html/oxyphp//controllers/accessories.php): failed to open stream: No such file or directory In /home/gabriel/Projects/oxyphp/engine/class.objloader.php on line 18
+
+At 2016/03/15 - 10:55:01: Warning: require_once(/var/www/html/oxyphp//controllers/accessories.php): failed to open stream: No such file or directory In /home/gabriel/Projects/oxyphp/engine/class.objloader.php on line 18
+
+At 2016/03/15 - 10:57:13: Warning: require_once(/var/www/html/oxyphp//controllers/accessories.php): failed to open stream: No such file or directory In /home/gabriel/Projects/oxyphp/engine/class.objloader.php on line 18
+
+At 2016/03/15 - 10:57:13: Warning: require_once(/var/www/html/oxyphp//controllers/accessories.php): failed to open stream: No such file or directory In /home/gabriel/Projects/oxyphp/engine/class.objloader.php on line 18
+
+At 2016/03/15 - 10:57:15: Warning: require_once(/var/www/html/oxyphp//controllers/accessories.php): failed to open stream: No such file or directory In /home/gabriel/Projects/oxyphp/engine/class.objloader.php on line 18
+
+At 2016/03/15 - 10:57:15: Warning: require_once(/var/www/html/oxyphp//controllers/accessories.php): failed to open stream: No such file or directory In /home/gabriel/Projects/oxyphp/engine/class.objloader.php on line 18
+
+At 2016/03/15 - 10:57:42: Warning: PDOStatement::execute(): SQLSTATE[HY093]: Invalid parameter number: parameter was not defined In /home/gabriel/Projects/oxyphp/engine/databasemodules/pdo/class.dbclass.php on line 153
+
+At 2016/03/15 - 10:57:43: Warning: require_once(/var/www/html/oxyphp//controllers/accessories.php): failed to open stream: No such file or directory In /home/gabriel/Projects/oxyphp/engine/class.objloader.php on line 18
+
+At 2016/03/15 - 10:57:43: Warning: require_once(/var/www/html/oxyphp//controllers/accessories.php): failed to open stream: No such file or directory In /home/gabriel/Projects/oxyphp/engine/class.objloader.php on line 18
+
+At 2016/03/15 - 10:57:56: Warning: require_once(/var/www/html/oxyphp//controllers/accessories.php): failed to open stream: No such file or directory In /home/gabriel/Projects/oxyphp/engine/class.objloader.php on line 18
+
+At 2016/03/15 - 10:57:56: Warning: require_once(/var/www/html/oxyphp//controllers/accessories.php): failed to open stream: No such file or directory In /home/gabriel/Projects/oxyphp/engine/class.objloader.php on line 18
+
+At 2016/03/15 - 10:58:45: Warning: require_once(/var/www/html/oxyphp//controllers/accessories.php): failed to open stream: No such file or directory In /home/gabriel/Projects/oxyphp/engine/class.objloader.php on line 18
+
+At 2016/03/15 - 10:58:45: Warning: require_once(/var/www/html/oxyphp//controllers/accessories.php): failed to open stream: No such file or directory In /home/gabriel/Projects/oxyphp/engine/class.objloader.php on line 18
+
+At 2016/03/15 - 10:59:07: Warning: PDOStatement::execute(): SQLSTATE[HY093]: Invalid parameter number: parameter was not defined In /home/gabriel/Projects/oxyphp/engine/databasemodules/pdo/class.dbclass.php on line 153
+
+At 2016/03/15 - 10:59:08: Warning: require_once(/var/www/html/oxyphp//controllers/accessories.php): failed to open stream: No such file or directory In /home/gabriel/Projects/oxyphp/engine/class.objloader.php on line 18
+
+At 2016/03/15 - 10:59:08: Warning: require_once(/var/www/html/oxyphp//controllers/accessories.php): failed to open stream: No such file or directory In /home/gabriel/Projects/oxyphp/engine/class.objloader.php on line 18
+
+At 2016/03/15 - 10:59:11: Warning: require_once(/var/www/html/oxyphp//controllers/accessories.php): failed to open stream: No such file or directory In /home/gabriel/Projects/oxyphp/engine/class.objloader.php on line 18
+
+At 2016/03/15 - 10:59:11: Warning: require_once(/var/www/html/oxyphp//controllers/accessories.php): failed to open stream: No such file or directory In /home/gabriel/Projects/oxyphp/engine/class.objloader.php on line 18
+
+At 2016/03/15 - 10:59:41: Warning: require_once(/var/www/html/oxyphp//controllers/accessories.php): failed to open stream: No such file or directory In /home/gabriel/Projects/oxyphp/engine/class.objloader.php on line 18
+
+At 2016/03/15 - 10:59:41: Warning: require_once(/var/www/html/oxyphp//controllers/accessories.php): failed to open stream: No such file or directory In /home/gabriel/Projects/oxyphp/engine/class.objloader.php on line 18
+
+At 2016/03/15 - 10:59:41: Warning: require_once(/var/www/html/oxyphp//controllers/accessories.php): failed to open stream: No such file or directory In /home/gabriel/Projects/oxyphp/engine/class.objloader.php on line 18
+
+At 2016/03/15 - 11:00:01: Warning: require_once(/var/www/html/oxyphp//controllers/accessories.php): failed to open stream: No such file or directory In /home/gabriel/Projects/oxyphp/engine/class.objloader.php on line 18
+
+At 2016/03/15 - 11:00:45: Warning: require_once(/var/www/html/oxyphp//controllers/accessories.php): failed to open stream: No such file or directory In /home/gabriel/Projects/oxyphp/engine/class.objloader.php on line 18
+
+At 2016/03/15 - 11:00:45: Warning: require_once(/var/www/html/oxyphp//controllers/accessories.php): failed to open stream: No such file or directory In /home/gabriel/Projects/oxyphp/engine/class.objloader.php on line 18
+
+At 2016/03/15 - 11:00:45: Warning: require_once(/var/www/html/oxyphp//controllers/accessories.php): failed to open stream: No such file or directory In /home/gabriel/Projects/oxyphp/engine/class.objloader.php on line 18
+
+At 2016/03/15 - 11:00:58: Warning: require_once(/var/www/html/oxyphp//controllers/accessories.php): failed to open stream: No such file or directory In /home/gabriel/Projects/oxyphp/engine/class.objloader.php on line 18
+
+At 2016/03/15 - 11:01:18: Warning: PDOStatement::execute(): SQLSTATE[HY093]: Invalid parameter number: parameter was not defined In /home/gabriel/Projects/oxyphp/engine/databasemodules/pdo/class.dbclass.php on line 154
+
+At 2016/03/15 - 11:01:18: Warning: require_once(/var/www/html/oxyphp//controllers/accessories.php): failed to open stream: No such file or directory In /home/gabriel/Projects/oxyphp/engine/class.objloader.php on line 18
+
+At 2016/03/15 - 11:01:18: Warning: require_once(/var/www/html/oxyphp//controllers/accessories.php): failed to open stream: No such file or directory In /home/gabriel/Projects/oxyphp/engine/class.objloader.php on line 18
+
+At 2016/03/15 - 11:01:39: Warning: PDOStatement::execute(): SQLSTATE[HY093]: Invalid parameter number: parameter was not defined In /home/gabriel/Projects/oxyphp/engine/databasemodules/pdo/class.dbclass.php on line 154
+
+At 2016/03/15 - 11:01:39: Warning: require_once(/var/www/html/oxyphp//controllers/accessories.php): failed to open stream: No such file or directory In /home/gabriel/Projects/oxyphp/engine/class.objloader.php on line 18
+
+At 2016/03/15 - 11:01:39: Warning: require_once(/var/www/html/oxyphp//controllers/accessories.php): failed to open stream: No such file or directory In /home/gabriel/Projects/oxyphp/engine/class.objloader.php on line 18
+
+At 2016/03/15 - 11:02:28: Warning: require_once(/var/www/html/oxyphp//controllers/accessories.php): failed to open stream: No such file or directory In /home/gabriel/Projects/oxyphp/engine/class.objloader.php on line 18
+
+At 2016/03/15 - 11:02:28: Warning: require_once(/var/www/html/oxyphp//controllers/accessories.php): failed to open stream: No such file or directory In /home/gabriel/Projects/oxyphp/engine/class.objloader.php on line 18
+
+At 2016/03/15 - 11:02:28: Warning: require_once(/var/www/html/oxyphp//controllers/accessories.php): failed to open stream: No such file or directory In /home/gabriel/Projects/oxyphp/engine/class.objloader.php on line 18
+
+At 2016/03/15 - 11:02:44: Warning: require_once(/var/www/html/oxyphp//controllers/accessories.php): failed to open stream: No such file or directory In /home/gabriel/Projects/oxyphp/engine/class.objloader.php on line 18
+
+At 2016/03/15 - 11:02:44: Warning: require_once(/var/www/html/oxyphp//controllers/accessories.php): failed to open stream: No such file or directory In /home/gabriel/Projects/oxyphp/engine/class.objloader.php on line 18
+
+At 2016/03/15 - 11:02:44: Warning: require_once(/var/www/html/oxyphp//controllers/accessories.php): failed to open stream: No such file or directory In /home/gabriel/Projects/oxyphp/engine/class.objloader.php on line 18
+
+At 2016/03/15 - 11:02:51: Warning: require_once(/var/www/html/oxyphp//controllers/accessories.php): failed to open stream: No such file or directory In /home/gabriel/Projects/oxyphp/engine/class.objloader.php on line 18
+
+At 2016/03/15 - 11:03:00: Warning: require_once(/var/www/html/oxyphp//controllers/accessories.php): failed to open stream: No such file or directory In /home/gabriel/Projects/oxyphp/engine/class.objloader.php on line 18
+
+At 2016/03/15 - 11:15:02: Warning: require_once(/var/www/html/oxyphp//controllers/accessories.php): failed to open stream: No such file or directory In /home/gabriel/Projects/oxyphp/engine/class.objloader.php on line 18
+
+At 2016/03/15 - 11:15:02: Warning: require_once(/var/www/html/oxyphp//controllers/accessories.php): failed to open stream: No such file or directory In /home/gabriel/Projects/oxyphp/engine/class.objloader.php on line 18
+
+At 2016/03/15 - 11:15:02: Warning: require_once(/var/www/html/oxyphp//controllers/accessories.php): failed to open stream: No such file or directory In /home/gabriel/Projects/oxyphp/engine/class.objloader.php on line 18
+
+At 2016/03/15 - 11:15:05: Warning: require_once(/var/www/html/oxyphp//controllers/accessories.php): failed to open stream: No such file or directory In /home/gabriel/Projects/oxyphp/engine/class.objloader.php on line 18
+
+At 2016/03/15 - 11:15:40: Warning: require_once(/var/www/html/oxyphp//controllers/accessories.php): failed to open stream: No such file or directory In /home/gabriel/Projects/oxyphp/engine/class.objloader.php on line 18
+
+At 2016/03/15 - 11:15:40: Warning: require_once(/var/www/html/oxyphp//controllers/accessories.php): failed to open stream: No such file or directory In /home/gabriel/Projects/oxyphp/engine/class.objloader.php on line 18
+
+At 2016/03/15 - 11:15:40: Warning: require_once(/var/www/html/oxyphp//controllers/accessories.php): failed to open stream: No such file or directory In /home/gabriel/Projects/oxyphp/engine/class.objloader.php on line 18
+
+At 2016/03/15 - 11:15:42: Warning: require_once(/var/www/html/oxyphp//controllers/accessories.php): failed to open stream: No such file or directory In /home/gabriel/Projects/oxyphp/engine/class.objloader.php on line 18
+
+At 2016/03/15 - 11:19:19: Warning: require_once(/var/www/html/oxyphp//controllers/accessories.php): failed to open stream: No such file or directory In /home/gabriel/Projects/oxyphp/engine/class.objloader.php on line 18
+
+At 2016/03/15 - 11:19:19: Warning: require_once(/var/www/html/oxyphp//controllers/accessories.php): failed to open stream: No such file or directory In /home/gabriel/Projects/oxyphp/engine/class.objloader.php on line 18
+
+At 2016/03/15 - 11:19:19: Warning: require_once(/var/www/html/oxyphp//controllers/accessories.php): failed to open stream: No such file or directory In /home/gabriel/Projects/oxyphp/engine/class.objloader.php on line 18
+
+At 2016/03/15 - 11:20:28: Warning: require_once(/var/www/html/oxyphp//controllers/accessories.php): failed to open stream: No such file or directory In /home/gabriel/Projects/oxyphp/engine/class.objloader.php on line 18
+
+At 2016/03/15 - 11:26:09: Warning: PDOStatement::execute(): SQLSTATE[HY093]: Invalid parameter number: no parameters were bound In /home/gabriel/Projects/oxyphp/engine/databasemodules/pdo/class.dbclass.php on line 154
+
+At 2016/03/15 - 11:28:06: Warning: array_values() expects parameter 1 to be array, string given In /home/gabriel/Projects/oxyphp/engine/databasemodules/pdo/class.dbclass.php on line 146
+
+At 2016/03/15 - 11:34:25: Warning: require_once(/var/www/html/oxyphp//controllers/accessories.php): failed to open stream: No such file or directory In /home/gabriel/Projects/oxyphp/engine/class.objloader.php on line 18
+
+At 2016/03/15 - 11:34:25: Warning: require_once(/var/www/html/oxyphp//controllers/accessories.php): failed to open stream: No such file or directory In /home/gabriel/Projects/oxyphp/engine/class.objloader.php on line 18
+
+At 2016/03/15 - 11:34:25: Warning: require_once(/var/www/html/oxyphp//controllers/accessories.php): failed to open stream: No such file or directory In /home/gabriel/Projects/oxyphp/engine/class.objloader.php on line 18
+
+At 2016/03/15 - 11:34:29: Warning: require_once(/var/www/html/oxyphp//controllers/accessories.php): failed to open stream: No such file or directory In /home/gabriel/Projects/oxyphp/engine/class.objloader.php on line 18
+
+At 2016/03/15 - 12:34:34: Warning: require_once(/var/www/html/oxyphp//controllers/accessories.php): failed to open stream: No such file or directory In /home/gabriel/Projects/oxyphp/engine/class.objloader.php on line 18
+
+At 2016/03/15 - 12:34:34: Warning: require_once(/var/www/html/oxyphp//controllers/accessories.php): failed to open stream: No such file or directory In /home/gabriel/Projects/oxyphp/engine/class.objloader.php on line 18
+
+At 2016/03/15 - 12:34:34: Warning: require_once(/var/www/html/oxyphp//controllers/accessories.php): failed to open stream: No such file or directory In /home/gabriel/Projects/oxyphp/engine/class.objloader.php on line 18
+
+At 2016/03/15 - 12:34:36: Warning: require_once(/var/www/html/oxyphp//controllers/accessories.php): failed to open stream: No such file or directory In /home/gabriel/Projects/oxyphp/engine/class.objloader.php on line 18
+
+At 2016/03/15 - 12:35:05: Warning: require_once(/var/www/html/oxyphp//controllers/accessories.php): failed to open stream: No such file or directory In /home/gabriel/Projects/oxyphp/engine/class.objloader.php on line 18
+
+At 2016/03/15 - 12:35:05: Warning: require_once(/var/www/html/oxyphp//controllers/accessories.php): failed to open stream: No such file or directory In /home/gabriel/Projects/oxyphp/engine/class.objloader.php on line 18
+
+At 2016/03/15 - 12:35:05: Warning: require_once(/var/www/html/oxyphp//controllers/accessories.php): failed to open stream: No such file or directory In /home/gabriel/Projects/oxyphp/engine/class.objloader.php on line 18
+
+At 2016/03/15 - 12:36:19: Warning: require_once(/var/www/html/oxyphp//controllers/accessories.php): failed to open stream: No such file or directory In /home/gabriel/Projects/oxyphp/engine/class.objloader.php on line 18
+
+At 2016/03/15 - 12:38:02: Warning: require_once(/var/www/html/oxyphp//controllers/accessories.php): failed to open stream: No such file or directory In /home/gabriel/Projects/oxyphp/engine/class.objloader.php on line 18
+
+At 2016/03/15 - 12:38:02: Warning: require_once(/var/www/html/oxyphp//controllers/accessories.php): failed to open stream: No such file or directory In /home/gabriel/Projects/oxyphp/engine/class.objloader.php on line 18
+
+At 2016/03/15 - 12:38:02: Warning: require_once(/var/www/html/oxyphp//controllers/accessories.php): failed to open stream: No such file or directory In /home/gabriel/Projects/oxyphp/engine/class.objloader.php on line 18
+
+At 2016/03/15 - 12:38:07: Warning: require_once(/var/www/html/oxyphp//controllers/accessories.php): failed to open stream: No such file or directory In /home/gabriel/Projects/oxyphp/engine/class.objloader.php on line 18
+
+At 2016/03/15 - 12:38:38: Warning: require_once(/var/www/html/oxyphp//controllers/accessories.php): failed to open stream: No such file or directory In /home/gabriel/Projects/oxyphp/engine/class.objloader.php on line 18
+
+At 2016/03/15 - 12:38:38: Warning: require_once(/var/www/html/oxyphp//controllers/accessories.php): failed to open stream: No such file or directory In /home/gabriel/Projects/oxyphp/engine/class.objloader.php on line 18
+
+At 2016/03/15 - 12:43:02: Warning: array_values() expects parameter 1 to be array, string given In /home/gabriel/Projects/oxyphp/engine/databasemodules/pdo/class.dbclass.php on line 146
+
+At 2016/03/15 - 12:43:02: Warning: require_once(/var/www/html/oxyphp//controllers/accessories.php): failed to open stream: No such file or directory In /home/gabriel/Projects/oxyphp/engine/class.objloader.php on line 18
+
+At 2016/03/15 - 12:43:02: Warning: require_once(/var/www/html/oxyphp//controllers/accessories.php): failed to open stream: No such file or directory In /home/gabriel/Projects/oxyphp/engine/class.objloader.php on line 18
+
+At 2016/03/15 - 12:43:05: Warning: require_once(/var/www/html/oxyphp//controllers/accessories.php): failed to open stream: No such file or directory In /home/gabriel/Projects/oxyphp/engine/class.objloader.php on line 18
+
+At 2016/03/15 - 12:43:05: Warning: require_once(/var/www/html/oxyphp//controllers/accessories.php): failed to open stream: No such file or directory In /home/gabriel/Projects/oxyphp/engine/class.objloader.php on line 18
+
+At 2016/03/15 - 12:46:08: Warning: PDOStatement::execute(): SQLSTATE[HY093]: Invalid parameter number: number of bound variables does not match number of tokens In /home/gabriel/Projects/oxyphp/engine/databasemodules/pdo/class.dbclass.php on line 155
+
+At 2016/03/15 - 12:46:09: Warning: require_once(/var/www/html/oxyphp//controllers/accessories.php): failed to open stream: No such file or directory In /home/gabriel/Projects/oxyphp/engine/class.objloader.php on line 18
+
+At 2016/03/15 - 12:46:09: Warning: require_once(/var/www/html/oxyphp//controllers/accessories.php): failed to open stream: No such file or directory In /home/gabriel/Projects/oxyphp/engine/class.objloader.php on line 18
+
+At 2016/03/15 - 12:46:43: Warning: require_once(/var/www/html/oxyphp//controllers/accessories.php): failed to open stream: No such file or directory In /home/gabriel/Projects/oxyphp/engine/class.objloader.php on line 18
+
+At 2016/03/15 - 12:46:43: Warning: require_once(/var/www/html/oxyphp//controllers/accessories.php): failed to open stream: No such file or directory In /home/gabriel/Projects/oxyphp/engine/class.objloader.php on line 18
+
+At 2016/03/15 - 12:46:51: Warning: require_once(/var/www/html/oxyphp//controllers/accessories.php): failed to open stream: No such file or directory In /home/gabriel/Projects/oxyphp/engine/class.objloader.php on line 18
+
+At 2016/03/15 - 12:46:57: Warning: require_once(/var/www/html/oxyphp//controllers/accessories.php): failed to open stream: No such file or directory In /home/gabriel/Projects/oxyphp/engine/class.objloader.php on line 18
+
+At 2016/03/15 - 12:52:05: Warning: require_once(/var/www/html/oxyphp//controllers/accessories.php): failed to open stream: No such file or directory In /home/gabriel/Projects/oxyphp/engine/class.objloader.php on line 18
+
+At 2016/03/15 - 12:52:05: Warning: require_once(/var/www/html/oxyphp//controllers/accessories.php): failed to open stream: No such file or directory In /home/gabriel/Projects/oxyphp/engine/class.objloader.php on line 18
+
+At 2016/03/15 - 12:52:08: Warning: require_once(/var/www/html/oxyphp//controllers/accessories.php): failed to open stream: No such file or directory In /home/gabriel/Projects/oxyphp/engine/class.objloader.php on line 18
+
+At 2016/03/15 - 12:52:08: Warning: require_once(/var/www/html/oxyphp//controllers/accessories.php): failed to open stream: No such file or directory In /home/gabriel/Projects/oxyphp/engine/class.objloader.php on line 18
+
+At 2016/03/15 - 12:53:37: Warning: PDOStatement::execute(): SQLSTATE[HY093]: Invalid parameter number: number of bound variables does not match number of tokens In /home/gabriel/Projects/oxyphp/engine/databasemodules/pdo/class.dbclass.php on line 157
+
+At 2016/03/15 - 12:53:38: Warning: require_once(/var/www/html/oxyphp//controllers/accessories.php): failed to open stream: No such file or directory In /home/gabriel/Projects/oxyphp/engine/class.objloader.php on line 18
+
+At 2016/03/15 - 12:53:38: Warning: require_once(/var/www/html/oxyphp//controllers/accessories.php): failed to open stream: No such file or directory In /home/gabriel/Projects/oxyphp/engine/class.objloader.php on line 18
+
+At 2016/03/15 - 12:57:02: Warning: require_once(/var/www/html/oxyphp//controllers/accessories.php): failed to open stream: No such file or directory In /home/gabriel/Projects/oxyphp/engine/class.objloader.php on line 18
+
+At 2016/03/15 - 12:57:02: Warning: require_once(/var/www/html/oxyphp//controllers/accessories.php): failed to open stream: No such file or directory In /home/gabriel/Projects/oxyphp/engine/class.objloader.php on line 18
+
+At 2016/03/15 - 12:57:05: Warning: require_once(/var/www/html/oxyphp//controllers/accessories.php): failed to open stream: No such file or directory In /home/gabriel/Projects/oxyphp/engine/class.objloader.php on line 18
+
+At 2016/03/15 - 12:57:05: Warning: require_once(/var/www/html/oxyphp//controllers/accessories.php): failed to open stream: No such file or directory In /home/gabriel/Projects/oxyphp/engine/class.objloader.php on line 18
+
+At 2016/03/15 - 12:57:23: Warning: require_once(/var/www/html/oxyphp//controllers/accessories.php): failed to open stream: No such file or directory In /home/gabriel/Projects/oxyphp/engine/class.objloader.php on line 18
+
+At 2016/03/15 - 12:57:23: Warning: require_once(/var/www/html/oxyphp//controllers/accessories.php): failed to open stream: No such file or directory In /home/gabriel/Projects/oxyphp/engine/class.objloader.php on line 18
+
+At 2016/03/15 - 12:57:23: Warning: require_once(/var/www/html/oxyphp//controllers/accessories.php): failed to open stream: No such file or directory In /home/gabriel/Projects/oxyphp/engine/class.objloader.php on line 18
+
+At 2016/03/15 - 12:57:28: Warning: require_once(/var/www/html/oxyphp//controllers/accessories.php): failed to open stream: No such file or directory In /home/gabriel/Projects/oxyphp/engine/class.objloader.php on line 18
+

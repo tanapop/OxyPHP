@@ -139,7 +139,7 @@ class Mvcgenerator {
             if ($f->Type == "tinyint(1)") {
                 $content = '<?php echo (empty($val->' . $f->Field . ') ? "No" : "Yes"); ?>';
             } elseif ($this->datatypes[preg_replace('/\([^)]*\)|[()]/', '', $f->Type)] == "file") {
-                $content = '<a href="/' . $modulename . '/download/?args[0][field]=' . $f->Field . '&args[0][conditions][' . $this->primarykey . ']=<?php echo $val->' . $this->primarykey . '; ?>">Download file</a>';
+                $content = '<?php if(!empty($val->'. $f->Field .')): ?><a href="/' . $modulename . '/download/?args[0][field]=' . $f->Field . '&args[0][conditions][' . $this->primarykey . ']=<?php echo $val->' . $this->primarykey . '; ?>">Download file</a><?php endif; ?>';
             } else {
                 $content = '<?php echo $val->' . $f->Field . '; ?>';
             }

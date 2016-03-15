@@ -53,8 +53,8 @@ class Dbclass {
 
         $this->cnnInfo = new stdClass();
         $this->cnnInfo->info = "No connection info.";
-        
-        $this->querybuilder = System::loadClass($_SERVER["DOCUMENT_ROOT"] . "/engine/databasemodules/".DBCLASS ."/class.querybuilder.php", "querybuilder");
+
+        $this->querybuilder = System::loadClass($_SERVER["DOCUMENT_ROOT"] . "/engine/databasemodules/" . DBCLASS . "/class.querybuilder.php", "querybuilder");
 
         if (!$this->connect(1))
             System::debug(array("Attempt to connect to database server failed. Error:" => $this->connection), array());
@@ -142,33 +142,25 @@ class Dbclass {
         return $ret;
     }
 
-    public function query($presql, $values) {
+    public function query($presql, $values = array()) {
+        $values = array_values($values);
+        
         try {
             $presql = $this->connection->prepare($presql);
             if (!empty($values)) {
                 foreach ($values as $key => $val) {
-                    $presql->bindParam((is_numeric($key) ? $key + 1 : $key), $val, $this->datatypes[gettype($val)]);
+                    $presql->bindValue((is_numeric($key) ? $key + 1 : ':' . $key), $val, $this->datatypes[gettype($val)]);
                 }
             }
             $res = $presql->execute();
 
-            if (!$res) {
-                $this->queryerror = $this->connection->errorInfo();
-                System::debug(array("SQL" => $sqldata[0], 'Error Message' => "While executing query, an error occured. More info listed bellow"), array('Values' => $values, 'Query Error' => $this->queryerror));
-                return false;
-            }
-
             $this->cnnInfo = (object) get_object_vars($this->connection);
 
-            if ($res === true || $res === false) {
-                return $res;
-            } else {
-                $ret = array();
-                while ($row = $presql->fetch(PDO::FETCH_OBJ)) {
-                    $ret[] = $row;
-                }
-                return $ret;
+            $ret = array();
+            while ($row = $presql->fetch(PDO::FETCH_OBJ)) {
+                $ret[] = $row;
             }
+            return empty($ret) ? true : $ret;
         } catch (PDOException $ex) {
             System::debug(array("Error Message" => $ex->getMessage() . '. In ' . $ex->getFile() . ' on line ' . $ex->getLine() . '.'), array('Parameter dbinfo' => $dbinfo));
         }

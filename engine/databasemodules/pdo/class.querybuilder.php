@@ -47,12 +47,12 @@ class Querybuilder {
         $sql = "UPDATE " . $this->table . " SET ";
         foreach ($dataset as $key => $val) {
             if (!is_null($val) && $val !== false) {
-                $sql .= $key . "=" . (is_numeric($val) ? $val : "'" . $val . "'") . ",";
+                $sql .= $key . "= ? ,";
             }
         }
         $sql = rtrim($sql, ",");
 
-        return $sql . $this->_whereClause($conditions, $join, $operator);
+        return array($sql . $this->_whereClause($conditions, $join, $operator), array_merge(array_values($dataset),array_values($conditions)));
     }
 
     // Build a select type query string with argument passed in dataset and return it.
@@ -63,13 +63,13 @@ class Querybuilder {
         }
         $sql = rtrim($sql, ",");
 
-        return $sql . " FROM " . $this->table . $this->_whereClause($conditions, $join, $operator);
+        return array($sql . " FROM " . $this->table . $this->_whereClause($conditions, $join, $operator), $conditions);
     }
 
     // Build a delete type query string with argument passed in dataset and return it.
     private function delete_query($conditions, $join = "AND", $operator = "=") {
-
-        return "DELETE FROM " . $this->table . $this->_whereClause($conditions, $join, $operator);
+        
+        return array("DELETE FROM " . $this->table . $this->_whereClause($conditions, $join, $operator), array_values($conditions)[0]);
     }
 
     /* Build a Mysql where clause string based on conditions passed on params,
@@ -83,17 +83,17 @@ class Querybuilder {
                 $_conditions = array();
                 foreach ($params as $key => $val) {
                     if (strtoupper($operator) == "LIKE") {
-                        $_conditions[] = $key . ' LIKE "%' . $val . '%"';
+                        $_conditions[] = $key . ' LIKE ? ';
                     } else if (is_array($val) && !empty($val)) {
                         $joined_values = array();
 
                         foreach ($val as $in_val) {
-                            $joined_values[] = is_numeric($in_val) ? $in_val : '"' . $in_val . '"';
+                            $joined_values[] = ' ? ';
                         }
 
                         $_conditions[] = $key . ' IN (' . join(',', $joined_values) . ')';
                     } else {
-                        $_conditions[] = $key . $operator . (is_numeric($val) ? $val : '"' . $val . '"');
+                        $_conditions[] = $key . $operator . ' ? ';
                     }
                 }
                 $join = strtoupper($join);
@@ -101,7 +101,7 @@ class Querybuilder {
 
                 $where = $join !== null ? ' WHERE ' . join($join, $_conditions) : '';
             } else {
-                $where = (string) $params;
+                System::debug(array('Error message'=>'Where clause conditions must be an array.'),array('Arg passed on $conditions'=>$params));
             }
         }
 

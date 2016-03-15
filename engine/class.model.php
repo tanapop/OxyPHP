@@ -8,13 +8,12 @@ class Model {
     private $table;
     // An instance of the class Mysql.
     private $dbclass;
-    
 
     // It sets the main table name, instantiate class Mysql and defines the table's primary key.
     public function __construct($table) {
         $this->table = $table;
 
-        $this->dbclass = System::loadClass($_SERVER["DOCUMENT_ROOT"] . "/engine/databasemodules/".DBCLASS."/class.dbclass.php", 'dbclass');
+        $this->dbclass = System::loadClass($_SERVER["DOCUMENT_ROOT"] . "/engine/databasemodules/" . DBCLASS . "/class.dbclass.php", 'dbclass');
 
         $this->set_primary_key();
     }
@@ -43,8 +42,9 @@ class Model {
     }
 
     protected function dbquery($args) {
-       if(is_string($args))
-           $args = array($args);
+        if (!is_array($args))
+            $args = array($args);
+
         return call_user_func_array(array($this->dbclass, 'query'), $args);
     }
 
@@ -61,9 +61,9 @@ class Model {
         }
 
         if ($debug) {
-            System::debug(array(), array("SQL" => $this->dbclass->querybuilder->build("select", array($fields, $conditions),$this->table)));
+            System::debug(array(), array("SQL" => $this->dbclass->querybuilder->build("select", array($fields, $conditions), $this->table)));
         } else {
-            if ($result = $this->dbquery($this->dbclass->querybuilder->build("select", array($fields, $conditions),$this->table))) {
+            if ($result = $this->dbquery($this->dbclass->querybuilder->build("select", array($fields, $conditions), $this->table))) {
                 return $result;
             } else
                 return false;
@@ -74,11 +74,11 @@ class Model {
     public function _save($dataset, $conditions = array(), $debug = false) {
         $dataset = (array) $dataset;
         if (!empty($conditions)) {
-            $sql = $this->dbclass->querybuilder->build("update", array($dataset, $conditions),$this->table);
+            $sql = $this->dbclass->querybuilder->build("update", array($dataset, $conditions), $this->table);
         } else {
             if (isset($dataset[$this->primarykey]))
                 unset($dataset[$this->primarykey]);
-            $sql = $this->dbclass->querybuilder->build("insert", array($dataset),$this->table);
+            $sql = $this->dbclass->querybuilder->build("insert", array($dataset), $this->table);
         }
 
         if ($debug) {
@@ -91,9 +91,10 @@ class Model {
     // Delete data from table under the rules specified in conditions.
     public function _delete($conditions, $debug = false) {
         if ($debug) {
-            System::debug(array(), array("SQL" => $this->dbclass->querybuilder->build("delete", array($fields, $conditions),$this->table)));
+            System::debug(array(), array("SQL" => $this->dbclass->querybuilder->build("delete", array($conditions), $this->table)));
         } else {
-            return $this->dbquery($this->dbclass->querybuilder->build("delete", array($conditions),$this->table));
+            
+            return $this->dbquery($this->dbclass->querybuilder->build("delete", array($conditions), $this->table));
         }
     }
 
