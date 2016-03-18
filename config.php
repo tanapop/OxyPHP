@@ -1,10 +1,10 @@
 <?php
 //< DATABASE CONFIGS:
-define("DBNAME", "marmitao");
-define("DBHOST", "localhost");
-define("DBUSER", "root");
-define("DBPASS", "h7t846m2");
-define("DBTYPE", 'mysql');
+define("DBNAME", "databasename");
+define("DBHOST", "databasehost");
+define("DBUSER", "databaseusername");
+define("DBPASS", "databasepassword");
+define("DBTYPE", 'databasesgbd');
 define("DBCONNECTION_MAX_TRIES", 5);
 define("DBCLASS", "pdo");  /* Built in, ready for use database modules: "pdo", "mysqli"(DEPRECATED). */
 //>
