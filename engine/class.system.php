@@ -131,6 +131,11 @@ class System extends ObjLoader{
     }
     
     public static function log($logname,$logmsg){
+        if (!file_exists(LOG_FILE_PATH))
+            mkdir(LOG_FILE_PATH, 0777, true);
+        touch(LOG_FILE_PATH);
+        chmod(LOG_FILE_PATH, 0777);
+        
         $log = fopen(LOG_FILE_PATH . $logname .'.log', 'a');
         fwrite($log, $logmsg.str_repeat((PATH_SEPARATOR == ":" ? "\r\n" : "\n"),2));
         fclose($log);

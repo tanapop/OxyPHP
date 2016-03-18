@@ -13,7 +13,7 @@ class Mvcgenerator {
 
     // Include Mysql class file and instantiate it on this->mysql, write database tables list and set the datatypes dictionary.
     public function __construct() {
-        $this->dbclass = System::loadClass($_SERVER["DOCUMENT_ROOT"] . "/engine/databasemodules/".DBCLASS."/class.dbclass.php", 'dbclass');
+        $this->dbclass = System::loadClass($_SERVER["DOCUMENT_ROOT"] . "/engine/databasemodules/" . DBCLASS . "/class.dbclass.php", 'dbclass');
 
         $this->tables = $this->dbclass->dbtables();
 
@@ -76,6 +76,10 @@ class Mvcgenerator {
         $f = str_replace("_CLASS_NAME_", "Model" . ucfirst($modulename), $f);
 
         $path = $_SERVER["DOCUMENT_ROOT"] . "models/";
+        if (!file_exists($path))
+            mkdir($path, 0777, true);
+        touch($path);
+        chmod($path, 0777);
         if (file_put_contents($path . $modulename . ".php", $f)) {
             touch($path . $modulename . ".php");
             chmod($path . $modulename . ".php", 0777);
@@ -115,6 +119,11 @@ class Mvcgenerator {
         $f = str_replace("_SAVE_FILE_HANDLER_", $file_handler, $f);
 
         $path = $_SERVER["DOCUMENT_ROOT"] . "controllers/";
+
+        if (!file_exists($path))
+            mkdir($path, 0777, true);
+        touch($path);
+        chmod($path, 0777);
         if (file_put_contents($path . $modulename . ".php", $f)) {
             touch($path . $modulename . ".php");
             chmod($path . $modulename . ".php", 0777);
@@ -139,7 +148,7 @@ class Mvcgenerator {
             if ($f->Type == "tinyint(1)") {
                 $content = '<?php echo (empty($val->' . $f->Field . ') ? "No" : "Yes"); ?>';
             } elseif ($this->datatypes[preg_replace('/\([^)]*\)|[()]/', '', $f->Type)] == "file") {
-                $content = '<?php if(!empty($val->'. $f->Field .')): ?><a href="/' . $modulename . '/download/?args[0][field]=' . $f->Field . '&args[0][conditions][' . $this->primarykey . ']=<?php echo $val->' . $this->primarykey . '; ?>">Download file</a><?php endif; ?>';
+                $content = '<?php if(!empty($val->' . $f->Field . ')): ?><a href="/' . $modulename . '/download/?args[0][field]=' . $f->Field . '&args[0][conditions][' . $this->primarykey . ']=<?php echo $val->' . $this->primarykey . '; ?>">Download file</a><?php endif; ?>';
             } else {
                 $content = '<?php echo $val->' . $f->Field . '; ?>';
             }
