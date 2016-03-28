@@ -72,6 +72,7 @@ class Dbclass {
     private function connect($count) {
         try {
             $this->connection = new PDO($this->dbtype . ':host=' . $this->dbhost . ';dbname=' . $this->dbname, $this->dbuser, $this->dbpass);
+            $this->connection->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
             return true;
         } catch (PDOException $ex) {
             $this->connection = null;
@@ -144,23 +145,28 @@ class Dbclass {
 
     public function query($presql, $values = array()) {
         $values = array_values($values);
-        
+
         try {
-            $presql = $this->connection->prepare($presql);
+            $stmt = $this->connection->prepare($presql);
             if (!empty($values)) {
                 foreach ($values as $key => $val) {
-                    $presql->bindValue((is_numeric($key) ? $key + 1 : ':' . $key), $val, $this->datatypes[gettype($val)]);
+                    $stmt->bindValue((is_numeric($key) ? $key + 1 : ':' . $key), $val, $this->datatypes[gettype($val)]);
                 }
             }
-            $res = $presql->execute();
+
+            $res = $stmt->execute();
 
             $this->cnnInfo = (object) get_object_vars($this->connection);
 
-            $ret = array();
-            while ($row = $presql->fetch(PDO::FETCH_OBJ)) {
-                $ret[] = $row;
+            if (strpos(strtoupper($presql), 'SELECT') !== false) {
+                $ret = array();
+                while ($row = $stmt->fetch(PDO::FETCH_OBJ)) {
+                    $ret[] = $row;
+                }
+                return $ret;
+            }else {
+                return $res;
             }
-            return empty($ret) ? true : $ret;
         } catch (PDOException $ex) {
             System::debug(array("Error Message" => $ex->getMessage() . '. In ' . $ex->getFile() . ' on line ' . $ex->getLine() . '.'), array('Parameter dbinfo' => $dbinfo));
         }
