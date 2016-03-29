@@ -19,7 +19,7 @@ class System extends ObjLoader{
         require_once "engine/class.model.php";
         self::loadClass($_SERVER['DOCUMENT_ROOT'].'engine/class.errorhandler.php', 'errorhandler');
 
-        $action = explode("/", str_replace(strrchr($_SERVER["REQUEST_URI"], "?"), "", $_SERVER["REQUEST_URI"]));
+        $action = explode("/", str_replace(strrchr($_SERVER["REQUEST_URI"], "?"), "", urldecode($_SERVER["REQUEST_URI"])));
         array_shift($action);
 
         if ($action[0] == "debug") {
