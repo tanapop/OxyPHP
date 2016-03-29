@@ -226,6 +226,7 @@ class Mvcgenerator {
         if (!file_exists($viewpath))
             mkdir($viewpath, 0777, true);
         touch($viewpath);
+        chmod($_SERVER['DOCUMENT_ROOT'] . "views/", 0777);
         chmod($viewpath, 0777);
 
         if (file_put_contents($viewpath . "listing.php", $fl) && file_put_contents($viewpath . "register.php", $fr)) {
