@@ -21,7 +21,7 @@ class Controller {
     }
 
     // Show or return the contents of a view file, passing specified variables for this file, if they're supplied.
-    protected function _view($file, $varlist = null, $module = null, $return = false) {
+    protected function _view($file, $varlist = array(), $module = null, $return = false) {
         if (!empty($varlist)) {
             try {
                 extract($varlist);
@@ -68,8 +68,8 @@ class Controller {
         }
         exit;
     }
-    
-    protected function _loadmodel($modelname){
+
+    protected function _loadmodel($modelname) {
         $this->model = System::loadClass($_SERVER['DOCUMENT_ROOT'] . "/models/" . $modelname . ".php", "Model" . ucfirst($modelname), array($modelname));
     }
 
