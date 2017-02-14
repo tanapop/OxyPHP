@@ -1,12 +1,16 @@
 <?php
-// Includes global configs and global System class.
-require_once "config.php";
-require_once "constants.php";
+// Includes global main classes.
 require_once "engine/class.objloader.php";
 require_once "engine/class.system.php";
 
-// Create the global instance of System class.
-$system = new System();
+/* If the keyword "_asyncload" is detected within the URI, system understand that this is an asynchronous request.
+ * Then it loads the main class System, which executes the request. Thereafter, it stops script's execution
+ * to avoid unwanted data, like HTML <head>, returning from the request.
+ */
+if (strpos(strtolower(str_replace(strrchr($_SERVER["REQUEST_URI"], "?"), "", urldecode($_SERVER["REQUEST_URI"]))), "_asyncload") !== false) {
+    $system = new System();
+    die;
+}
 ?>
 <!DOCTYPE html>
 <html>
@@ -32,8 +36,8 @@ $system = new System();
     </head>
     <body>
         <?php
-        // Calls a method from a controller. Method and controller are specified in REQUEST or URI.
-        $system->execute();
+        // Loads system, which calls a method from a controller. Method and controller are specified in REQUEST or URI.
+        $system = new System();
         ?>
     </body>
 </html>

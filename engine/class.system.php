@@ -15,12 +15,20 @@ class System extends ObjLoader{
 
     // Include some global core classes and uses data passed on POST, GET or URI to set running controller, action and args.
     public function __construct() {
+        foreach (parse_ini_file($_SERVER['DOCUMENT_ROOT'] . "config.ini") as $k => $v) {
+            define(strtoupper($k), $v);
+        }
+        
         require_once "engine/class.controller.php";
         require_once "engine/class.model.php";
         self::loadClass($_SERVER['DOCUMENT_ROOT'].'engine/class.errorhandler.php', 'errorhandler');
 
         $action = explode("/", str_replace(strrchr($_SERVER["REQUEST_URI"], "?"), "", urldecode($_SERVER["REQUEST_URI"])));
         array_shift($action);
+        
+        if ($action[0] == "_asyncload") {
+            array_shift($action);
+        }
 
         if ($action[0] == "debug") {
             include $_SERVER['DOCUMENT_ROOT'] . "engine/widgets/debug.php";
@@ -37,6 +45,7 @@ class System extends ObjLoader{
 
         $this->setargs($action);
         
+        $this->execute();
     }
 
     // Change path of controller classes to mvcgenerator, set running controller to mvcgenerator and method to index, if not defined.
