@@ -9,7 +9,7 @@ class ObjLoader {
      * If the class isn't registered yet, create a new instance of that, register it on collection, then returns it.
      */
 
-    protected static function load($path, $classname, $args) {
+    protected static function loadObject($path, $classname, $args) {
         if (isset(self::$collection[$path])) {
             return self::$collection[$path];
         }

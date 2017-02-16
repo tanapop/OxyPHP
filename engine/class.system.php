@@ -2,7 +2,7 @@
 
 session_start();
 
-class System extends ObjLoader{
+class System extends ObjLoader {
 
     // The name of running controller.
     private $controller;
@@ -15,17 +15,21 @@ class System extends ObjLoader{
 
     // Include some global core classes and uses data passed on POST, GET or URI to set running controller, action and args.
     public function __construct() {
-        foreach (parse_ini_file($_SERVER['DOCUMENT_ROOT'] . "config.ini") as $k => $v) {
-            define(strtoupper($k), $v);
+        foreach (parse_ini_file($_SERVER['DOCUMENT_ROOT'] . "config.ini", true) as $key => $val) {
+            if ($key !== "HELPERS") {
+                foreach ($val as $k => $v) {
+                    define(strtoupper($k), $v);
+                }
+            }
         }
-        
+
         require_once "engine/class.controller.php";
         require_once "engine/class.model.php";
-        self::loadClass($_SERVER['DOCUMENT_ROOT'].'engine/class.errorhandler.php', 'errorhandler');
+        self::loadClass($_SERVER['DOCUMENT_ROOT'] . 'engine/class.errorhandler.php', 'errorhandler');
 
         $action = explode("/", str_replace(strrchr($_SERVER["REQUEST_URI"], "?"), "", urldecode($_SERVER["REQUEST_URI"])));
         array_shift($action);
-        
+
         if ($action[0] == "_asyncload") {
             array_shift($action);
         }
@@ -44,7 +48,7 @@ class System extends ObjLoader{
         }
 
         $this->setargs($action);
-        
+
         $this->execute();
     }
 
@@ -92,7 +96,8 @@ class System extends ObjLoader{
         $this->controller = (empty($controller) ? $this->controller : $controller);
 
         try {
-            return call_user_func_array(array(self::loadClass($this->cpath . $this->controller . ".php", $this->controller, array($this->controller)), (empty($method) ? $this->method : $method)), (empty($args) ? $this->args : $args));
+            $c_obj = self::loadClass($this->cpath . $this->controller . ".php", $this->controller, array($this->controller, $this->method));
+            return call_user_func_array(array($c_obj, (empty($method) ? $this->method : $method)), (empty($args) ? $this->args : $args));
         } catch (Exception $ex) {
             System::debug(array("Error message" => $ex->getMessage() . '. In ' . $ex->getFile() . ' on line ' . $ex->getLine() . '.'));
         }
@@ -117,7 +122,7 @@ class System extends ObjLoader{
      */
 
     public static function debug($messages = array(), $print_data = array()) {
-        if(!SHOW_DEBUG)
+        if (!SHOW_DEBUG)
             return false;
         $_SESSION['debug']['request'] = $_REQUEST;
 
@@ -129,24 +134,24 @@ class System extends ObjLoader{
         $_SESSION['debug']['time'] = date("Y/m/d - H:i:s", time());
 
         echo "<script>window.open('/debug');</script>";
-        
-        if(DEBUG_LOGGING)
-            self::log ('debug', 'At '.$_SESSION['debug']['time'].': Debug called from '. $_SESSION['debug']['backtrace'][1]['class'].'::'.$_SESSION['debug']['backtrace'][1]['function'].'() in '.$_SESSION['debug']['backtrace'][0]['file'].' on line '.$_SESSION['debug']['backtrace'][0]['line'].'.');
+
+        if (DEBUG_LOGGING)
+            self::log('debug', 'At ' . $_SESSION['debug']['time'] . ': Debug called from ' . $_SESSION['debug']['backtrace'][1]['class'] . '::' . $_SESSION['debug']['backtrace'][1]['function'] . '() in ' . $_SESSION['debug']['backtrace'][0]['file'] . ' on line ' . $_SESSION['debug']['backtrace'][0]['line'] . '.');
         die;
     }
 
     public static function loadClass($ab_path, $classname, $args = array()) {
-        return self::load($ab_path, $classname, $args);
+        return self::loadObject($ab_path, $classname, $args);
     }
-    
-    public static function log($logname,$logmsg){
+
+    public static function log($logname, $logmsg) {
         if (!file_exists(LOG_FILE_PATH))
             mkdir(LOG_FILE_PATH, 0777, true);
         touch(LOG_FILE_PATH);
         chmod(LOG_FILE_PATH, 0777);
-        
-        $log = fopen(LOG_FILE_PATH . $logname .'.log', 'a');
-        fwrite($log, $logmsg.str_repeat((PATH_SEPARATOR == ":" ? "\r\n" : "\n"),2));
+
+        $log = fopen(LOG_FILE_PATH . $logname . '.log', 'a');
+        fwrite($log, $logmsg . str_repeat((PATH_SEPARATOR == ":" ? "\r\n" : "\n"), 2));
         fclose($log);
     }
 

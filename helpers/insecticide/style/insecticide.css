@@ -1,0 +1,24 @@
+body{
+    margin:0px;
+}
+.ins-container{
+    font-size:12px;
+}
+.ins-container ul{
+    list-style-type: none;
+    padding:10px 0px 0px 20px;
+}
+.ins-dump>li{
+    cursor:pointer;
+    margin-bottom: 3px;
+}
+.ins-hidden{
+    display: none;
+}
+.ins-varname{
+    font-style: italic;
+}
+#debug-contents{
+    font-family: arial;
+    margin:15px;
+}

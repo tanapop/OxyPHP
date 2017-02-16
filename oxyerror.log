@@ -1,0 +1,16 @@
+At 2017/02/15 - 20:16:12: Warning: mkdir(): Invalid path In /home/gabriel/Projects/oxyphp/engine/class.system.php on line 149
+
+At 2017/02/15 - 20:16:12: Warning: mkdir(): Invalid path In /home/gabriel/Projects/oxyphp/engine/class.system.php on line 149
+
+At 2017/02/15 - 20:16:12: Warning: mkdir(): Invalid path In /home/gabriel/Projects/oxyphp/engine/class.system.php on line 149
+
+At 2017/02/15 - 20:16:12: Warning: mkdir(): Invalid path In /home/gabriel/Projects/oxyphp/engine/class.system.php on line 149
+
+At 2017/02/15 - 20:16:12: Warning: require_once(/var/www/html/oxyphp/accessories/krumo/class.krumo.php): failed to open stream: No such file or directory In /home/gabriel/Projects/oxyphp/engine/class.objloader.php on line 18
+
+At 2017/02/15 - 20:16:13: Warning: require_once(/var/www/html/oxyphp/accessories/krumo/class.krumo.php): failed to open stream: No such file or directory In /home/gabriel/Projects/oxyphp/engine/class.objloader.php on line 18
+
+At 2017/02/15 - 20:16:13: Warning: require_once(/var/www/html/oxyphp/accessories/krumo/class.krumo.php): failed to open stream: No such file or directory In /home/gabriel/Projects/oxyphp/engine/class.objloader.php on line 18
+
+At 2017/02/15 - 20:16:13: Warning: require_once(/var/www/html/oxyphp/accessories/krumo/class.krumo.php): failed to open stream: No such file or directory In /home/gabriel/Projects/oxyphp/engine/class.objloader.php on line 18
+

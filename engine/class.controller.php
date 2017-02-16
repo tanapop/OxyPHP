@@ -4,6 +4,8 @@ class Controller {
 
     // The running global instance of system class
     protected $system;
+    // The running global instance of helpers class
+    protected $helpers;
     // Current module. It's the same name of the running controller.
     private $module;
     // An instance of the module's model, if it exists.
@@ -12,7 +14,9 @@ class Controller {
     // Set the global system property, set the module and create module's model instance.
     public function __construct($module) {
         global $system;
+        global $helpers;
         $this->system = &$system;
+        $this->helpers = &$helpers;
 
         $this->module = $module;
 
