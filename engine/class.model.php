@@ -8,9 +8,14 @@ class Model {
     private $table;
     // An instance of the class Mysql.
     private $dbclass;
+    // The global object of Helpers class
+    protected $helpers;
 
     // It sets the main table name, instantiate class Mysql and defines the table's primary key.
     public function __construct($table) {
+        global $helpers;
+        $this->helpers = &$helpers;
+        
         $this->table = $table;
 
         $this->dbclass = System::loadClass($_SERVER["DOCUMENT_ROOT"] . "/engine/databasemodules/" . DBCLASS . "/class.dbclass.php", 'dbclass');
@@ -61,7 +66,7 @@ class Model {
         }
 
         if ($debug) {
-            System::debug(array(), array("SQL" => $this->dbclass->querybuilder->build("select", array($fields, $conditions), $this->table)));
+            $this->helpers->insecticide->debug(array(), array("SQL" => $this->dbclass->querybuilder->build("select", array($fields, $conditions), $this->table)));
         } else {
             if ($result = $this->dbquery($this->dbclass->querybuilder->build("select", array($fields, $conditions), $this->table))) {
                 return $result;
@@ -82,7 +87,7 @@ class Model {
         }
 
         if ($debug) {
-            System::debug(array(), array("SQL" => $sql));
+            $this->helpers->insecticide->debug(array(), array("SQL" => $sql));
         } else {
             return $this->dbquery($sql);
         }
@@ -91,7 +96,7 @@ class Model {
     // Delete data from table under the rules specified in conditions.
     public function _delete($conditions, $debug = false) {
         if ($debug) {
-            System::debug(array(), array("SQL" => $this->dbclass->querybuilder->build("delete", array($conditions), $this->table)));
+            $this->helpers->insecticide->debug(array(), array("SQL" => $this->dbclass->querybuilder->build("delete", array($conditions), $this->table)));
         } else {
             
             return $this->dbquery($this->dbclass->querybuilder->build("delete", array($conditions), $this->table));

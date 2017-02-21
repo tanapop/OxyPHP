@@ -4,7 +4,7 @@ class Controller {
 
     // The running global instance of system class
     protected $system;
-    // The running global instance of helpers class
+    // The global object of Helpers class
     protected $helpers;
     // Current module. It's the same name of the running controller.
     private $module;
@@ -30,7 +30,7 @@ class Controller {
             try {
                 extract($varlist);
             } catch (Exception $ex) {
-                System::debug(array("Error message" => $ex->getMessage() . '. In ' . $ex->getFile() . ' on line ' . $ex->getLine() . '.'), array('Parameter varlist' => $varlist));
+                $this->helpers->insecticide->debug(array("Error message" => $ex->getMessage() . '. In ' . $ex->getFile() . ' on line ' . $ex->getLine() . '.'), array('Parameter varlist' => $varlist));
             }
         }
 
@@ -38,7 +38,7 @@ class Controller {
         try {
             include $_SERVER['DOCUMENT_ROOT'] . "views/" . (empty($module) ? $this->module : $module) . "/" . $file . ".php";
         } catch (Exception $ex) {
-            System::debug(array("Error message" => $ex->getMessage() . '. In ' . $ex->getFile() . ' on line ' . $ex->getLine() . '.'));
+            $this->helpers->insecticide->debug(array("Error message" => $ex->getMessage() . '. In ' . $ex->getFile() . ' on line ' . $ex->getLine() . '.'));
         }
 
         if ($return === true)
@@ -68,7 +68,7 @@ class Controller {
                 trigger_error("Wrong argument type. It must be a string or an array.", E_WARNING);
             }
         } catch (Exception $e) {
-            System::debug(array("Error message" => $ex->getMessage() . '. In ' . $ex->getFile() . ' on line ' . $ex->getLine() . '.'), array('Paramater args' => $args, 'Parameter filename' => $filename));
+            $this->helpers->insecticide->debug(array("Error message" => $ex->getMessage() . '. In ' . $ex->getFile() . ' on line ' . $ex->getLine() . '.'), array('Paramater args' => $args, 'Parameter filename' => $filename));
         }
         exit;
     }

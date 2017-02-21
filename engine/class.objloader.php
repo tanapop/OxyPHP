@@ -20,7 +20,7 @@ class ObjLoader {
             self::$collection[$path] = $r->newInstanceArgs($args);
             return self::$collection[$path];
         } catch (Exception $ex) {
-            System::debug(array("Error message" => $ex->getMessage() . '. In ' . $ex->getFile() . ' on line ' . $ex->getLine() . '.'),array('Parameter path'=>$path,'Parameter classname'=>$classname,'Parameter args'=>$args));
+            System::log("oxyerror","Oxy Error Message: " . $ex->getMessage() . '. In ' . $ex->getFile() . ' on line ' . $ex->getLine() . '.');
         }
     }
 

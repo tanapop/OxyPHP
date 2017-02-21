@@ -24,8 +24,9 @@ class Dbclass {
     public $queryerror;
     // Data types constants
     private $datatypes;
-    // An instance of class Querybuilder.
-    public $querybuilder;
+    // If true, deactivate automatic commit
+    private $transaction_mode;
+    private $lastresult;
 
     /* Verifies if database connection data is valid, then sets the properties with those values.
      * Connect to database server and save the connection in a property.
@@ -48,16 +49,15 @@ class Dbclass {
             $this->dbpass = (isset($dbinfo["dbpass"]) ? $dbinfo["dbpass"] : DBPASS);
             $this->dbtype = (isset($dbinfo["dbtype"]) ? $dbinfo["dbtype"] : DBTYPE);
         } catch (Exception $ex) {
-            System::debug(array("Error message" => $ex->getMessage() . '. In ' . $ex->getFile() . ' on line ' . $ex->getLine() . '.'), array('Parameter dbinfo' => $dbinfo));
+            System::log("oxyerror","Error message" . $ex->getMessage() . '. In ' . $ex->getFile() . ' on line ' . $ex->getLine() . '.');
         }
 
         $this->cnnInfo = new stdClass();
         $this->cnnInfo->info = "No connection info.";
-
-        $this->querybuilder = System::loadClass($_SERVER["DOCUMENT_ROOT"] . "/engine/databasemodules/" . DBCLASS . "/class.querybuilder.php", "querybuilder");
+        $this->transaction_mode = false;
 
         if (!$this->connect(1))
-            System::debug(array("Attempt to connect to database server failed. Error:" => $this->connection), array());
+            System::log("oxyerror","Attempt to connect to database server failed. Error:" . $this->connection);
     }
 
     // When this class's object is destructed, close the connection to database server.
@@ -102,12 +102,12 @@ class Dbclass {
             $this->dbpass = (isset($dbinfo["dbpass"]) ? $dbinfo["dbpass"] : $this->dbpass);
             $this->dbtype = (isset($dbinfo["dbtype"]) ? $dbinfo["dbtype"] : $this->dbtype);
         } catch (Exception $ex) {
-            System::debug(array("Error message" => $ex->getMessage() . '. In ' . $ex->getFile() . ' on line ' . $ex->getLine() . '.'), array('Parameter dbinfo' => $dbinfo));
+            System::log("oxyerror","Error message: " . $ex->getMessage() . '. In ' . $ex->getFile() . ' on line ' . $ex->getLine() . '.');
         }
 
         $this->disconnect();
         if (!$this->connect(1))
-            System::debug(array("Attempt to connect to mysql database failed. Error:" => $this->connection), array());
+            System::log("oxyerror","Attempt to connect to mysql database failed. Error:" . $this->connection);
     }
 
     // Returns all current connection information.
@@ -143,33 +143,95 @@ class Dbclass {
         return $ret;
     }
 
-    public function query($presql, $values = array()) {
-        $values = array_values($values);
+    private function prepare_statement($sqlstring, $sqlvalues = array()) {
+        $stmt = $this->connection->prepare($sqlstring);
 
+        if (!empty($sqlvalues)) {
+            foreach ($sqlvalues as $key => $val) {
+                $stmt->bindValue(($key + 1), $val, $this->datatypes[gettype($val)]);
+            }
+        }
+
+        return $stmt;
+    }
+
+    public function query(Sqlobj $sqlobj, $debug = true) {
         try {
-            $stmt = $this->connection->prepare($presql);
-            if (!empty($values)) {
-                foreach ($values as $key => $val) {
-                    $stmt->bindValue((is_numeric($key) ? $key + 1 : ':' . $key), $val, $this->datatypes[gettype($val)]);
-                }
+            if ($this->transaction_mode && !$this->lastresult) {
+                $this->connection->beginTransaction();
             }
 
+            $stmt = $this->prepare_statement($sqlobj->sqlstring, array_values($sqlobj->sqlvalues));
             $res = $stmt->execute();
+
+            if (strpos(strtoupper($sqlobj->sqlstring), 'SELECT') !== false) {
+                $res = array();
+                while ($row = $stmt->fetch(PDO::FETCH_OBJ)) {
+                    $res[] = $row;
+                }
+            } elseif (strpos(strtoupper($sqlobj->sqlstring), 'INSERT') !== false) {
+                $res = $this->connection->lastInsertId();
+            }
+
 
             $this->cnnInfo = (object) get_object_vars($this->connection);
 
-            if (strpos(strtoupper($presql), 'SELECT') !== false) {
-                $ret = array();
-                while ($row = $stmt->fetch(PDO::FETCH_OBJ)) {
-                    $ret[] = $row;
-                }
-                return $ret;
-            }else {
-                return $res;
-            }
+            $this->lastresult = $res;
+            return $res;
         } catch (PDOException $ex) {
-            System::debug(array("Error Message" => $ex->getMessage() . '. In ' . $ex->getFile() . ' on line ' . $ex->getLine() . '.'), array('Parameter dbinfo' => $dbinfo));
+            if ($this->transaction_mode) {
+                $this->connection->rollBack();
+                $this->transaction_mode = false;
+                $this->lastresult = null;
+            }
+            if ($debug) {
+                System::log("oxyerror","Error Message" . $ex->getMessage() . '. In ' . $ex->getFile() . ' on line ' . $ex->getLine() . '.');
+            }
         }
+    }
+
+    public function transaction($sqlset) {
+        $this->connection->beginTransaction();
+        $this->transaction_mode = false;
+        $this->lastresult = null;
+        $commit = true;
+
+        foreach ($sqlset as $sql) {
+            try {
+                $res = $this->query($sql, false);
+            } catch (PDOException $ex) {
+                $this->connection->rollBack();
+                System::log("oxyerror","Error Message" . $ex->getMessage() . '. In ' . $ex->getFile() . ' on line ' . $ex->getLine() . '.');
+            }
+
+            if (strpos(strtoupper($sql->sqlstring), 'SELECT') !== false || $res === false) {
+                System::log('oxyerror', date('m/d/Y h:i:s') . " - NOTICE: You tried to use some SELECT query(ies) in a transaction of queries. It makes no sense! Only the first SELECT query was executed.");
+                $this->connection->rollBack();
+                $commit = false;
+                break;
+            }
+        }
+
+        if ($commit) {
+            $this->connection->commit();
+        }
+
+        return $res;
+    }
+
+    public function transaction_mode($usemode = true) {
+        if (!empty($this->lastresult)) {
+            System::log("oxyerror","There is an active transaction. It must be finished before turning on or off the transaction mode.");
+        }
+        $this->transaction_mode = $usemode;
+        $this->lastresult = false;
+    }
+
+    public function commit() {
+        $r = $this->lastresult;
+        $this->lastresult = null;
+        $this->connection->commit();
+        return $r;
     }
 
 }

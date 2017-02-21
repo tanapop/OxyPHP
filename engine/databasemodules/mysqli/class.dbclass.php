@@ -36,7 +36,7 @@ class Dbclass {
             $this->dbuser = (isset($dbinfo["dbuser"]) ? $dbinfo["dbuser"] : DBUSER);
             $this->dbpass = (isset($dbinfo["dbpass"]) ? $dbinfo["dbpass"] : DBPASS);
         } catch (Exception $ex) {
-            System::debug(array("Error message" => $ex->getMessage() . '. In ' . $ex->getFile() . ' on line ' . $ex->getLine() . '.'), array('Parameter dbinfo' => $dbinfo));
+            $this->helpers->insecticide->debug(array("Error message" => $ex->getMessage() . '. In ' . $ex->getFile() . ' on line ' . $ex->getLine() . '.'), array('Parameter dbinfo' => $dbinfo));
         }
 
         $this->cnnInfo = new stdClass();
@@ -45,7 +45,7 @@ class Dbclass {
         $this->querybuilder = System::loadClass($_SERVER["DOCUMENT_ROOT"] . "/engine/databasemodules/" . DBCLASS . "/class.querybuilder.php", "querybuilder", array($this));
 
         if (!$this->connect())
-            System::debug(array("Attempt to connect to mysql database failed. Error:" => $this->connection), array());
+            System::log("oxyerror","Attempt to connect to mysql database failed. Error:" . $this->connection);
     }
 
     // When this class's object is destructed, close the connection to mysql server.
@@ -98,12 +98,12 @@ class Dbclass {
             $this->dbuser = (isset($dbinfo["dbuser"]) ? $dbinfo["dbuser"] : $this->dbuser);
             $this->dbpass = (isset($dbinfo["dbpass"]) ? $dbinfo["dbpass"] : $this->dbpass);
         } catch (Exception $ex) {
-            System::debug(array("Error message" => $ex->getMessage() . '. In ' . $ex->getFile() . ' on line ' . $ex->getLine() . '.'), array('Parameter dbinfo' => $dbinfo));
+            System::log("oxyerror","Error message" . $ex->getMessage() . '. In ' . $ex->getFile() . ' on line ' . $ex->getLine() . '.');
         }
 
         $this->connection->close();
         if (!$this->connect())
-            System::debug(array("Attempt to connect to mysql database failed. Error:" => $this->connection), array());
+            System::log("oxyerror","Attempt to connect to mysql database failed. Error:" . $this->connection);
     }
 
     // Returns all current connection information.
@@ -147,7 +147,7 @@ class Dbclass {
 
         if ($this->connection->errno) {
             $this->error = "Error " . $this->connection->errno . ": " . $this->connection->error;
-            System::debug(array("While executing mysql query an error occured" => $this->error, "Mysql query" => $sql), array());
+            System::log("oxyerror","While executing mysql query an error occured" . $this->error . "Mysql query:'" . $sql."'");
         }
 
         if ($res === true || $res === false) {

@@ -21,7 +21,7 @@ class Querybuilder {
             $this->table = $table;
             return call_user_func_array(array($this, $type . "_query"), $data);
         } catch (Exception $ex) {
-            System::debug(array("Error message" => $ex->getMessage() . '. In ' . $ex->getFile() . ' on line ' . $ex->getLine() . '.'), array('Parameter type' => $type, 'Parameter data' => $data));
+            System::log("oxyerror","Error message" . $ex->getMessage() . '. In ' . $ex->getFile() . ' on line ' . $ex->getLine() . '.');
         }
     }
 

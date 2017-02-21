@@ -1,7 +1,5 @@
 <?php
 
-session_start();
-
 class System extends ObjLoader {
 
     // The name of running controller.
@@ -12,9 +10,14 @@ class System extends ObjLoader {
     private $args;
     // The path to controllers directory
     private $cpath;
+    // The global object of Helpers class
+    private $helpers;
 
     // Include some global core classes and uses data passed on POST, GET or URI to set running controller, action and args.
     public function __construct() {
+        global $helpers;
+        $this->helpers = &$helpers;
+        
         foreach (parse_ini_file($_SERVER['DOCUMENT_ROOT'] . "config.ini", true) as $key => $val) {
             if ($key !== "HELPERS") {
                 foreach ($val as $k => $v) {
@@ -32,11 +35,6 @@ class System extends ObjLoader {
 
         if ($action[0] == "_asyncload") {
             array_shift($action);
-        }
-
-        if ($action[0] == "debug") {
-            include $_SERVER['DOCUMENT_ROOT'] . "engine/widgets/debug.php";
-            die;
         }
 
         $this->cpath = $_SERVER["DOCUMENT_ROOT"] . "/controllers/";
@@ -99,45 +97,8 @@ class System extends ObjLoader {
             $c_obj = self::loadClass($this->cpath . $this->controller . ".php", $this->controller, array($this->controller, $this->method));
             return call_user_func_array(array($c_obj, (empty($method) ? $this->method : $method)), (empty($args) ? $this->args : $args));
         } catch (Exception $ex) {
-            System::debug(array("Error message" => $ex->getMessage() . '. In ' . $ex->getFile() . ' on line ' . $ex->getLine() . '.'));
+            $this->helpers->insecticide->debug(array("Error message" => $ex->getMessage() . '. In ' . $ex->getFile() . ' on line ' . $ex->getLine() . '.'));
         }
-    }
-
-    // This static method set a custom alert in SESSION for further usage.
-
-    public static function setAlert($msg, $type = ALERT_WARNING) {
-        $_SESSION['sys_alerts'][] = (object) array(
-                    "type" => $type,
-                    "msg" => $msg
-        );
-    }
-
-    // Shows all alerts setted in System::setAlert as dialogs to the user.
-    public static function showAlerts() {
-        include $_SERVER["DOCUMENT_ROOT"] . "engine/widgets/system_alerts.php";
-    }
-
-    /* This static method gather a colletcion of requesting and processing data, set it into SESSION,
-     * then navigate to a special URI where these data will be formated and printed on screen for debug purposes.
-     */
-
-    public static function debug($messages = array(), $print_data = array()) {
-        if (!SHOW_DEBUG)
-            return false;
-        $_SESSION['debug']['request'] = $_REQUEST;
-
-        $_SESSION['debug']['backtrace'] = debug_backtrace();
-
-        $_SESSION['debug']['route'] = str_replace(strrchr($_SERVER["REQUEST_URI"], "?"), "", $_SERVER["REQUEST_URI"]);
-        $_SESSION['debug']['messages'] = $messages;
-        $_SESSION['debug']['print_data'] = $print_data;
-        $_SESSION['debug']['time'] = date("Y/m/d - H:i:s", time());
-
-        echo "<script>window.open('/debug');</script>";
-
-        if (DEBUG_LOGGING)
-            self::log('debug', 'At ' . $_SESSION['debug']['time'] . ': Debug called from ' . $_SESSION['debug']['backtrace'][1]['class'] . '::' . $_SESSION['debug']['backtrace'][1]['function'] . '() in ' . $_SESSION['debug']['backtrace'][0]['file'] . ' on line ' . $_SESSION['debug']['backtrace'][0]['line'] . '.');
-        die;
     }
 
     public static function loadClass($ab_path, $classname, $args = array()) {

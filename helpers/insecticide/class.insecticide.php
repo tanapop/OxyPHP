@@ -2,22 +2,20 @@
 
 class Insecticide {
 
-    private $ins_root_path;
-    private $ins_root_uri;
+    private $uri_path;
     private $theme;
 
-    public function __construct($ins_root_path, $ins_root_uri, $theme = 'default') {
+    public function __construct($uri_path, $theme = 'default') {
 
-        $this->ins_root_path = $_SERVER["DOCUMENT_ROOT"].$ins_root_path;
-        $this->ins_root_uri = $_SERVER["SERVER_NAME"].$ins_root_uri;
+        $this->uri_path = (isset($_SERVER["HTTPS"]) && $_SERVER["HTTPS"] != "off" ? "https" : "http")."://".$_SERVER["SERVER_NAME"].$uri_path."/insecticide/";
         $this->theme = $theme;
     }
 
     public function debug($messages = array(), $print_data = array()) {
         echo '<script src="http://code.jquery.com/jquery-latest.min.js"></script>';
-        echo '<script src="' . $this->ins_root_uri . 'insecticide/js/insecticide.js"></script>';
-        echo '<link rel="stylesheet" href="' . $this->ins_root_uri . 'insecticide/style/insecticide.css">';
-        echo '<link rel="stylesheet" href="' . $this->ins_root_uri . 'insecticide/style/themes/' . $this->theme . '.css">';
+        echo '<script src="' . $this->uri_path . 'js/insecticide.js"></script>';
+        echo '<link rel="stylesheet" href="' . $this->uri_path . 'style/insecticide.css">';
+        echo '<link rel="stylesheet" href="' . $this->uri_path . 'style/themes/' . $this->theme . '.css">';
         
         $request = $_REQUEST;
         $backtrace = debug_backtrace();
@@ -25,7 +23,7 @@ class Insecticide {
         $time = date("Y/m/d - H:i:s", time());
 
         ob_start();
-        include $this->ins_root_path . '/debug.php';
+        include __DIR__ . '/debug.php';
         echo ob_get_clean();
 
         die;

@@ -8,12 +8,12 @@ class _CLASS_NAME_ extends Controller {
 
     public function listing() {
         $this->_view("listing", array("dataset" => $this->get("*")));
-        System::showAlerts();
+        $this->helpers->phpalert->show();
     }
 
     public function register($id = null) {
         $this->_view("register", array("dataset" => (!empty($id) ? $this->model->row("*", array("id" => $id)) : array())));
-        System::showAlerts();
+        $this->helpers->phpalert->show();
     }
 
     public function get($fields, $conditions = array()) {
@@ -25,9 +25,9 @@ class _CLASS_NAME_ extends Controller {
         $primarykey = $this->model->_get_primary_key();
         
         if ($this->model->save($dataset, (empty($dataset[$primarykey]) ? array() : array($primarykey => $dataset[$primarykey])))) {
-            System::setAlert("The data was successfully saved!", ALERT_SUCCESS);
+            $this->helpers->phpalert->add("The data was successfully saved!", "success");
         } else {
-            System::setAlert("Attempt to save data failed!", ALERT_FAILURE);
+            $this->helpers->phpalert->add("Attempt to save data failed!", "failure");
         }
 
         header('Location: /_MODULE_NAME_');
@@ -37,13 +37,13 @@ class _CLASS_NAME_ extends Controller {
         if (is_numeric($list)) {
             $list = array($list);
         } elseif (!is_array($list)) {
-            System::debug(array('Argument type error'=>'Argument "list" must be an integer or an array.'));
+            $this->helpers->insecticide->debug(array('Argument type error'=>'Argument "list" must be an integer or an array.'));
         }
         
         if ($this->model->delete(array($this->model->_get_primary_key() => $list))) {
-            System::setAlert("The registers were deleted successfully!", ALERT_SUCCESS);
+            $this->helpers->phpalert->add("The registers were deleted successfully!", "success");
         } else {
-            System::setAlert("Attempt to delete registers failed!", ALERT_FAILURE);
+            $this->helpers->phpalert->add("Attempt to delete registers failed!", "failure");
         }
 
         header('Location: /_MODULE_NAME_');

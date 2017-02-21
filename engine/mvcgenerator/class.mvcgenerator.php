@@ -10,9 +10,14 @@ class Mvcgenerator {
     private $datatypes;
     // The current table's primary key name.
     private $primarykey;
+    // The global object of Helpers class
+    private $helpers;
 
     // Include Mysql class file and instantiate it on this->mysql, write database tables list and set the datatypes dictionary.
     public function __construct() {
+        global $helpers;
+        $this->helpers = &$helpers;
+        
         $this->dbclass = System::loadClass($_SERVER["DOCUMENT_ROOT"] . "/engine/databasemodules/" . DBCLASS . "/class.dbclass.php", 'dbclass');
 
         $this->tables = $this->dbclass->dbtables();
@@ -54,7 +59,7 @@ class Mvcgenerator {
         include $_SERVER['DOCUMENT_ROOT'] . "engine/mvcgenerator/index.php";
 
         echo ob_get_clean();
-        System::showAlerts();
+        $this->helpers->phpalert->show();
     }
 
     public function createmvc($modulename, $fileset) {
@@ -71,7 +76,7 @@ class Mvcgenerator {
 
     // Generate a model file, based on a template, adapting it to the module which is being created.
     private function createmodel($modulename, $fields, $return = false) {
-        $f = file_get_contents($_SERVER["DOCUMENT_ROOT"] . "engine/mvcgenerator/templates/model");
+        $f = file_get_contents($_SERVER["DOCUMENT_ROOT"] . "engine/mvcgenerator/templates/model.mtx");
 
         $f = str_replace("_CLASS_NAME_", "Model" . ucfirst($modulename), $f);
 
@@ -85,12 +90,12 @@ class Mvcgenerator {
             chmod($path . $modulename . ".php", 0777);
             if ($return)
                 return true;
-            System::setAlert('"' . ucfirst($modulename) . '" module\'s model created successfully.', ALERT_SUCCESS);
+            $this->helpers->phpalert->add('"' . ucfirst($modulename) . '" module\'s model created successfully.', "success");
             header('Location: /');
         } else {
             if ($return)
                 return false;
-            System::setAlert('Attempt to create "' . ucfirst($modulename) . '" module\'s model failed.', ALERT_FAILURE);
+            $this->helpers->phpalert->add('Attempt to create "' . ucfirst($modulename) . '" module\'s model failed.', "failure");
             header('Location: /');
         }
     }
@@ -98,7 +103,7 @@ class Mvcgenerator {
     // Generate a controller file, based on a template, adapting it to the module which is being created.
     private function createcontroller($modulename, $fields, $return = false) {
         $breakline = (PATH_SEPARATOR == ":" ? "\r\n" : "\n");
-        $f = file_get_contents($_SERVER["DOCUMENT_ROOT"] . "engine/mvcgenerator/templates/controller");
+        $f = file_get_contents($_SERVER["DOCUMENT_ROOT"] . "engine/mvcgenerator/templates/controller.mtx");
 
         $f = str_replace("_MODULE_NAME_", $modulename, $f);
         $f = str_replace("_CLASS_NAME_", ucfirst($modulename), $f);
@@ -129,12 +134,12 @@ class Mvcgenerator {
             chmod($path . $modulename . ".php", 0777);
             if ($return)
                 return true;
-            System::setAlert('"' . ucfirst($modulename) . '" module\'s controller created successfully.', ALERT_SUCCESS);
+            $this->helpers->phpalert->add('"' . ucfirst($modulename) . '" module\'s controller created successfully.', "success");
             header('Location: /');
         } else {
             if ($return)
                 return false;
-            System::setAlert('Attempt to create "' . ucfirst($modulename) . '" module\'s controller failed.', ALERT_FAILURE);
+            $this->helpers->phpalert->add('Attempt to create "' . ucfirst($modulename) . '" module\'s controller failed.', "failure");
             header('Location: /');
         }
     }
@@ -200,8 +205,8 @@ class Mvcgenerator {
 
     // Generate "listing" and "register" view files, based on templates, adapting them to the module which is being created.
     private function createviews($modulename, $fields, $return = false) {
-        $fl = file_get_contents($_SERVER["DOCUMENT_ROOT"] . "engine/mvcgenerator/templates/view_listing");
-        $fr = file_get_contents($_SERVER["DOCUMENT_ROOT"] . "engine/mvcgenerator/templates/view_register");
+        $fl = file_get_contents($_SERVER["DOCUMENT_ROOT"] . "engine/mvcgenerator/templates/view_listing.mtx");
+        $fr = file_get_contents($_SERVER["DOCUMENT_ROOT"] . "engine/mvcgenerator/templates/view_register.mtx");
 
         $fl = str_replace("_MODULE_NAME_", $modulename, $fl);
         $fr = str_replace("_MODULE_NAME_", $modulename, $fr);
@@ -236,12 +241,12 @@ class Mvcgenerator {
             chmod($viewpath . "register.php", 0777);
             if ($return)
                 return true;
-            System::setAlert('"' . ucfirst($modulename) . '" module\'s views created successfully.', ALERT_SUCCESS);
+            $this->helpers->phpalert->add('"' . ucfirst($modulename) . '" module\'s views created successfully.', "success");
             header('Location: /');
         } else {
             if ($return)
                 return false;
-            System::setAlert('Attempt to create "' . ucfirst($modulename) . '" module\'s views failed.', ALERT_FAILURE);
+            $this->helpers->phpalert->add('Attempt to create "' . ucfirst($modulename) . '" module\'s views failed.', "failure");
             header('Location: /');
         }
     }
@@ -249,22 +254,22 @@ class Mvcgenerator {
     // Generate a model, a controller and the 2 view files, calling the other creation methods within this class.
     private function createall($modulename, $fields) {
         if (!$this->createcontroller($modulename, $fields, true)) {
-            System::setAlert("Attempt to create module's controller failed. No file created.", ALERT_FAILURE);
+            $this->helpers->phpalert->add("Attempt to create module's controller failed. No file created.", "failure");
             header('Location: /');
             return false;
         }
         if (!$this->createmodel($modulename, $fields, true)) {
-            System::setAlert("Attempt to create module's model failed. But controller file created with success.");
+            $this->helpers->phpalert->add("Attempt to create module's model failed. But controller file created with success.");
             header('Location: /');
             return false;
         }
         if (!$this->createviews($modulename, $fields, true)) {
-            System::setAlert("Attempt to create module's views failed. But controller and model files created with success.");
+            $this->helpers->phpalert->add("Attempt to create module's views failed. But controller and model files created with success.");
             header('Location: /');
             return false;
         }
 
-        System::setAlert("Module " . $modulename . " MVC created successfully.", ALERT_SUCCESS);
+        $this->helpers->phpalert->add("Module " . $modulename . " MVC created successfully.", "success");
         header('Location: /');
     }
 
