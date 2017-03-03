@@ -8,17 +8,20 @@ class Controller {
     protected $helpers;
     // Current module. It's the same name of the running controller.
     private $module;
+    // Current method.
+    private $method;
     // An instance of the module's model, if it exists.
     protected $model;
 
     // Set the global system property, set the module and create module's model instance.
-    public function __construct($module) {
+    public function __construct($module, $method) {
         global $system;
         global $helpers;
         $this->system = &$system;
         $this->helpers = &$helpers;
 
         $this->module = $module;
+        $this->method = $method;
 
         if (is_file($_SERVER['DOCUMENT_ROOT'] . "/models/" . $this->module . ".php"))
             $this->_loadmodel($this->module);
@@ -30,7 +33,7 @@ class Controller {
             try {
                 extract($varlist);
             } catch (Exception $ex) {
-                $this->helpers->insecticide->debug(array("Error message" => $ex->getMessage() . '. In ' . $ex->getFile() . ' on line ' . $ex->getLine() . '.'), array('Parameter varlist' => $varlist));
+                System::debug(array("Error message" => $ex->getMessage() . '. In ' . $ex->getFile() . ' on line ' . $ex->getLine() . '.'), array('Parameter varlist' => $varlist));
             }
         }
 
@@ -38,13 +41,33 @@ class Controller {
         try {
             include $_SERVER['DOCUMENT_ROOT'] . "views/" . (empty($module) ? $this->module : $module) . "/" . $file . ".php";
         } catch (Exception $ex) {
-            $this->helpers->insecticide->debug(array("Error message" => $ex->getMessage() . '. In ' . $ex->getFile() . ' on line ' . $ex->getLine() . '.'));
+            System::debug(array("Error message" => $ex->getMessage() . '. In ' . $ex->getFile() . ' on line ' . $ex->getLine() . '.'));
         }
 
         if ($return === true)
             return ob_get_clean();
         else
             echo ob_get_clean();
+    }
+
+    protected function _route($module_alias, $method_alias = null, $data = array()) {
+        $ret = array(
+            ucfirst(DEFAULT_CONTROLLER) => '/',
+            $module_alias => '/' . $this->module
+        );
+
+        if (!empty($method_alias)) {
+            $ret[$method_alias] = '/' . $this->module . '/' . $this->method;
+            foreach ($data as $d) {
+                $ret[$method_alias] .= '/'.$d;
+            }
+        }
+
+        return $ret;
+    }
+    
+    protected function module(){
+        return $this->module;
     }
 
     protected function _downloadfile($args, $filename) {
@@ -68,7 +91,7 @@ class Controller {
                 trigger_error("Wrong argument type. It must be a string or an array.", E_WARNING);
             }
         } catch (Exception $e) {
-            $this->helpers->insecticide->debug(array("Error message" => $ex->getMessage() . '. In ' . $ex->getFile() . ' on line ' . $ex->getLine() . '.'), array('Paramater args' => $args, 'Parameter filename' => $filename));
+            System::debug(array("Error message" => $ex->getMessage() . '. In ' . $ex->getFile() . ' on line ' . $ex->getLine() . '.'), array('Paramater args' => $args, 'Parameter filename' => $filename));
         }
         exit;
     }

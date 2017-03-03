@@ -18,7 +18,7 @@
         If a Model, View and/or Controller already exists within the module, creating a new one will overwrite the former file(s).
     </p>
     <p>
-        After creating a module's MVC set(a Model, a View and/or a Controller), you can edit each file created to fulfill your application's needs.
+        After creating a module's MVC set(a Model, a View and/or a Controller), you can edit each file to fulfill your application's needs.
         You can find them in the "/controllers", "/models" and "/views" directories.
     </p>
     <p style="color:#990000;">*: Do not forget to grant the required permissions for the application, as it will automatically create files in the directories.</p>

@@ -27,7 +27,6 @@ if (strpos(strtolower(str_replace(strrchr($_SERVER["REQUEST_URI"], "?"), "", url
 
         <!--<JS>-->
         <script src="http://code.jquery.com/jquery-latest.min.js"></script>
-        <script src="/media/js/main.js"></script>
         <!--</JS>-->
 
 

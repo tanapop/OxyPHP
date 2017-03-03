@@ -25,7 +25,7 @@ class System extends ObjLoader {
                 }
             }
         }
-
+        
         require_once "engine/class.controller.php";
         require_once "engine/class.model.php";
         self::loadClass($_SERVER['DOCUMENT_ROOT'] . 'engine/class.errorhandler.php', 'errorhandler');
@@ -106,12 +106,13 @@ class System extends ObjLoader {
     }
 
     public static function log($logname, $logmsg) {
-        if (!file_exists(LOG_FILE_PATH))
-            mkdir(LOG_FILE_PATH, 0777, true);
-        touch(LOG_FILE_PATH);
-        chmod(LOG_FILE_PATH, 0777);
+        $path = $_SERVER["DOCUMENT_ROOT"]."log/";
+        if (!file_exists($path))
+            mkdir($path, 0777, true);
+        touch($path);
+        chmod($path, 0777);
 
-        $log = fopen(LOG_FILE_PATH . $logname . '.log', 'a');
+        $log = fopen($path . $logname . '.log', 'a');
         fwrite($log, $logmsg . str_repeat((PATH_SEPARATOR == ":" ? "\r\n" : "\n"), 2));
         fclose($log);
     }

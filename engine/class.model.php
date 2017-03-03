@@ -6,8 +6,10 @@ class Model {
     private $primarykey;
     // The name of main table of this module. By default, it has the same name of the module itself.
     private $table;
-    // An instance of the class Mysql.
-    private $dbclass;
+    // An instance of the class Dbclass.
+    protected $dbclass;
+    // An instance of the class Sql.
+    protected $sql;
     // The global object of Helpers class
     protected $helpers;
 
@@ -19,6 +21,7 @@ class Model {
         $this->table = $table;
 
         $this->dbclass = System::loadClass($_SERVER["DOCUMENT_ROOT"] . "/engine/databasemodules/" . DBCLASS . "/class.dbclass.php", 'dbclass');
+        $this->sql = System::loadClass($_SERVER["DOCUMENT_ROOT"] . "/engine/databasemodules/" . DBCLASS . "/class.sql.php", 'sql', array($this->table));
 
         $this->set_primary_key();
     }
@@ -46,13 +49,6 @@ class Model {
         return $this->table;
     }
 
-    protected function dbquery($args) {
-        if (!is_array($args))
-            $args = array($args);
-
-        return call_user_func_array(array($this->dbclass, 'query'), $args);
-    }
-
     // Select fields from the table under the rules specified in conditions. Return a list of results.
     public function _get($fields, $conditions = array(), $debug = false) {
         if (is_string($fields)) {
@@ -65,10 +61,14 @@ class Model {
             return false;
         }
 
+        $sql = $this->sql
+                ->select($fields, $this->table, $conditions)
+                ->where($conditions, $this->table);
+
         if ($debug) {
-            $this->helpers->insecticide->debug(array(), array("SQL" => $this->dbclass->querybuilder->build("select", array($fields, $conditions), $this->table)));
+            System::debug(array(), $sql->output());
         } else {
-            if ($result = $this->dbquery($this->dbclass->querybuilder->build("select", array($fields, $conditions), $this->table))) {
+            if ($result = $this->dbclass->query($sql->output())) {
                 return $result;
             } else
                 return false;
@@ -79,27 +79,32 @@ class Model {
     public function _save($dataset, $conditions = array(), $debug = false) {
         $dataset = (array) $dataset;
         if (!empty($conditions)) {
-            $sql = $this->dbclass->querybuilder->build("update", array($dataset, $conditions), $this->table);
+            $sql = $this->sql
+                    ->update($dataset, $this->table, $conditions)
+                    ->where($conditions);
         } else {
             if (isset($dataset[$this->primarykey]))
                 unset($dataset[$this->primarykey]);
-            $sql = $this->dbclass->querybuilder->build("insert", array($dataset), $this->table);
+            $sql = $this->sql->insert($dataset, $this->table);
         }
 
         if ($debug) {
-            $this->helpers->insecticide->debug(array(), array("SQL" => $sql));
+            System::debug(array(), array("SQL" => $sql));
         } else {
-            return $this->dbquery($sql);
+            return $this->dbclass->query($sql->output());
         }
     }
 
     // Delete data from table under the rules specified in conditions.
     public function _delete($conditions, $debug = false) {
+        $sql = $this->sql
+                ->delete($this->table, $conditions)
+                ->where($conditions);
+        
         if ($debug) {
-            $this->helpers->insecticide->debug(array(), array("SQL" => $this->dbclass->querybuilder->build("delete", array($conditions), $this->table)));
+            System::debug(array(), $sql->output());
         } else {
-            
-            return $this->dbquery($this->dbclass->querybuilder->build("delete", array($conditions), $this->table));
+            return $this->dbclass->query($sql->output());
         }
     }
 
