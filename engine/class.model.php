@@ -17,7 +17,7 @@ class Model {
     public function __construct($table) {
         global $helpers;
         $this->helpers = &$helpers;
-        
+
         $this->table = $table;
 
         $this->dbclass = System::loadClass($_SERVER["DOCUMENT_ROOT"] . "/engine/databasemodules/" . DBCLASS . "/class.dbclass.php", 'dbclass');
@@ -50,7 +50,7 @@ class Model {
     }
 
     // Select fields from the table under the rules specified in conditions. Return a list of results.
-    public function _get($fields, $conditions = array(), $debug = false) {
+    public function _get($fields, $conditions = array()) {
         if (is_string($fields)) {
             $fields = array($fields);
         } elseif (!is_array($fields)) {
@@ -65,18 +65,14 @@ class Model {
                 ->select($fields, $this->table, $conditions)
                 ->where($conditions, $this->table);
 
-        if ($debug) {
-            System::debug(array(), $sql->output());
-        } else {
-            if ($result = $this->dbclass->query($sql->output())) {
-                return $result;
-            } else
-                return false;
-        }
+        if ($result = $this->dbclass->query($sql->output())) {
+            return $result;
+        } else
+            return false;
     }
 
     // Save on database data passed in dataset, under the rules specified in conditions.
-    public function _save($dataset, $conditions = array(), $debug = false) {
+    public function _save($dataset, $conditions = array()) {
         $dataset = (array) $dataset;
         if (!empty($conditions)) {
             $sql = $this->sql
@@ -88,24 +84,16 @@ class Model {
             $sql = $this->sql->insert($dataset, $this->table);
         }
 
-        if ($debug) {
-            System::debug(array(), array("SQL" => $sql));
-        } else {
-            return $this->dbclass->query($sql->output());
-        }
+        return $this->dbclass->query($sql->output());
     }
 
     // Delete data from table under the rules specified in conditions.
-    public function _delete($conditions, $debug = false) {
+    public function _delete($conditions) {
         $sql = $this->sql
                 ->delete($this->table, $conditions)
                 ->where($conditions);
-        
-        if ($debug) {
-            System::debug(array(), $sql->output());
-        } else {
-            return $this->dbclass->query($sql->output());
-        }
+
+        return $this->dbclass->query($sql->output());
     }
 
 }

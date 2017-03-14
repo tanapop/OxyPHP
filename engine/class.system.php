@@ -61,7 +61,7 @@ class System extends ObjLoader {
 
         if (isset($_REQUEST["args"])) {
             if (!is_array($_REQUEST["args"])) {
-                self::debug(array('class.system: Argument Error: args must be an array.'), array('args' => $_REQUEST["args"]));
+                self::log("sys_error",'Error message: Argument passed to "System::setargs" must be an array.');
             }
             $this->args = $_REQUEST["args"];
         } elseif (!empty($_POST)) {
@@ -92,7 +92,7 @@ class System extends ObjLoader {
             $c_obj = self::loadClass($this->cpath . $this->controller . ".php", $this->controller, array($this->controller, $this->method));
             return call_user_func_array(array($c_obj, (empty($method) ? $this->method : $method)), (empty($args) ? $this->args : $args));
         } catch (Exception $ex) {
-            self::log("oxyerror","Error message: " . $ex->getMessage() . '. In ' . $ex->getFile() . ' on line ' . $ex->getLine() . '.');
+            self::log("sys_error","Error message: " . $ex->getMessage() . '. In ' . $ex->getFile() . ' on line ' . $ex->getLine() . '.');
         }
     }
 

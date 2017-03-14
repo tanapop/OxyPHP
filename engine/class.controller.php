@@ -33,7 +33,7 @@ class Controller {
             try {
                 extract($varlist);
             } catch (Exception $ex) {
-                System::debug(array("Error message" => $ex->getMessage() . '. In ' . $ex->getFile() . ' on line ' . $ex->getLine() . '.'), array('Parameter varlist' => $varlist));
+                System::log("sys_error","Error message: " . $ex->getMessage() . '. In ' . $ex->getFile() . ' on line ' . $ex->getLine() . '.');
             }
         }
 
@@ -41,7 +41,7 @@ class Controller {
         try {
             include $_SERVER['DOCUMENT_ROOT'] . "views/" . (empty($module) ? $this->module : $module) . "/" . $file . ".php";
         } catch (Exception $ex) {
-            System::debug(array("Error message" => $ex->getMessage() . '. In ' . $ex->getFile() . ' on line ' . $ex->getLine() . '.'));
+            System::log("sys_error","Error message: " . $ex->getMessage() . '. In ' . $ex->getFile() . ' on line ' . $ex->getLine() . '.');
         }
 
         if ($return === true)
@@ -91,7 +91,7 @@ class Controller {
                 trigger_error("Wrong argument type. It must be a string or an array.", E_WARNING);
             }
         } catch (Exception $e) {
-            System::debug(array("Error message" => $ex->getMessage() . '. In ' . $ex->getFile() . ' on line ' . $ex->getLine() . '.'), array('Paramater args' => $args, 'Parameter filename' => $filename));
+            System::log("sys_error","Error message: " . $ex->getMessage() . '. In ' . $ex->getFile() . ' on line ' . $ex->getLine() . '.');
         }
         exit;
     }
