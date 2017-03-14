@@ -14,7 +14,7 @@ class Sql {
     private $sqlvalues;
 
     public function __construct($table) {
-        require_once $_SERVER['DOCUMENT_ROOT'] . 'engine/prototype.sqlobj.php';
+        require_once $_SERVER['DOCUMENT_ROOT'] . 'engine/databasemodules/prototype.sqlobj.php';
         $this->table = $table;
         $this->sqlstring = "";
         $this->sqlvalues = array();

@@ -83,7 +83,7 @@ class Dbclass {
     }
 
     // Force the current connection to close.
-    protected function disconnect() {
+    public function disconnect() {
         $this->connection->close();
     }
 
