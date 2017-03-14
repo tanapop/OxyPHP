@@ -111,7 +111,7 @@ class Sql {
 
                 $where = $join !== null ? ' WHERE ' . join($join, $_conditions) : '';
             } else {
-                System::log("oxyerror",'Error message: ' . 'Where clause conditions must be an array.');
+                System::log("sql_error",'Error message: ' . 'Where clause conditions must be an array.');
             }
         }
 

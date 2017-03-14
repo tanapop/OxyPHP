@@ -10,14 +10,9 @@ class System extends ObjLoader {
     private $args;
     // The path to controllers directory
     private $cpath;
-    // The global object of Helpers class
-    private $helpers;
 
     // Include some global core classes and uses data passed on POST, GET or URI to set running controller, action and args.
     public function __construct() {
-        global $helpers;
-        $this->helpers = &$helpers;
-        
         foreach (parse_ini_file($_SERVER['DOCUMENT_ROOT'] . "config.ini", true) as $key => $val) {
             if ($key !== "HELPERS") {
                 foreach ($val as $k => $v) {
@@ -97,7 +92,7 @@ class System extends ObjLoader {
             $c_obj = self::loadClass($this->cpath . $this->controller . ".php", $this->controller, array($this->controller, $this->method));
             return call_user_func_array(array($c_obj, (empty($method) ? $this->method : $method)), (empty($args) ? $this->args : $args));
         } catch (Exception $ex) {
-            $this->helpers->insecticide->debug(array("Error message" => $ex->getMessage() . '. In ' . $ex->getFile() . ' on line ' . $ex->getLine() . '.'));
+            self::log("oxyerror","Error message: " . $ex->getMessage() . '. In ' . $ex->getFile() . ' on line ' . $ex->getLine() . '.');
         }
     }
 

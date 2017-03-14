@@ -49,7 +49,7 @@ class Dbclass {
             $this->dbpass = (isset($dbinfo["dbpass"]) ? $dbinfo["dbpass"] : DBPASS);
             $this->dbtype = (isset($dbinfo["dbtype"]) ? $dbinfo["dbtype"] : DBTYPE);
         } catch (Exception $ex) {
-            System::log("oxyerror","Error message" . $ex->getMessage() . '. In ' . $ex->getFile() . ' on line ' . $ex->getLine() . '.');
+            System::log("db_error","Error message" . $ex->getMessage() . '. In ' . $ex->getFile() . ' on line ' . $ex->getLine() . '.');
         }
 
         $this->cnnInfo = new stdClass();
@@ -57,7 +57,7 @@ class Dbclass {
         $this->transaction_mode = false;
 
         if (!$this->connect(1))
-            System::log("oxyerror","Attempt to connect to database server failed. Error:" . $this->connection);
+            System::log("db_error","Attempt to connect to database server failed. Error:" . $this->connection);
     }
 
     // When this class's object is destructed, close the connection to database server.
@@ -102,12 +102,12 @@ class Dbclass {
             $this->dbpass = (isset($dbinfo["dbpass"]) ? $dbinfo["dbpass"] : $this->dbpass);
             $this->dbtype = (isset($dbinfo["dbtype"]) ? $dbinfo["dbtype"] : $this->dbtype);
         } catch (Exception $ex) {
-            System::log("oxyerror","Error message: " . $ex->getMessage() . '. In ' . $ex->getFile() . ' on line ' . $ex->getLine() . '.');
+            System::log("db_error","Error message: " . $ex->getMessage() . '. In ' . $ex->getFile() . ' on line ' . $ex->getLine() . '.');
         }
 
         $this->disconnect();
         if (!$this->connect(1))
-            System::log("oxyerror","Attempt to connect to mysql database failed. Error:" . $this->connection);
+            System::log("db_error","Attempt to connect to mysql database failed. Error:" . $this->connection);
     }
 
     // Returns all current connection information.
@@ -185,7 +185,7 @@ class Dbclass {
                 $this->lastresult = null;
             }
             if ($debug) {
-                System::log("oxyerror","Error Message" . $ex->getMessage() . '. In ' . $ex->getFile() . ' on line ' . $ex->getLine() . '.');
+                System::log("db_error","Error Message" . $ex->getMessage() . '. In ' . $ex->getFile() . ' on line ' . $ex->getLine() . '.');
             }
         }
     }
@@ -201,11 +201,11 @@ class Dbclass {
                 $res = $this->query($sql, false);
             } catch (PDOException $ex) {
                 $this->connection->rollBack();
-                System::log("oxyerror","Error Message" . $ex->getMessage() . '. In ' . $ex->getFile() . ' on line ' . $ex->getLine() . '.');
+                System::log("db_error","Error Message" . $ex->getMessage() . '. In ' . $ex->getFile() . ' on line ' . $ex->getLine() . '.');
             }
 
             if (strpos(strtoupper($sql->sqlstring), 'SELECT') !== false || $res === false) {
-                System::log('oxyerror', date('m/d/Y h:i:s') . " - NOTICE: You tried to use some SELECT query(ies) in a transaction of queries. It makes no sense! Only the first SELECT query was executed.");
+                System::log('db_error', date('m/d/Y h:i:s') . " - NOTICE: You tried to use some SELECT query(ies) in a transaction of queries. It makes no sense! Only the first SELECT query was executed.");
                 $this->connection->rollBack();
                 $commit = false;
                 break;
@@ -221,7 +221,7 @@ class Dbclass {
 
     public function transaction_mode($usemode = true) {
         if (!empty($this->lastresult)) {
-            System::log("oxyerror","There is an active transaction. It must be finished before turning on or off the transaction mode.");
+            System::log("db_error","There is an active transaction. It must be finished before turning on or off the transaction mode.");
         }
         $this->transaction_mode = $usemode;
         $this->lastresult = false;
