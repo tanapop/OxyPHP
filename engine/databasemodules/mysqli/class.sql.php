@@ -1,99 +1,83 @@
 <?php
 
-/* ///////////////////////////
-  PDO SQLOBJ PROTOTYPE CLASS//
- *////////////////////////////
+/* ///////////////////////////////
+  MYSQLI SQL QUERY BUILDER CLASS//
+ *////////////////////////////////
 
-class Sqlobj {
-    // SQL string, itself.
-    public $sqlstring;
-    // The values to be inserted in sql.
-    public $sqlvalues;
-    
-    public function __construct($str, $vals){
-        $this->sqlstring = $str;
-        $this->sqlvalues = $vals;
-    }
-}
-
-/* ////////////////////////////
-  PDO SQL QUERY BUILDER CLASS//
- */////////////////////////////
 class Sql {
 
     // SQL string, itself.
     private $sqlstring;
-    // The values to be inserted in sql.
-    private $sqlvalues;
+    // An instance of the class Mysql.
+    private $dbclass;
 
     public function __construct() {
+        $this->dbclass = System::loadClass($_SERVER["DOCUMENT_ROOT"] . "/engine/databasemodules/mysqli/class.dbclass.php", 'dbclass');
         $this->sqlstring = "";
-        $this->sqlvalues = array();
     }
 
-    // Build a insert type query string with argument passed in dataset.
-    public function insert($dataset, $table) {
+    // Build a insert type query string with argument passed in dataset and return it.
+    private function insert($dataset, $table) {
+        $dataset = $this->dbclass->escapevar($dataset);
+
         $fields = "";
         $values = " VALUES (";
-        $arrVals = array();
 
         foreach ($dataset as $key => $val) {
             if (!empty($val)) {
-                $fields .= $this->escape($key) . ",";
-                $values .= "?,";
-                $arrVals[] = $val;
+                $fields .= $key . ",";
+                $values .= (is_numeric($val) ? $val : "'" . $val . "'") . ",";
             }
         }
         $fields = rtrim($fields, ",") . ")";
         $values = rtrim($values, ",") . ")";
 
-        $this->write("INSERT INTO " . $this->escape($table). " (" . $fields . $values, $arrVals);
+        $this->write("INSERT INTO " . $this->escape($table) . " (" . $fields . $values);
         return $this;
     }
 
-    // Build a update type query string with argument passed in dataset.
-    public function update($dataset, $table, $conditions = array()) {
+    // Build a update type query string with argument passed in dataset and return it.
+    private function update($dataset, $table, $conditions = null) {
+        unset($conditions);
+        $dataset = $this->dbclass->escapevar($dataset);
+
         $sql = "UPDATE " . $this->escape($table) . " SET ";
         foreach ($dataset as $key => $val) {
             if (!is_null($val) && $val !== false) {
-                $sql .= $this->escape($key) . "= ? ,";
+                $sql .= $this->escape($key) . "=" . (is_numeric($val) ? $val : "'" . $val . "'") . ",";
             }
         }
-        $sql = rtrim($sql, " ,");
+        $sql = rtrim($sql, ",");
 
-        $this->write($sql, array_merge(array_values($dataset), array_values($conditions)));
+        $this->write($sql);
         return $this;
     }
 
-    // Build a select type query string with argument passed in dataset.
-    public function select($fields, $table, $conditions = array()) {
+    // Build a select type query string with argument passed in dataset and return it.
+    private function select($fields, $table, $conditions = null) {
+        unset($conditions);
+        $fields = $this->dbclass->escapevar($fields);
+
         $sql = "SELECT ";
         foreach ($fields as $f) {
             $sql .= $this->escape($f) . ",";
         }
         $sql = rtrim($sql, ",");
-
-        $this->write($sql . " FROM " . $this->escape($table), $conditions);
+        
+        $this->write($sql . " FROM " . $this->escape($table));
         return $this;
     }
 
-    // Build a delete type query string with argument passed in dataset.
-    public function delete($table, $conditions = array()) {
-        $arrvalues = array();
-        foreach($conditions as $c){
-            if(is_array($c)){
-                $arrvalues = array_merge($arrvalues, $c);
-            }else{
-                $arrvalues[] = $c;
-            }
-        }
-        
-        $this->write("DELETE ".$this->escape($table)." FROM " . $this->escape($table), $arrvalues);
+    // Build a delete type query string with argument passed in dataset and return it.
+    private function delete($table, $conditions = null) {
+        unset($conditions);
+
+        $this->write("DELETE ".$this->escape($table)." FROM " . $this->escape($table));
         return $this;
     }
 
     /* Build a Mysql where clause string based on conditions passed on params,
-     * the join OR or AND and operator as = or LIKE.
+     * the join OR or AND and operator as = or LIKE, then return the string.
      */
 
     public function where($params, $table = null, $join = 'AND', $operator = '=') {
@@ -104,17 +88,17 @@ class Sql {
                 foreach ($params as $key => $val) {
                     $key = (!empty($table) ? $table.".".$this->escape($key)  : $this->escape($key));
                     if (strtoupper($operator) == "LIKE") {
-                        $_conditions[] = $key . ' LIKE ? ';
+                        $_conditions[] = $key . ' LIKE "%' . $val . '%"';
                     } else if (is_array($val) && !empty($val)) {
                         $joined_values = array();
 
                         foreach ($val as $in_val) {
-                            $joined_values[] = ' ? ';
+                            $joined_values[] = is_numeric($in_val) ? $in_val : '"' . $in_val . '"';
                         }
 
                         $_conditions[] = $key . ' IN (' . join(',', $joined_values) . ')';
                     } else {
-                        $_conditions[] = $key . $operator . ' ? ';
+                        $_conditions[] = $key . $operator . (is_numeric($val) ? $val : '"' . $val . '"');
                     }
                 }
                 $join = strtoupper($join);
@@ -125,12 +109,12 @@ class Sql {
                 System::log("sql_error",'Error message: ' . 'Where clause conditions must be an array.');
             }
         }
-
-        $this->write($where, array(), false);
+        
+        $this->write($where, false);
 
         return $this;
     }
-
+    
     public function join($table2join, $matches, $way = 'INNER', $operators = "=", $joint = 'AND') {
         $str = " " . $way . " JOIN " . $this->escape($table2join) . " ON ";
         $counter = 0;
@@ -140,25 +124,23 @@ class Sql {
         }
         $str = rtrim($str, " " . $joint . " ");
 
-        $this->write($str, array(), false);
+        $this->write($str, false);
         return $this;
     }
-
+    
     private function condition($factor1, $factor2, $operator = "=") {
         $factor1 = (is_array($factor1) ? $factor1[0] . '.' . $this->escape($factor1[1]) : (is_numeric($factor1) ? $factor1 : "'" . $factor1 . "'"));
         $factor2 = (is_array($factor2) ? $factor2[0] . '.' . $this->escape($factor2[1]) : (is_numeric($factor2) ? $factor2 : "'" . $factor2 . "'"));
 
         return $factor1 . $operator . $factor2;
     }
-
+    
     // Register SQL query data, then return the object.
-    public function write($sqlstr, $values, $overwrite = true) {
+    public function write($sqlstr, $overwrite = true) {
         if ($overwrite) {
             $this->sqlstring = $sqlstr;
-            $this->sqlvalues = $values;
         } else {
             $this->sqlstring .= $sqlstr;
-            $this->sqlvalues = array_merge($this->sqlvalues, $values);
         }
         return $this;
     }
@@ -166,17 +148,23 @@ class Sql {
     private function escape($val){
         return $val == "*" ? $val : "`".$val."`";
     }
-
-    public function output() {
-        return new Sqlobj($this->sqlstring, $this->sqlvalues);
+    
+    public function output(){
+        return $this->sqlstring;
     }
-
-    // Erase SQL query data, then return the object.
-    public function reset() {
+    
+    public function reset(){
         $this->sqlstring = "";
-        $this->sqlvalues = array();
         return $this;
     }
+
+    public function escapeArgs($params) {
+        foreach ($params as $k => $p) {
+            $params[$k] = $this->dbclass->escapevar($p);
+        }
+        return $params;
+    }
+    
 
 }
 

@@ -18,17 +18,16 @@ class Dbclass {
     private $cnnInfo;
     // Connection's link identifier. If connection fails, a string containing the connection error description.
     private $connection;
-    // Stores a query error, if it occurs.
-    public $error;
-    // An instance of class Querybuilder.
-    public $querybuilder;
+    // If true, deactivate automatic commit.
+    private $transaction_mode;
+    // An instance of the last sql result executed.
+    private $lastresult;
 
     /* Verifies if database connection data is valid, then sets the properties with those values.
      * Connect to mysql server and save the connection in a property.
      */
 
     public function __construct($dbinfo = array()) {
-        $this->error = 0;
 
         try {
             $this->dbhost = (isset($dbinfo["dbhost"]) ? $dbinfo["dbhost"] : DBHOST);
@@ -36,16 +35,15 @@ class Dbclass {
             $this->dbuser = (isset($dbinfo["dbuser"]) ? $dbinfo["dbuser"] : DBUSER);
             $this->dbpass = (isset($dbinfo["dbpass"]) ? $dbinfo["dbpass"] : DBPASS);
         } catch (Exception $ex) {
-            System::log("db_error","Message: ". $ex->getMessage() . '. In ' . $ex->getFile() . ' on line ' . $ex->getLine() . '.');
+            System::log("db_error", "Message: " . $ex->getMessage() . '. In ' . $ex->getFile() . ' on line ' . $ex->getLine() . '.');
         }
 
         $this->cnnInfo = new stdClass();
         $this->cnnInfo->info = "No connection info.";
 
-        $this->querybuilder = System::loadClass($_SERVER["DOCUMENT_ROOT"] . "/engine/databasemodules/" . DBCLASS . "/class.querybuilder.php", "querybuilder", array($this));
 
         if (!$this->connect())
-            System::log("db_error","Attempt to connect to mysql database failed. Error:" . $this->connection);
+            System::log("db_error", "Attempt to connect to mysql database failed. Error:" . $this->connection);
     }
 
     // When this class's object is destructed, close the connection to mysql server.
@@ -98,12 +96,12 @@ class Dbclass {
             $this->dbuser = (isset($dbinfo["dbuser"]) ? $dbinfo["dbuser"] : $this->dbuser);
             $this->dbpass = (isset($dbinfo["dbpass"]) ? $dbinfo["dbpass"] : $this->dbpass);
         } catch (Exception $ex) {
-            System::log("db_error","Error message" . $ex->getMessage() . '. In ' . $ex->getFile() . ' on line ' . $ex->getLine() . '.');
+            System::log("db_error", "Error message" . $ex->getMessage() . '. In ' . $ex->getFile() . ' on line ' . $ex->getLine() . '.');
         }
 
         $this->connection->close();
         if (!$this->connect())
-            System::log("db_error","Attempt to connect to mysql database failed. Error:" . $this->connection);
+            System::log("db_error", "Attempt to connect to mysql database failed. Error:" . $this->connection);
     }
 
     // Returns all current connection information.
@@ -143,11 +141,22 @@ class Dbclass {
      */
 
     public function query($sql) {
-        $res = $this->connection->query($sql);
+        mysqli_report(MYSQLI_REPORT_ERROR | MYSQLI_REPORT_STRICT);
 
-        if ($this->connection->errno) {
-            $this->error = "Error " . $this->connection->errno . ": " . $this->connection->error;
-            System::log("db_error","While executing mysql query an error occured" . $this->error . "Mysql query:'" . $sql."'");
+        if ($this->transaction_mode && !$this->lastresult) {
+            $this->connection->autocommit(false);
+        }
+
+        try {
+            $res = $this->connection->query($sql);
+        } catch (mysqli_sql_exception $ex) {
+            if ($this->transaction_mode) {
+                $this->connection->rollback();
+                $this->transaction_mode = false;
+                $this->lastresult = null;
+            }
+            System::log("db_error", "While executing mysql query an error occured. " . $ex->getMessage() . ". Mysql query:'" . $sql . "'");
+            throw new Exception($ex->getMessage());
         }
 
         if ($res === true || $res === false) {
@@ -157,11 +166,58 @@ class Dbclass {
             while ($row = $res->fetch_assoc()) {
                 $ret[] = (object) $row;
             }
+            $res->close();
         }
 
         $this->cnnInfo = (object) get_object_vars($this->connection);
+        $this->lastresult = $ret;
 
         return $ret;
+    }
+
+    public function transaction($sqlset) {
+        $this->connection->autocommit(false);
+        $this->transaction_mode = false;
+        $this->lastresult = null;
+        $commit = true;
+
+        foreach ($sqlset as $sql) {
+            try {
+                $res = $this->query($sql);
+            } catch (Exception $ex) {
+                $this->connection->rollback();
+                System::log("db_error", "Error Message" . $ex->getMessage() . '. In ' . $ex->getFile() . ' on line ' . $ex->getLine() . '.');
+            }
+            
+            if (strpos(strtoupper($sql), 'SELECT') !== false) {
+                System::log('db_error', date('m/d/Y h:i:s') . " - NOTICE: You tried to use some SELECT query(ies) in a transaction of queries. It makes no sense! Only the first SELECT query was executed.");
+                $this->connection->rollback();
+                $commit = false;
+                break;
+            }
+        }
+        
+        if ($commit) {
+            $this->connection->commit();
+        }
+        
+        return $res;
+    }
+    
+    public function transaction_mode($usemode = true) {
+        if (!empty($this->lastresult)) {
+            System::log("db_error", "There is an active transaction. It must be finished before turning on or off the transaction mode.");
+            return false;
+        }
+        $this->transaction_mode = $usemode;
+        $this->lastresult = false;
+    }
+    
+    public function commit() {
+        $r = $this->lastresult;
+        $this->lastresult = null;
+        $this->connection->commit();
+        return $r;
     }
 
     // Escape data properly for mysql statements.
@@ -171,7 +227,7 @@ class Dbclass {
                 if (!is_numeric($data))
                     $dataset[$key] = mysqli_real_escape_string($this->connection, $data);
             }
-        } elseif (is_object($dataset)) {
+        } elseif (gettype($dataset) === "object") {
             foreach ($dataset as $key => $data) {
                 if (!is_numeric($data))
                     $dataset->$key = mysqli_real_escape_string($this->connection, $data);

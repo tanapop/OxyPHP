@@ -20,12 +20,11 @@ class Dbclass {
     private $cnnInfo;
     // Connection's link identifier. If connection fails, a PDOExcetion object, containing error info.
     private $connection;
-    // Stores a query error, if it occurs.
-    public $queryerror;
-    // Data types constants
+    // Data types constants.
     private $datatypes;
-    // If true, deactivate automatic commit
+    // If true, deactivate automatic commit.
     private $transaction_mode;
+    // An instance of the last sql result executed.
     private $lastresult;
 
     /* Verifies if database connection data is valid, then sets the properties with those values.
@@ -163,21 +162,6 @@ class Dbclass {
 
             $stmt = $this->prepare_statement($sqlobj->sqlstring, array_values($sqlobj->sqlvalues));
             $res = $stmt->execute();
-
-            if (strpos(strtoupper($sqlobj->sqlstring), 'SELECT') !== false) {
-                $res = array();
-                while ($row = $stmt->fetch(PDO::FETCH_OBJ)) {
-                    $res[] = $row;
-                }
-            } elseif (strpos(strtoupper($sqlobj->sqlstring), 'INSERT') !== false) {
-                $res = $this->connection->lastInsertId();
-            }
-
-
-            $this->cnnInfo = (object) get_object_vars($this->connection);
-
-            $this->lastresult = $res;
-            return $res;
         } catch (PDOException $ex) {
             if ($this->transaction_mode) {
                 $this->connection->rollBack();
@@ -186,6 +170,21 @@ class Dbclass {
             }
             System::log("db_error", "Error Message" . $ex->getMessage() . '. In ' . $ex->getFile() . ' on line ' . $ex->getLine() . '.');
         }
+
+        if (strpos(strtoupper($sqlobj->sqlstring), 'SELECT') !== false) {
+            $res = array();
+            while ($row = $stmt->fetch(PDO::FETCH_OBJ)) {
+                $res[] = $row;
+            }
+        } elseif (strpos(strtoupper($sqlobj->sqlstring), 'INSERT') !== false) {
+            $res = $this->connection->lastInsertId();
+        }
+
+
+        $this->cnnInfo = (object) get_object_vars($this->connection);
+
+        $this->lastresult = $res;
+        return $res;
     }
 
     public function transaction($sqlset) {
@@ -196,7 +195,7 @@ class Dbclass {
 
         foreach ($sqlset as $sql) {
             try {
-                $res = $this->query($sql, false);
+                $res = $this->query($sql);
             } catch (PDOException $ex) {
                 $this->connection->rollBack();
                 System::log("db_error", "Error Message" . $ex->getMessage() . '. In ' . $ex->getFile() . ' on line ' . $ex->getLine() . '.');
@@ -220,6 +219,7 @@ class Dbclass {
     public function transaction_mode($usemode = true) {
         if (!empty($this->lastresult)) {
             System::log("db_error", "There is an active transaction. It must be finished before turning on or off the transaction mode.");
+            return false;
         }
         $this->transaction_mode = $usemode;
         $this->lastresult = false;
