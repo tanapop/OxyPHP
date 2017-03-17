@@ -156,7 +156,7 @@ class Dbclass {
                 $this->lastresult = null;
             }
             System::log("db_error", "While executing mysql query an error occured. " . $ex->getMessage() . ". Mysql query:'" . $sql . "'");
-            throw new Exception($ex->getMessage());
+            throw $ex;
         }
 
         if ($res === true || $res === false) {
@@ -184,9 +184,8 @@ class Dbclass {
         foreach ($sqlset as $sql) {
             try {
                 $res = $this->query($sql);
-            } catch (Exception $ex) {
+            } catch (mysqli_sql_exception $ex) {
                 $this->connection->rollback();
-                System::log("db_error", "Error Message" . $ex->getMessage() . '. In ' . $ex->getFile() . ' on line ' . $ex->getLine() . '.');
             }
             
             if (strpos(strtoupper($sql), 'SELECT') !== false) {

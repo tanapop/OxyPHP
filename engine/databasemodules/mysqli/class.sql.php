@@ -17,7 +17,7 @@ class Sql {
     }
 
     // Build a insert type query string with argument passed in dataset and return it.
-    private function insert($dataset, $table) {
+    public function insert($dataset, $table) {
         $dataset = $this->dbclass->escapevar($dataset);
 
         $fields = "";
@@ -25,7 +25,7 @@ class Sql {
 
         foreach ($dataset as $key => $val) {
             if (!empty($val)) {
-                $fields .= $key . ",";
+                $fields .= $this->escape($key) . ",";
                 $values .= (is_numeric($val) ? $val : "'" . $val . "'") . ",";
             }
         }
@@ -37,7 +37,7 @@ class Sql {
     }
 
     // Build a update type query string with argument passed in dataset and return it.
-    private function update($dataset, $table, $conditions = null) {
+    public function update($dataset, $table, $conditions = null) {
         unset($conditions);
         $dataset = $this->dbclass->escapevar($dataset);
 
@@ -54,7 +54,7 @@ class Sql {
     }
 
     // Build a select type query string with argument passed in dataset and return it.
-    private function select($fields, $table, $conditions = null) {
+    public function select($fields, $table, $conditions = null) {
         unset($conditions);
         $fields = $this->dbclass->escapevar($fields);
 
@@ -69,7 +69,7 @@ class Sql {
     }
 
     // Build a delete type query string with argument passed in dataset and return it.
-    private function delete($table, $conditions = null) {
+    public function delete($table, $conditions = null) {
         unset($conditions);
 
         $this->write("DELETE ".$this->escape($table)." FROM " . $this->escape($table));

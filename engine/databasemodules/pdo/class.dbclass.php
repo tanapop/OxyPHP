@@ -169,6 +169,7 @@ class Dbclass {
                 $this->lastresult = null;
             }
             System::log("db_error", "Error Message" . $ex->getMessage() . '. In ' . $ex->getFile() . ' on line ' . $ex->getLine() . '.');
+            throw $ex;
         }
 
         if (strpos(strtoupper($sqlobj->sqlstring), 'SELECT') !== false) {
@@ -198,7 +199,6 @@ class Dbclass {
                 $res = $this->query($sql);
             } catch (PDOException $ex) {
                 $this->connection->rollBack();
-                System::log("db_error", "Error Message" . $ex->getMessage() . '. In ' . $ex->getFile() . ' on line ' . $ex->getLine() . '.');
             }
 
             if (strpos(strtoupper($sql->sqlstring), 'SELECT') !== false || $res === false) {
