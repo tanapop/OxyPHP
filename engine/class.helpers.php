@@ -1,10 +1,10 @@
 <?php
 
 class Helpers extends ObjLoader {
-
     /* $summary is an index of helpers specified in config.ini file. 
      * It holds data like helper's class name, path and arguments to be passed to helper's construct method.
      */
+
     private $summary;
 
     public function __construct() {
@@ -14,10 +14,12 @@ class Helpers extends ObjLoader {
             $k = strtolower($k);
             $temp = explode("?", $v);
             $v = $temp[0];
-            $args = explode("&", $temp[1]);
+            $args = array();
+            if (isset($temp[1]))
+                $args = explode("&", $temp[1]);
             unset($temp);
             foreach ($args as $i => $val) {
-                $args[$i] = trim(substr($val, strpos($val, "=")),"=");
+                $args[$i] = trim(substr($val, strpos($val, "=")), "=");
             }
 
             $this->register($k, $v, $args);
@@ -30,10 +32,10 @@ class Helpers extends ObjLoader {
 
     public function load($name, $path = null, $args = array()) {
         $name = strtolower($name);
-        if(!empty($path) && !array_key_exists($name, $this->summary)){
+        if (!empty($path) && !array_key_exists($name, $this->summary)) {
             $this->register($name, $path, $args);
         }
-        
+
         return $this->$name = self::loadObject($_SERVER["DOCUMENT_ROOT"] . "helpers/" . $this->summary[$name]->path, $name, $this->summary[$name]->args);
     }
 

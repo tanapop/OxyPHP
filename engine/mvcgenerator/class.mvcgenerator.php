@@ -56,7 +56,7 @@ class Mvcgenerator {
         extract(array("tables" => $this->tables));
 
         ob_start();
-        include $_SERVER['DOCUMENT_ROOT'] . "engine/mvcgenerator/index.php";
+        include $_SERVER['DOCUMENT_ROOT'] . "engine/mvcgenerator/view.index.php";
 
         echo ob_get_clean();
         $this->helpers->phpalert->show();
@@ -64,6 +64,7 @@ class Mvcgenerator {
 
     public function createmvc($modulename, $fileset) {
         $fields = $this->dbclass->describeTable($modulename);
+        
         foreach ($fields as $row) {
             if ($row->Key == "PRI") {
                 $this->primarykey = $row->Field;
@@ -76,6 +77,10 @@ class Mvcgenerator {
 
     // Generate a model file, based on a template, adapting it to the module which is being created.
     private function createmodel($modulename, $fields, $return = false) {
+        echo "<pre>";
+        print_r($fields);
+        echo "<pre>";
+        die;
         $f = file_get_contents($_SERVER["DOCUMENT_ROOT"] . "engine/mvcgenerator/templates/model.mtx");
 
         $f = str_replace("_CLASS_NAME_", "Model" . ucfirst($modulename), $f);

@@ -1,5 +1,5 @@
 <div id="debug-contents">
-    <h2 style="text-align: center;">Insecticide - Debugger Tool - PHP Edition</h2>
+    <h2 style="text-align: center;">Insecticide v1.0 - Debugger Tool - PHP Edition</h2>
     <!--Header with general debug data-->
     <b>URI: </b><?php echo $_SERVER['REQUEST_URI']; ?>
     <br>
@@ -18,7 +18,7 @@
     if (!empty($backtrace[1]['args'][0])):
         ?>
         <div class="blank-screen">
-            <?php Insecticide::dump($backtrace[1]['args'][0], "Args"); ?>
+            <?php $this->dump($backtrace[1]['args'][0], "Args"); ?>
         </div>
     <?php else: ?>
         <div style="border: 1px solid;">
@@ -31,7 +31,7 @@
     <h5>CURRENT SESSION: </h5>
     <?php if (!empty($_SESSION)): ?>
         <div class="blank-screen">
-            <?php Insecticide::dump($_SESSION, "Session"); ?>
+            <?php $this->dump($_SESSION, "Session"); ?>
         </div>
         <?php
     else:
@@ -46,7 +46,7 @@
     <h5>CURRENT REQUEST: </h5>
     <?php if (!empty($request)): ?>
         <div class="blank-screen">
-            <?php Insecticide::dump($request); ?>
+            <?php $this->dump($request); ?>
         </div>
     <?php else:
         ?>
@@ -60,8 +60,9 @@
     <h5>CUSTOM DEBUG MESSAGES:</h5>
     <?php if (!empty($messages)): ?>
         <div class="blank-screen">
-            <?php foreach ($messages as $k => $m):
-                Insecticide::dump($m, $k);
+            <?php
+            foreach ($messages as $k => $m):
+                $this->dump($m, $k);
                 ?>
             <?php endforeach; ?>
         </div>
@@ -79,7 +80,7 @@
             <?php
             foreach ($print_data as $k => $p):
                 ?>
-                <p><?php Insecticide::dump($p, $k); ?></p>
+                <p><?php $this->dump($p, $k); ?></p>
             <?php endforeach; ?>
         </div>
         <?php
@@ -89,7 +90,8 @@
             <p>--- No custom data to print ---</p>
         </div>
     <?php endif; ?>
-
+    <br>
+    <hr>
     <!--Tracing execution-->
     <h5>EXECUTION HISTORY:</h5>
     <div class="blank-screen">
@@ -110,7 +112,7 @@
                 <br>
                 <span style="font-size:12px;">The following arguments were passed on this <?php echo $method ? 'method' : 'function'; ?>:</span>
                 <br>
-                <?php Insecticide::dump($backtrace[$i]['args'], "Args"); ?>
+                <?php $this->dump($backtrace[$i]['args'], "Args"); ?>
                 <b>&#8675;</b>
             </p>
             <?php
