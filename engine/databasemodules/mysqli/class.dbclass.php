@@ -163,11 +163,13 @@ class Dbclass {
             $ret = $res;
         } else {
             $ret = array();
+//          $ret $this->mapData($ret);
             while ($row = $res->fetch_assoc()) {
                 $ret[] = (object) $row;
             }
             $res->close();
         }
+
 
         $this->cnnInfo = (object) get_object_vars($this->connection);
         $this->lastresult = $ret;
@@ -187,7 +189,7 @@ class Dbclass {
             } catch (mysqli_sql_exception $ex) {
                 $this->connection->rollback();
             }
-            
+
             if (strpos(strtoupper($sql), 'SELECT') !== false) {
                 System::log('db_error', date('m/d/Y h:i:s') . " - NOTICE: You tried to use some SELECT query(ies) in a transaction of queries. It makes no sense! Only the first SELECT query was executed.");
                 $this->connection->rollback();
@@ -195,14 +197,14 @@ class Dbclass {
                 break;
             }
         }
-        
+
         if ($commit) {
             $this->connection->commit();
         }
-        
+
         return $res;
     }
-    
+
     public function transaction_mode($usemode = true) {
         if (!empty($this->lastresult)) {
             System::log("db_error", "There is an active transaction. It must be finished before turning on or off the transaction mode.");
@@ -211,7 +213,7 @@ class Dbclass {
         $this->transaction_mode = $usemode;
         $this->lastresult = false;
     }
-    
+
     public function commit() {
         $r = $this->lastresult;
         $this->lastresult = null;
@@ -236,6 +238,34 @@ class Dbclass {
         }
 
         return $dataset;
+    }
+
+    private function mapData($dataset, $key) {
+        $result = array();
+
+        foreach ($dataset as $row) {
+            if (!isset($result[$row->$key])) {
+                $result[$row->$key] = $row;
+            } else {
+                foreach ((array) $row as $k => $v) {
+                    if ($result[$row->$key]->$k != $v) {
+                        if (!is_array($result[$row->$key]->$k)) {
+                            $result[$row->$key]->$k = array($result[$row->$key]->$k, $v);
+                        } else {
+                            $arr = $result[$row->$key]->$k;
+                            $arr[] = $v;
+                            ;
+                            $result[$row->$key]->$k = $arr;
+                        }
+                    }
+                }
+            }
+        }
+        return array_values($result);
+    }
+    
+    private function findKey($sql){
+        
     }
 
 }

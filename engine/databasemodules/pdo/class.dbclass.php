@@ -231,6 +231,30 @@ class Dbclass {
         $this->connection->commit();
         return $r;
     }
+    
+    private function mapData($dataset, $key) {
+        $result = array();
+
+        foreach ($dataset as $row) {
+            if (!isset($result[$row->$key])) {
+                $result[$row->$key] = $row;
+            } else {
+                foreach ((array) $row as $k => $v) {
+                    if ($result[$row->$key]->$k != $v) {
+                        if (!is_array($result[$row->$key]->$k)) {
+                            $result[$row->$key]->$k = array($result[$row->$key]->$k, $v);
+                        } else {
+                            $arr = $result[$row->$key]->$k;
+                            $arr[] = $v;
+                            ;
+                            $result[$row->$key]->$k = $arr;
+                        }
+                    }
+                }
+            }
+        }
+        return array_values($result);
+    }
 
 }
 
