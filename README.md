@@ -4,7 +4,7 @@ OxyPHP is an open source Object Oriented PHP framework project focused in securi
 
 Its current version is 0.9 stable, with the main features of: friendly URL, structured SQL generator, automatic helpers loader and automated database's CRUD generator, which creates, with one click, an entire MVC structure that does the basic database operations(Create, Read, Update, Delete) and the end-user views.
 
-It already comes with some useful stuff included, like JQuery, bootstrap and other helpers.
+It already comes with some useful stuff included, like: JQuery, bootstrap and other helpers.
 
 It is my main open source project and i am currently running against time to deploy the 1.0 version stable with the new features of Database's response data mapping and CRUD generation for related database entities.
 
