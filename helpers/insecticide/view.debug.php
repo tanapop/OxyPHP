@@ -74,7 +74,7 @@
     <br>
     <hr>
     <!--Printing custom debug data-->
-    <h5>CUSTOM PRINT DATA:</h5>
+    <h5>CUSTOM PRINTABLE DATA:</h5>
     <?php if (!empty($print_data)): ?>
         <div class="blank-screen">
             <?php

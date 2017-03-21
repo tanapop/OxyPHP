@@ -1,6 +1,6 @@
 <?php
 
-class System extends ObjLoader {
+class System {
 
     // The name of running controller.
     private $controller;
@@ -10,9 +10,13 @@ class System extends ObjLoader {
     private $args;
     // The path to controllers directory
     private $cpath;
+    // Helpers class object
+    private $helpers;
 
     // Include some global core classes and uses data passed on POST, GET or URI to set running controller, action and args.
     public function __construct() {
+        $this->helpers = self::loadClass(__DIR__ . "/class.helpers.php", "helpers");
+        
         foreach (parse_ini_file($_SERVER['DOCUMENT_ROOT'] . "config.ini", true) as $key => $val) {
             if ($key !== "HELPERS") {
                 foreach ($val as $k => $v) {
@@ -20,7 +24,7 @@ class System extends ObjLoader {
                 }
             }
         }
-        
+
         require_once "engine/class.controller.php";
         require_once "engine/class.model.php";
         self::loadClass($_SERVER['DOCUMENT_ROOT'] . 'engine/class.errorhandler.php', 'errorhandler');
@@ -32,7 +36,7 @@ class System extends ObjLoader {
             array_shift($action);
         }
 
-        $this->cpath = $_SERVER["DOCUMENT_ROOT"] . "/controllers/";
+        $this->cpath = $_SERVER["DOCUMENT_ROOT"] . "controllers/";
         $this->controller = (isset($_REQUEST["controller"]) ? $_REQUEST["controller"] : (!empty($action[0]) ? $action[0] : DEFAULT_CONTROLLER));
         $this->method = (isset($_REQUEST["method"]) ? $_REQUEST["method"] : (!empty($action[1]) ? $action[1] : DEFAULT_METHOD));
 
@@ -61,7 +65,7 @@ class System extends ObjLoader {
 
         if (isset($_REQUEST["args"])) {
             if (!is_array($_REQUEST["args"])) {
-                self::log("sys_error",'Error message: Argument passed to "System::setargs" must be an array.');
+                self::log("sys_error", 'Error message: Argument passed to "System::setargs" must be an array.');
             }
             $this->args = $_REQUEST["args"];
         } elseif (!empty($_POST)) {
@@ -92,16 +96,17 @@ class System extends ObjLoader {
             $c_obj = self::loadClass($this->cpath . $this->controller . ".php", $this->controller, array($this->controller, $this->method));
             return call_user_func_array(array($c_obj, (empty($method) ? $this->method : $method)), (empty($args) ? $this->args : $args));
         } catch (Exception $ex) {
-            self::log("sys_error","Error message: " . $ex->getMessage() . '. In ' . $ex->getFile() . ' on line ' . $ex->getLine() . '.');
+            self::log("sys_error", "From System->execute() - " . $ex->getMessage());
+            $this->helpers->insecticide->debug(array("Attempt to execute URL failed.",'The system returned with the following message: "At 2017/03/21 - 18:39:19 - Warning: include_once(/var/www/html/oxyphp/controllers/bar.php): failed to open stream: No such file or directory. The exception occurred in file /home/gabriel/Projects/oxyphp/engine/class.objloader.php on line 18".'));
         }
     }
 
     public static function loadClass($ab_path, $classname, $args = array()) {
-        return self::loadObject($ab_path, $classname, $args);
+        return ObjLoader::load($ab_path, $classname, $args);
     }
 
     public static function log($logname, $logmsg) {
-        $path = $_SERVER["DOCUMENT_ROOT"]."log/";
+        $path = $_SERVER["DOCUMENT_ROOT"] . "log/";
         if (!file_exists($path))
             mkdir($path, 0777, true);
         touch($path);

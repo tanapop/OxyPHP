@@ -9,18 +9,19 @@ class ObjLoader {
      * If the class isn't registered yet, create a new instance of that, register it on collection, then returns it.
      */
 
-    public static function loadObject($path, $classname, $args = array()) {
+    public static function load($path, $classname, $args = array()) {
         if (isset(self::$collection[$path])) {
             return self::$collection[$path];
         }
 
         try {
-            require_once $path;
+            include_once $path;
             $r = new ReflectionClass(ucfirst($classname));
             self::$collection[$path] = $r->newInstanceArgs($args);
             return self::$collection[$path];
         } catch (Exception $ex) {
-            System::log("sys_error","Error Message: " . $ex->getMessage() . '. In ' . $ex->getFile() . ' on line ' . $ex->getLine() . '.');
+            System::log("sys_error",'From ObjLoader::load() - ' . $ex->getMessage());
+            throw $ex;
         }
     }
 

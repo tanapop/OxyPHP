@@ -22,6 +22,8 @@ class Dbclass {
     private $transaction_mode;
     // An instance of the last sql result executed.
     private $lastresult;
+    // An Exception object for connection errors.
+    private $error;
 
     /* Verifies if database connection data is valid, then sets the properties with those values.
      * Connect to mysql server and save the connection in a property.
@@ -43,7 +45,7 @@ class Dbclass {
 
 
         if (!$this->connect())
-            System::log("db_error", "Attempt to connect to mysql database failed. Error:" . $this->connection);
+            System::log("db_error", "Attempt to connect to mysql database failed. Error:" . $this->error);
     }
 
     // When this class's object is destructed, close the connection to mysql server.
@@ -73,7 +75,7 @@ class Dbclass {
                 }
                 $currenttry++;
             }
-            $this->connection = $error;
+            $this->error = $error;
             return false;
         }
 

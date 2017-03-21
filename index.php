@@ -7,8 +7,8 @@ require_once "engine/class.objloader.php";
  * to avoid unwanted data, like HTML <head>, returning from the request.
  */
 if (strpos(strtolower(str_replace(strrchr($_SERVER["REQUEST_URI"], "?"), "", urldecode($_SERVER["REQUEST_URI"]))), "_asyncload") !== false) {
-    $helpers = ObjLoader::loadObject(__DIR__ . "/engine/class.helpers.php", "helpers");
-    $system = ObjLoader::loadObject(__DIR__ . "/engine/class.system.php", "system");
+    $helpers = ObjLoader::load(__DIR__ . "/engine/class.helpers.php", "helpers");
+    $system = ObjLoader::load(__DIR__ . "/engine/class.system.php", "system");
     die;
 }
 ?>
@@ -36,8 +36,8 @@ if (strpos(strtolower(str_replace(strrchr($_SERVER["REQUEST_URI"], "?"), "", url
     <body>
         <?php
         // Loads system, which calls a method from a controller. Method and controller are specified in REQUEST or URI.
-        $helpers = ObjLoader::loadObject(__DIR__ . "/engine/class.helpers.php", "helpers");
-        $system = ObjLoader::loadObject(__DIR__ . "/engine/class.system.php", "system");
+        $helpers = ObjLoader::load(__DIR__ . "/engine/class.helpers.php", "helpers");
+        $system = ObjLoader::load(__DIR__ . "/engine/class.system.php", "system");
         ?>
     </body>
 </html>

@@ -15,8 +15,7 @@ class Model {
 
     // It sets the main table name, instantiate class Mysql and defines the table's primary key.
     public function __construct($table) {
-        global $helpers;
-        $this->helpers = &$helpers;
+        $this->helpers = System::loadClass($_SERVER['DOCUMENT_ROOT'] . "engine/class.helpers.php", "helpers");
 
         $this->table = $table;
 

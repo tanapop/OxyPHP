@@ -16,9 +16,9 @@ class Controller {
     // Set the global system property, set the module and create module's model instance.
     public function __construct($module, $method) {
         global $system;
-        global $helpers;
+        
+        $this->helpers = System::loadClass($_SERVER['DOCUMENT_ROOT'] . "engine/class.helpers.php", "helpers");
         $this->system = &$system;
-        $this->helpers = &$helpers;
 
         $this->module = $module;
         $this->method = $method;

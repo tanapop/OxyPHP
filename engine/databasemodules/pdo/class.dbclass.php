@@ -26,6 +26,8 @@ class Dbclass {
     private $transaction_mode;
     // An instance of the last sql result executed.
     private $lastresult;
+    // An PDOException object
+    private $error;
 
     /* Verifies if database connection data is valid, then sets the properties with those values.
      * Connect to database server and save the connection in a property.
@@ -56,7 +58,7 @@ class Dbclass {
         $this->transaction_mode = false;
 
         if (!$this->connect(1))
-            System::log("db_error", "Attempt to connect to database server failed. Error:" . $this->connection);
+            System::log("db_error", "Attempt to connect to database server failed. Error:" . $this->error);
     }
 
     // When this class's object is destructed, close the connection to database server.
@@ -78,7 +80,7 @@ class Dbclass {
             if ($count <= DBCONNECTION_MAX_TRIES) {
                 $this->connect($count + 1);
             } else {
-                $this->connection = $ex;
+                $this->error = $ex;
                 return false;
             }
         }
