@@ -186,9 +186,9 @@ To deploy your application and stop showing the Module Generator screen at your 
 
 ### Notes ###
 
-- Sorry for poor documentation. After releasing version 1.0, i will create a web site with full documentation in a similar layout to manual.php.net.
+- It is very important that you create your database in the appropriated manner, because the OxyPHP CRUD generator, will create your MVC files based on your database structure.
 
-- It is very important that you create your database in the appropriated manner, for the OxyPHP CRUD generator, will create your MVC files based on your database structure.
+- Sorry for poor documentation. After releasing version 1.0, i will create a web site with full documentation in a similar layout to manual.php.net.
 
 
 
