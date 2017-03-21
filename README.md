@@ -135,7 +135,7 @@ PHPMailer = "phpmailer/PHPMailerAutoload.php"
 ```
 There is already 3 native helpers: [PHPAlert](https://bitbucket.org/gabriel-guelfi/php-alert), a tool to show up alerts to your end-users, [Insecticide](https://bitbucket.org/gabriel-guelfi/insecticide), which is a tool for debugging purposes, and [PHPMailer](https://github.com/PHPMailer/PHPMailer),a third party gadget for sending emails from your application.
 
-All helpers loaded is available in the global instance "$this->helpers", and you can access it from almost all places within application.
+All helpers loaded is available in the global instance "$this->helpers", and you can access it from almost all places within the application.
 
 Example:
 ```
@@ -163,9 +163,11 @@ http://oxyphp.local/
 It will show up the Module(MVC) Generator screen, that will read your database and list the tables in it:
 
 ![Screenshot from 2017-03-21 15-19-18.png](https://bitbucket.org/repo/p6xdM7/images/3280251291-Screenshot%20from%202017-03-21%2015-19-18.png)
+**:In the example shown in image above, i have a database with 4 tables in it: bar, example, foo and test.
+*
 
 
-Then you can click on the option, in each table listed, to generate a module for your application, based on the database table's structure. Each module created is a set of 4 files, a Model, 2 Views(one for listing data from the DB and one for registering/editing) and a Controller. You can edit each of these, accessing the respective "Models", "Views" and "Controllers" directories that will be generated automatically at your application's root folder. This files already do CRUD operations on your application. (Create, Read, Update, Delete).
+Then you can click on the option, in each table listed, to generate a module for your application, based on the database table's structure. Each module created is a set of 4 files: a Model, 2 Views(one for listing data from the DB and one for registering/editing) and a Controller. You can edit each of these, accessing the respective "Models", "Views" and "Controllers" directories that will be generated automatically at your application's root folder. This files already do CRUD operations on your application. (Create, Read, Update, Delete).
 
 After creating a module, you can access it using the friendly URL syntax in your browser's navigation bar:
 
