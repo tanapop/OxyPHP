@@ -176,6 +176,14 @@ You shall see something like this:
 
 ![Screenshot from 2017-03-21 15-28-55.png](https://bitbucket.org/repo/p6xdM7/images/1366632440-Screenshot%20from%202017-03-21%2015-28-55.png)
 
+To deploy your application and stop showing the Module Generator screen at your home page, simply go to config.ini file and set SETUP_MODE = 0.
+
+
+
+### Notes ###
+Sorry for poor documentation. After releasing version 1.0, i will create a web site with full documentation in a similar layout to manual.php.net.
+
+
 
 ### Who am i? ###
 
