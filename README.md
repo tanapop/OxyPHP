@@ -113,7 +113,7 @@ Here's the main system configs constants. Know what you are doing before change 
 
 - DEFAULT_METHOD: Is your main method's name. It must be within your default controller.(default value is "index");
 
-- SETUP_MODE: A boolean value. 1 for activated, 0 for inactive. Is the setup mode that you will use to generate your CRUD and MVC files automatic. See more in Module Generator Section.(default value is 1);
+- SETUP_MODE: A boolean value. 1 for activated, 0 for inactive. Is the setup mode that you will use to generate your CRUD and MVC files automatically. See more in Running Application Section.(default value is 1);
 
 - HANDLE_ERROR_TYPES: The PHP flags for error handling. Do not change this unless you know exactly what you're doing.
 
