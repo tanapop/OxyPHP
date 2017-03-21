@@ -26,7 +26,7 @@ class Dbclass {
     private $transaction_mode;
     // An instance of the last sql result executed.
     private $lastresult;
-    // An PDOException object
+    // A PDOException object
     private $error;
 
     /* Verifies if database connection data is valid, then sets the properties with those values.
