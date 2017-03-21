@@ -77,10 +77,10 @@ class Mvcgenerator {
 
     // Generate a model file, based on a template, adapting it to the module which is being created.
     private function createmodel($modulename, $fields, $return = false) {
-        echo "<pre>";
-        print_r($fields);
-        echo "<pre>";
-        die;
+//        echo "<pre>";
+//        print_r($fields);
+//        echo "<pre>";
+//        die;
         $f = file_get_contents($_SERVER["DOCUMENT_ROOT"] . "engine/mvcgenerator/templates/model.mtx");
 
         $f = str_replace("_CLASS_NAME_", "Model" . ucfirst($modulename), $f);
