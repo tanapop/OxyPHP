@@ -40,8 +40,8 @@ class System {
         $this->controller = (isset($_REQUEST["controller"]) ? $_REQUEST["controller"] : (!empty($action[0]) ? $action[0] : DEFAULT_CONTROLLER));
         $this->method = (isset($_REQUEST["method"]) ? $_REQUEST["method"] : (!empty($action[1]) ? $action[1] : DEFAULT_METHOD));
 
-        if (SETUP_MODE) {
-            $this->setupmode($action);
+        if (DEVELOP_MODE) {
+            $this->developmode($action);
         }
 
         $this->setargs($action);
@@ -50,7 +50,7 @@ class System {
     }
 
     // Change path of controller classes to mvcgenerator, set running controller to mvcgenerator and method to index, if not defined.
-    private function setupmode($action) {
+    private function developmode($action) {
         if (empty($action[0]) || $action[0] == 'mvcgenerator') {
             $this->cpath = $_SERVER["DOCUMENT_ROOT"] . "engine/mvcgenerator/class.";
 

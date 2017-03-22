@@ -1,6 +1,6 @@
 <?php
 
-if(SETUP_MODE)
+if(DEVELOP_MODE)
     $this->helpers->insecticide->dump($dataset);
 ?>
 <div id="_MODULE_NAME_-register-contents">

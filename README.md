@@ -115,7 +115,7 @@ Here's the main system configs constants. Know what you are doing before change 
 
 - DEFAULT_METHOD: Is your main method's name. It must be within your default controller.(default value is "index");
 
-- SETUP_MODE: A boolean value. 1 for activated, 0 for inactive. Is the setup mode that you will use to generate your CRUD and MVC files automatically. See more in Running Application Section.(default value is 1);
+- DEVELOP_MODE: A boolean value. 1 for activated, 0 for inactive. Is the develop mode that you will use to generate your CRUD and MVC files automatically. See more in Running Application Section.(default value is 1);
 
 - HANDLE_ERROR_TYPES: The PHP flags for error handling. Do not change this unless you know exactly what you're doing.
 
@@ -180,7 +180,7 @@ You shall see something like this:
 
 ![Screenshot from 2017-03-21 15-28-55.png](https://bitbucket.org/repo/p6xdM7/images/1366632440-Screenshot%20from%202017-03-21%2015-28-55.png)
 
-To deploy your application and stop showing the Module Generator screen at your home page, simply go to config.ini file and set SETUP_MODE = 0.
+To deploy your application and stop showing the Module Generator screen at your home page, simply go to config.ini file and set DEVELOP_MODE = 0.
 
 
 
