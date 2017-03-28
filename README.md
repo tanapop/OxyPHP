@@ -71,7 +71,6 @@ Within your OxyPHP's root directory there is a file named "config.ini". When you
 
 Here's 7 database configuration constants:
 ```
-#!php
 
 - DBNAME: A string containing the name of your application's database.(Ex.: "foo_app_db");
 
@@ -94,7 +93,6 @@ Here's 7 database configuration constants:
 You can use these constants to create super admin users.
 
 ```
-#!php
 
 - ADMIN_NAME: A string containing the name of Super Admin User.(Ex.: "Super Administrator");
 
@@ -109,7 +107,6 @@ You can use these constants to create super admin users.
 Here's the main system configs constants. Know what you are doing before change some of these.
 
 ```
-#!php
 
 - DEFAULT_CONTROLLER: A string containing the default module's name of your application. It is the controller that will work on your home page.(default value is "home");
 
@@ -129,7 +126,6 @@ Here is where you configure the helpers you want to autoload. You give the helpe
 
 Example:
 ```
-#!php
 PHPAlert = "phpalert/class.phpalert.php?args[]=/helpers"
 PHPMailer = "phpmailer/PHPMailerAutoload.php"
 ```
@@ -138,12 +134,10 @@ There is already 3 native helpers: [PHPAlert](https://bitbucket.org/gabriel-guel
 All helpers loaded is available in the global instance "$this->helpers", and you can access it from almost all places within the application.
 
 Example:
-```
-#!php
-
-Inside a controller you can do:
-
+```php
 <?php
+// Inside a controller you can do:
+
 $this->helpers->phpalert->add("An end-user alert.");
 $this->helpers->phpalert->show();
 ?>
@@ -156,7 +150,6 @@ $this->helpers->phpalert->show();
 After creating your application's database and setting up the virtual host, just access the domain set in that Virtual Host:
 
 ```
-#!php
 http://oxyphp.local/
 ```
 
@@ -172,7 +165,6 @@ Then you can click on the option, in each table listed, to generate a module for
 After creating a module, you can access it using the friendly URL syntax in your browser's navigation bar:
 
 ```
-#!php
 http://oxyphp.local/foo/
 ```
 
