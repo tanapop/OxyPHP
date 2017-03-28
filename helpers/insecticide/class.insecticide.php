@@ -22,8 +22,8 @@ class Insecticide {
         $theme = $this->theme;
         
         ob_start();
-        include_once __DIR__ . '/view.debug.php';
         include_once __DIR__ . '/view.includes.php';
+        include_once __DIR__ . '/view.debug.php';
         echo ob_get_clean();
 
         die;
@@ -36,8 +36,8 @@ class Insecticide {
         $vartype = gettype($var);
             
         ob_start();
-        include __DIR__.'/view.dump.php';
         include_once __DIR__ . '/view.includes.php';
+        include __DIR__.'/view.dump.php';
         $output = ob_get_clean();
         
         if ($return)
