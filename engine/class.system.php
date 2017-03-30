@@ -17,36 +17,58 @@ class System {
     public function __construct() {
         $this->helpers = self::loadClass(__DIR__ . "/class.helpers.php", "helpers");
         
-        foreach (parse_ini_file($_SERVER['DOCUMENT_ROOT'] . "config.ini", true) as $key => $val) {
+        // Setting up general configs:
+        $c = parse_ini_file($_SERVER['DOCUMENT_ROOT'] . "config.ini", true);
+        
+        foreach ($c as $key => $val) {
             if ($key !== "HELPERS") {
                 foreach ($val as $k => $v) {
                     define(strtoupper($k), $v);
                 }
             }
         }
-
+        //
+        
+        // Including main classes:
         require_once "engine/class.controller.php";
         require_once "engine/class.model.php";
         self::loadClass($_SERVER['DOCUMENT_ROOT'] . 'engine/class.errorhandler.php', 'errorhandler');
-
+        //
+        
+        // URL parsing (controller, method and arguments):
         $action = explode("/", str_replace(strrchr($_SERVER["REQUEST_URI"], "?"), "", urldecode($_SERVER["REQUEST_URI"])));
         array_shift($action);
 
         if ($action[0] == "_asyncload") {
             array_shift($action);
         }
-
+        
+        $urlalias = $c["URL_ALIAS"];
+        if(array_key_exists($action[0], $urlalias)){
+            $arr_alias = explode("/", $urlalias[$action[0]]);
+            
+            unset($action[0]);
+            array_unshift($action, $arr_alias[0], isset($arr_alias[1]) ? $arr_alias[1] : "");
+        }
+        //
+        
+        // Setting up route:
         $this->cpath = $_SERVER["DOCUMENT_ROOT"] . "controllers/";
         $this->controller = (isset($_REQUEST["controller"]) ? $_REQUEST["controller"] : (!empty($action[0]) ? $action[0] : DEFAULT_CONTROLLER));
         $this->method = (isset($_REQUEST["method"]) ? $_REQUEST["method"] : (!empty($action[1]) ? $action[1] : DEFAULT_METHOD));
-
+        //
+        
+        // Invoking Develop mode(If it is set):
         if (DEVELOP_MODE) {
             $this->developmode($action);
         }
+        //
 
+        // Setting up arguments(if it is there), then execute MVC route:
         $this->setargs($action);
 
         $this->execute();
+        //
     }
 
     // Change path of controller classes to mvcgenerator, set running controller to mvcgenerator and method to index, if not defined.
