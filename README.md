@@ -116,7 +116,7 @@ DEVELOP_MODE = 1 ;A boolean value. 1 for activated, 0 for inactive. Is the devel
 
 HANDLE_ERROR_TYPES = E_ALL ;The PHP flags for error handling. Do not change this unless you know exactly what you're doing.
 
-- HELPERS_AUTOLOAD = 1 ;A boolean value that tells the system if you want to load helpers automatically. 1 to Yes, 0 to No. To see how helpers works in OxyPHP, go to Helpers section, within this documentation.(default value is 1);
+HELPERS_AUTOLOAD = 1 ;A boolean value that tells the system if you want to load helpers automatically. 1 to Yes, 0 to No. To see how helpers works in OxyPHP, go to Helpers section, within this documentation.(default value is 1);
 
 ```
 
@@ -126,6 +126,7 @@ Here is where you configure the helpers you want to autoload. You give the helpe
 
 Example:
 ```ini
+[HELPERS]
 PHPAlert = "phpalert/class.phpalert.php?args[]=/helpers"
 PHPMailer = "phpmailer/PHPMailerAutoload.php"
 ```
@@ -152,7 +153,7 @@ test = "foo/bar" ;An alias for accessing method "bar" from controller "foo", usi
 
 ```
 
-With this configs above, you can access route "foo/bar" through the url "/test". Of course you can access it using "/foo/bar", but it is particularly useful sometimes to have aliases for your urls.
+With this configs above, you can access route "foo/bar" through the url "/test". Of course you can access it using "/foo/bar" too, but it is particularly useful sometimes to have aliases for your urls.
 
 
 ## Running Application ##
