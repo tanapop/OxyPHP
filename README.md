@@ -145,6 +145,7 @@ $this->helpers->phpalert->show();
 ```
 
 **5. URL_ALIAS: **
+
 Here you can define some alias for a route(controller/method) you want to access. The name you use is the alias, the value is the route you want to access. 
 For example:
 ```ini
