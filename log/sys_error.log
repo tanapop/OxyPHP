@@ -1,6 +1,0 @@
-At 2017/03/22 - 13:09:51 - Warning: include_once(/home/gabriel/Projects/oxyphp/controllers/bar.php): failed to open stream: No such file or directory. The exception occurred in file /home/gabriel/Projects/oxyphp/engine/class.objloader.php on line 18
-
-From ObjLoader::load() - At 2017/03/22 - 13:09:51 - Warning: include_once(/home/gabriel/Projects/oxyphp/controllers/bar.php): failed to open stream: No such file or directory. The exception occurred in file /home/gabriel/Projects/oxyphp/engine/class.objloader.php on line 18
-
-From System->execute() - At 2017/03/22 - 13:09:51 - Warning: include_once(/home/gabriel/Projects/oxyphp/controllers/bar.php): failed to open stream: No such file or directory. The exception occurred in file /home/gabriel/Projects/oxyphp/engine/class.objloader.php on line 18
-

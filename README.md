@@ -4,9 +4,9 @@
 
 OxyPHP is an open source Object Oriented PHP framework project focused in security, performance, friendly interface and Automation of development.
 
-Its current version is 0.9 stable, with the main features of: friendly URL, structured SQL generator, automatic helpers loader and automated database's CRUD generator, which creates, with one click, an entire MVC structure that does the basic database operations(Create, Read, Update, Delete) and the end-user views.
+Its current version is 0.9 stable, with the main features of: friendly URL with aliases, structured SQL generator, automatic helpers loader and automated database's CRUD generator, which creates, with one click, an entire MVC structure that does the basic database operations(Create, Read, Update, Delete) and the end-user views.
 
-It already comes with some useful stuff included, like: JQuery, bootstrap and other helpers.
+It already comes with some useful stuff included, like: JQuery, Bootstrap, Pesticide Debugger and other helpers.
 
 It is my main open source project and i am currently running against time to deploy the 1.0 version stable with the new features of Database's response data mapping and CRUD generation for related database entities.
 
@@ -70,21 +70,21 @@ Within your OxyPHP's root directory there is a file named "config.ini". When you
 **1. DATABASE: ** 
 
 Here's 7 database configuration constants:
-```
+```ini
 
-- DBNAME: A string containing the name of your application's database.(Ex.: "foo_app_db");
+DBNAME = "foo" ;A string containing the name of your application's database.(Ex.: "foo_app_db");
 
-- DBHOST: A string containing your application's database host address.(Ex.: "localhost");
+DBHOST = "localhost" ;A string containing your application's database host address.(Ex.: "localhost");
 
-- DBUSER: A string containing the user name for your database.(Ex.: "foo_app_db_user");
+DBUSER = "foo_username" ;A string containing the user name for your database.(Ex.: "foo_app_db_user");
 
-- DBPASS: A string containing your user's database password.
+DBPASS = "foo_password" ;A string containing your user's database password.
 
-- DBTYPE: A string containing your database type. Default value is "mysql". (it does not support other database types in the current version)
+DBTYPE = "mysql" ;A string containing your database type. Default value is "mysql". (it does not support other database types in the current version)
 
-- DBCLASS: A string containing the PHP library that the system will use to manage database. Currently it supports "mysqli" and "pdo"(default);
+DBCLASS = "pdo" ;A string containing the PHP library that the system will use to manage database. Currently it supports "mysqli" and "pdo"(default);
 
-- DBCONNECTION_MAX_TRIES: An integer containing the number of tries that the application will do to connect to database before it fails. Default value is 5. (Database connection persistence)
+DBCONNECTION_MAX_TRIES = 5 ;An integer containing the number of tries that the application will do to connect to database before it fails. Default value is 5. (Database connection persistence)
 
 ```
 
@@ -92,13 +92,13 @@ Here's 7 database configuration constants:
 
 You can use these constants to create super admin users.
 
-```
+```ini
 
-- ADMIN_NAME: A string containing the name of Super Admin User.(Ex.: "Super Administrator");
+ADMIN_NAME = "Super Administrator" ;A string containing the name of Super Admin User.(Ex.: "Super Administrator");
 
-- ADMIN_EMAIL: A string containing an email address that can be used to contact the application's administrator or login;
+ADMIN_EMAIL = "super.admin@example.com" ;A string containing an email address that can be used to contact the application's administrator or login;
 
-- ADMIN_PASS: A string containing a password for this application's Super Administrator User, for login purposes;
+ADMIN_PASS = "123456" ;A string containing a password for this application's Super Administrator User, for login purposes;
 
 ```
 
@@ -106,17 +106,17 @@ You can use these constants to create super admin users.
 
 Here's the main system configs constants. Know what you are doing before change some of these.
 
-```
+```ini
 
-- DEFAULT_CONTROLLER: A string containing the default module's name of your application. It is the controller that will work on your home page.(default value is "home");
+DEFAULT_CONTROLLER = "home" ;A string containing the default module's name of your application. It is the controller that will work on your home page.(default value is "home");
 
-- DEFAULT_METHOD: Is your main method's name. It must be within your default controller.(default value is "index");
+DEFAULT_METHOD = "index" ;Is your main method's name. It must be within your default controller.(default value is "index");
 
-- DEVELOP_MODE: A boolean value. 1 for activated, 0 for inactive. Is the develop mode that you will use to generate your CRUD and MVC files automatically. See more in Running Application Section.(default value is 1);
+DEVELOP_MODE = 1 ;A boolean value. 1 for activated, 0 for inactive. Is the develop mode that you will use to generate your CRUD and MVC files automatically. See more in Running Application Section.(default value is 1);
 
-- HANDLE_ERROR_TYPES: The PHP flags for error handling. Do not change this unless you know exactly what you're doing.
+HANDLE_ERROR_TYPES = E_ALL ;The PHP flags for error handling. Do not change this unless you know exactly what you're doing.
 
-- HELPERS_AUTOLOAD: A boolean value that tells the system if you want to load helpers automatically. 1 to Yes, 0 to No. To see how helpers works in OxyPHP, go to Helpers section, within this documentation.(default value is 1);
+HELPERS_AUTOLOAD = 1 ;A boolean value that tells the system if you want to load helpers automatically. 1 to Yes, 0 to No. To see how helpers works in OxyPHP, go to Helpers section, within this documentation.(default value is 1);
 
 ```
 
@@ -125,7 +125,8 @@ Here's the main system configs constants. Know what you are doing before change 
 Here is where you configure the helpers you want to autoload. You give the helper's name and URL. You can pass, within URL, some arguments, if the helper's constructor method requires.
 
 Example:
-```
+```ini
+[HELPERS]
 PHPAlert = "phpalert/class.phpalert.php?args[]=/helpers"
 PHPMailer = "phpmailer/PHPMailerAutoload.php"
 ```
@@ -143,6 +144,17 @@ $this->helpers->phpalert->show();
 ?>
 ```
 
+**5. URL_ALIAS: **
+
+Here you can define some alias for a route(controller/method) you want to access. The name you use is the alias, the value is the route you want to access. 
+For example:
+```ini
+[URL_ALIAS]
+test = "foo/bar" ;An alias for accessing method "bar" from controller "foo", using the word "test" in your URL
+
+```
+
+With this configs above, you can access route "foo/bar" through the url "/test". Of course you can access it using "/foo/bar" too, but it is particularly useful sometimes to have aliases for your urls.
 
 
 ## Running Application ##
