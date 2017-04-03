@@ -54,7 +54,7 @@ class Dbclass {
     }
 
     /* Tries to connect to mysql database much times as configured. If all attempts fails, 
-     * write an error to property and returns false. Returns true on first success.
+     * Register an error, then returns false. Returns true on first success.
      */
 
     private function connect() {
@@ -142,7 +142,7 @@ class Dbclass {
      * If it's a mysql resource, process it into an array of objects before returning.
      */
 
-    public function query($sql) {
+    public function query(Sqlobj $sql) {
         mysqli_report(MYSQLI_REPORT_ERROR | MYSQLI_REPORT_STRICT);
 
         if ($this->transaction_mode && !$this->lastresult) {
@@ -150,7 +150,7 @@ class Dbclass {
         }
 
         try {
-            $res = $this->connection->query($sql);
+            $res = $this->connection->query($sql->sqlstring);
         } catch (mysqli_sql_exception $ex) {
             if ($this->transaction_mode) {
                 $this->connection->rollback();
@@ -165,10 +165,10 @@ class Dbclass {
             $ret = $res;
         } else {
             $ret = array();
-//          $ret $this->mapData($ret);
             while ($row = $res->fetch_assoc()) {
                 $ret[] = (object) $row;
             }
+            $ret = $this->mapdata($ret, $this->tablekey($sql->table));
             $res->close();
         }
 
@@ -242,7 +242,12 @@ class Dbclass {
         return $dataset;
     }
 
-    private function mapData($dataset, $key) {
+    private function mapdata($dataset, $key) {
+        if(!$key){
+            System::log("db_error", date('m/d/Y h:i:s') . " - NOTICE: Table from where you selected data has not a primary key. So, dataset could not be mapped. It is extremely recommended to define primary keys for all your database tables.");
+            return $dataset;
+        }
+        
         $result = array();
 
         foreach ($dataset as $row) {
@@ -265,9 +270,15 @@ class Dbclass {
         }
         return array_values($result);
     }
-    
-    private function findKey($sql){
+
+    private function tablekey($table) {
+        foreach($this->describeTable($table) as $row){
+            if ($row->Key == "PRI") {
+                return $row->Field;
+            }
+        }
         
+        return false;
     }
 
 }

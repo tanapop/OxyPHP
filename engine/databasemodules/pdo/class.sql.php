@@ -9,10 +9,13 @@ class Sqlobj {
     public $sqlstring;
     // The values to be inserted in sql.
     public $sqlvalues;
+    // Current table name.
+    public $table;
     
-    public function __construct($str, $vals){
+    public function __construct($str, $vals, $table){
         $this->sqlstring = $str;
         $this->sqlvalues = $vals;
+        $this->table = $table;
     }
 }
 
@@ -25,6 +28,8 @@ class Sql {
     private $sqlstring;
     // The values to be inserted in sql.
     private $sqlvalues;
+    // Current table name.
+    private $table;
 
     public function __construct() {
         $this->sqlstring = "";
@@ -47,7 +52,7 @@ class Sql {
         $fields = rtrim($fields, ",") . ")";
         $values = rtrim($values, ",") . ")";
 
-        $this->write("INSERT INTO " . $this->escape($table). " (" . $fields . $values, $arrVals);
+        $this->write("INSERT INTO " . $this->escape($table). " (" . $fields . $values, $arrVals, $table);
         return $this;
     }
 
@@ -61,7 +66,7 @@ class Sql {
         }
         $sql = rtrim($sql, " ,");
 
-        $this->write($sql, array_merge(array_values($dataset), array_values($conditions)));
+        $this->write($sql, array_merge(array_values($dataset), array_values($conditions)), $table);
         return $this;
     }
 
@@ -73,7 +78,7 @@ class Sql {
         }
         $sql = rtrim($sql, ",");
 
-        $this->write($sql . " FROM " . $this->escape($table), $conditions);
+        $this->write($sql . " FROM " . $this->escape($table), $conditions, $table);
         return $this;
     }
 
@@ -88,7 +93,7 @@ class Sql {
             }
         }
         
-        $this->write("DELETE ".$this->escape($table)." FROM " . $this->escape($table), $arrvalues);
+        $this->write("DELETE ".$this->escape($table)." FROM " . $this->escape($table), $arrvalues, $table);
         return $this;
     }
 
@@ -126,7 +131,7 @@ class Sql {
             }
         }
 
-        $this->write($where, array(), false);
+        $this->write($where, array(), null, false);
 
         return $this;
     }
@@ -140,7 +145,7 @@ class Sql {
         }
         $str = rtrim($str, " " . $joint . " ");
 
-        $this->write($str, array(), false);
+        $this->write($str, array(), null, false);
         return $this;
     }
 
@@ -152,10 +157,12 @@ class Sql {
     }
 
     // Register SQL query data, then return the object.
-    public function write($sqlstr, $values, $overwrite = true) {
+    public function write($sqlstr, $values, $table, $overwrite = true) {
+        
         if ($overwrite) {
             $this->sqlstring = $sqlstr;
             $this->sqlvalues = $values;
+            $this->table = $table;
         } else {
             $this->sqlstring .= $sqlstr;
             $this->sqlvalues = array_merge($this->sqlvalues, $values);
@@ -168,7 +175,7 @@ class Sql {
     }
 
     public function output() {
-        return new Sqlobj($this->sqlstring, $this->sqlvalues);
+        return new Sqlobj($this->sqlstring, $this->sqlvalues, $this->table);
     }
 
     // Erase SQL query data, then return the object.

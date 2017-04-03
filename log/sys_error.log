@@ -1,0 +1,8 @@
+At 2017/04/02 - 22:15:58 - Warning: Missing argument 2 for Sql::select(), called in /home/gabriel/Projects/oxyphp/models/bar.php on line 9 and defined. The exception occurred in file /home/gabriel/Projects/oxyphp/engine/databasemodules/pdo/class.sql.php on line 74
+
+From System->execute() - At 2017/04/02 - 22:15:58 - Warning: Missing argument 2 for Sql::select(), called in /home/gabriel/Projects/oxyphp/models/bar.php on line 9 and defined. The exception occurred in file /home/gabriel/Projects/oxyphp/engine/databasemodules/pdo/class.sql.php on line 74
+
+At 2017/04/02 - 22:17:40 - Warning: Invalid argument supplied for foreach(). The exception occurred in file /home/gabriel/Projects/oxyphp/engine/databasemodules/pdo/class.sql.php on line 76
+
+From System->execute() - At 2017/04/02 - 22:17:40 - Warning: Invalid argument supplied for foreach(). The exception occurred in file /home/gabriel/Projects/oxyphp/engine/databasemodules/pdo/class.sql.php on line 76
+

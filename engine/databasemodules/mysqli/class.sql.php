@@ -1,4 +1,20 @@
 <?php
+/* //////////////////////////////
+  MYSQLI SQLOBJ PROTOTYPE CLASS//
+ *///////////////////////////////
+
+class Sqlobj {
+    // SQL string, itself.
+    public $sqlstring;
+    // Current table name.
+    public $table;
+    
+    public function __construct($str, $table){
+        $this->sqlstring = $str;
+        $this->table = $table;
+    }
+}
+
 
 /* ///////////////////////////////
   MYSQLI SQL QUERY BUILDER CLASS//
@@ -10,6 +26,8 @@ class Sql {
     private $sqlstring;
     // An instance of the class Mysql.
     private $dbclass;
+    // Current table name.
+    private $table;
 
     public function __construct() {
         $this->dbclass = System::loadClass($_SERVER["DOCUMENT_ROOT"] . "/engine/databasemodules/mysqli/class.dbclass.php", 'dbclass');
@@ -32,7 +50,7 @@ class Sql {
         $fields = rtrim($fields, ",") . ")";
         $values = rtrim($values, ",") . ")";
 
-        $this->write("INSERT INTO " . $this->escape($table) . " (" . $fields . $values);
+        $this->write("INSERT INTO " . $this->escape($table) . " (" . $fields . $values, $table);
         return $this;
     }
 
@@ -49,7 +67,7 @@ class Sql {
         }
         $sql = rtrim($sql, ",");
 
-        $this->write($sql);
+        $this->write($sql, $table);
         return $this;
     }
 
@@ -64,7 +82,7 @@ class Sql {
         }
         $sql = rtrim($sql, ",");
         
-        $this->write($sql . " FROM " . $this->escape($table));
+        $this->write($sql . " FROM " . $this->escape($table), $table);
         return $this;
     }
 
@@ -72,7 +90,7 @@ class Sql {
     public function delete($table, $conditions = null) {
         unset($conditions);
 
-        $this->write("DELETE ".$this->escape($table)." FROM " . $this->escape($table));
+        $this->write("DELETE ".$this->escape($table)." FROM " . $this->escape($table), $table);
         return $this;
     }
 
@@ -110,7 +128,7 @@ class Sql {
             }
         }
         
-        $this->write($where, false);
+        $this->write($where, null, false);
 
         return $this;
     }
@@ -124,7 +142,7 @@ class Sql {
         }
         $str = rtrim($str, " " . $joint . " ");
 
-        $this->write($str, false);
+        $this->write($str, null, false);
         return $this;
     }
     
@@ -136,12 +154,14 @@ class Sql {
     }
     
     // Register SQL query data, then return the object.
-    public function write($sqlstr, $overwrite = true) {
+    public function write($sqlstr, $table, $overwrite = true) {
         if ($overwrite) {
             $this->sqlstring = $sqlstr;
+            $this->table = $table;
         } else {
             $this->sqlstring .= $sqlstr;
         }
+        
         return $this;
     }
     
@@ -150,11 +170,12 @@ class Sql {
     }
     
     public function output(){
-        return $this->sqlstring;
+        return new Sqlobj($this->sqlstring, $this->table);
     }
     
     public function reset(){
         $this->sqlstring = "";
+        $thid->table = null;
         return $this;
     }
 
