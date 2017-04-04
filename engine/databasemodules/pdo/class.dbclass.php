@@ -179,8 +179,10 @@ class Dbclass {
             while ($row = $stmt->fetch(PDO::FETCH_OBJ)) {
                 $res[] = $row;
             }
-            
-            $res = $this->mapdata($res, $this->tablekey($sqlobj->table));
+
+            if (strpos(strtoupper($sqlobj->sqlstring), 'JOIN') !== false) {
+                $res = $this->mapdata($res, $this->tablekey($sqlobj->table));
+            }
         } elseif (strpos(strtoupper($sqlobj->sqlstring), 'INSERT') !== false) {
             $res = $this->connection->lastInsertId();
         }
@@ -235,13 +237,13 @@ class Dbclass {
         $this->connection->commit();
         return $r;
     }
-    
+
     private function mapdata($dataset, $key) {
-        if(!$key){
+        if (!$key) {
             System::log("db_error", date('m/d/Y h:i:s') . " - NOTICE: Table from where you selected data has not a primary key. So, dataset could not be mapped. It is extremely recommended to define primary keys for all your database tables.");
             return $dataset;
         }
-        
+
         $result = array();
 
         foreach ($dataset as $row) {
@@ -264,14 +266,14 @@ class Dbclass {
         }
         return array_values($result);
     }
-    
+
     private function tablekey($table) {
-        foreach($this->describeTable($table) as $row){
+        foreach ($this->describeTable($table) as $row) {
             if ($row->Key == "PRI") {
-                return $table."_".$row->Field;
+                return $table . "_" . $row->Field;
             }
         }
-        
+
         return false;
     }
 

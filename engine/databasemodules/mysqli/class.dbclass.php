@@ -142,7 +142,7 @@ class Dbclass {
      * If it's a mysql resource, process it into an array of objects before returning.
      */
 
-    public function query(Sqlobj $sql) {
+    public function query(Sqlobj $sqlobj) {
         mysqli_report(MYSQLI_REPORT_ERROR | MYSQLI_REPORT_STRICT);
 
         if ($this->transaction_mode && !$this->lastresult) {
@@ -150,14 +150,14 @@ class Dbclass {
         }
 
         try {
-            $res = $this->connection->query($sql->sqlstring);
+            $res = $this->connection->query($sqlobj->sqlstring);
         } catch (mysqli_sql_exception $ex) {
             if ($this->transaction_mode) {
                 $this->connection->rollback();
                 $this->transaction_mode = false;
                 $this->lastresult = null;
             }
-            System::log("db_error", "While executing mysql query an error occured. " . $ex->getMessage() . ". Mysql query:'" . $sql . "'");
+            System::log("db_error", "While executing mysql query an error occured. " . $ex->getMessage() . ". Mysql query:'" . $sqlobj->sqlstring . "'");
             throw $ex;
         }
 
@@ -168,7 +168,11 @@ class Dbclass {
             while ($row = $res->fetch_assoc()) {
                 $ret[] = (object) $row;
             }
-            $ret = $this->mapdata($ret, $this->tablekey($sql->table));
+            
+            if (strpos(strtoupper($sqlobj->sqlstring), 'JOIN') !== false) {
+                $ret = $this->mapdata($ret, $this->tablekey($sqlobj->table));
+            }
+            
             $res->close();
         }
 
@@ -243,11 +247,11 @@ class Dbclass {
     }
 
     private function mapdata($dataset, $key) {
-        if(!$key){
+        if (!$key) {
             System::log("db_error", date('m/d/Y h:i:s') . " - NOTICE: Table from where you selected data has not a primary key. So, dataset could not be mapped. It is extremely recommended to define primary keys for all your database tables.");
             return $dataset;
         }
-        
+
         $result = array();
 
         foreach ($dataset as $row) {
@@ -272,12 +276,12 @@ class Dbclass {
     }
 
     private function tablekey($table) {
-        foreach($this->describeTable($table) as $row){
+        foreach ($this->describeTable($table) as $row) {
             if ($row->Key == "PRI") {
                 return $row->Field;
             }
         }
-        
+
         return false;
     }
 
