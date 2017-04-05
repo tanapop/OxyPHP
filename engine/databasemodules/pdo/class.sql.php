@@ -1,7 +1,7 @@
 <?php
 
 /* ///////////////////////////
-  PDO SQLOBJ PROTOTYPE CLASS//
+  PDO SQLOBJ PACKAGE CLASS////
  *////////////////////////////
 
 class Sqlobj {

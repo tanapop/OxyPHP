@@ -1,6 +1,6 @@
 <?php
 /* //////////////////////////////
-  MYSQLI SQLOBJ PROTOTYPE CLASS//
+  MYSQLI SQLOBJ PACKAGE CLASS////
  *///////////////////////////////
 
 class Sqlobj {
@@ -28,6 +28,8 @@ class Sql {
     private $dbclass;
     // Current table name.
     private $table;
+    // A description of the current table structure.
+    private $tabledesc;
 
     public function __construct() {
         $this->dbclass = System::loadClass($_SERVER["DOCUMENT_ROOT"] . "/engine/databasemodules/mysqli/class.dbclass.php", 'dbclass');
@@ -155,6 +157,12 @@ class Sql {
     
     // Register SQL query data, then return the object.
     public function write($sqlstr, $table, $overwrite = true) {
+        if(empty($this->tabledesc)){
+            $this->tabledesc = $this->dbclass->describeTable($table);
+        }
+        if(strpos(strtoupper($sqlstr), 'SELECT') !== false){
+            
+        }
         if ($overwrite) {
             $this->sqlstring = $sqlstr;
             $this->table = $table;

@@ -1,4 +1,22 @@
 <?php
+/* //////////////////////
+  DB TABLE PACKAGE CLASS/
+ *///////////////////////
+
+class DbTableMetaData{
+    public $name;
+    
+    public $priKey;
+    
+    public $forKeys;
+    
+    public function __construct($tablename, $tablekey, $tableforeigns) {
+        $this->name = $tablename;
+        $this->priKey = $tablekey;
+        $this->forKeys = is_array($tableforeigns) ? $tableforeigns : array($tableforeigns);
+    }
+}
+
 
 /* //////////////////////
   MYSQLI DATABASE CLASS//
@@ -170,7 +188,7 @@ class Dbclass {
             }
             
             if (strpos(strtoupper($sqlobj->sqlstring), 'JOIN') !== false) {
-                $ret = $this->mapdata($ret, $this->tablekey($sqlobj->table));
+                $ret = $this->mapdata($ret, $this->tablekey($sqlobj->table)->keyalias);
             }
             
             $res->close();
@@ -278,7 +296,10 @@ class Dbclass {
     private function tablekey($table) {
         foreach ($this->describeTable($table) as $row) {
             if ($row->Key == "PRI") {
-                return $row->Field;
+                return (object) array(
+                    'keyname' => $row->Field,
+                    'keyalias' => $table . "_" . $row->Field
+                );
             }
         }
 
