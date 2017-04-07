@@ -17,7 +17,7 @@ class Controller {
     public function __construct($module, $method) {
         global $system;
         
-        $this->helpers = System::loadClass($_SERVER['DOCUMENT_ROOT'] . "engine/class.helpers.php", "helpers");
+        $this->helpers = System::loadClass($_SERVER['DOCUMENT_ROOT'] . "/engine/class.helpers.php", "helpers");
         $this->system = &$system;
 
         $this->module = $module;
@@ -39,7 +39,7 @@ class Controller {
 
         ob_start();
         try {
-            include $_SERVER['DOCUMENT_ROOT'] . "views/" . (empty($module) ? $this->module : $module) . "/" . $file . ".php";
+            include $_SERVER['DOCUMENT_ROOT'] . "/views/" . (empty($module) ? $this->module : $module) . "/" . $file . ".php";
         } catch (Exception $ex) {
             System::log("sys_error","Error message: " . $ex->getMessage() . '. In ' . $ex->getFile() . ' on line ' . $ex->getLine() . '.');
         }

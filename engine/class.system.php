@@ -18,7 +18,7 @@ class System {
         $this->helpers = self::loadClass(__DIR__ . "/class.helpers.php", "helpers");
         
         // Setting up general configs:
-        $c = parse_ini_file($_SERVER['DOCUMENT_ROOT'] . "config.ini", true);
+        $c = parse_ini_file($_SERVER['DOCUMENT_ROOT'] . "/config.ini", true);
         
         foreach ($c as $key => $val) {
             if ($key !== "HELPERS") {
@@ -32,7 +32,7 @@ class System {
         // Including main classes:
         require_once "engine/class.controller.php";
         require_once "engine/class.model.php";
-        self::loadClass($_SERVER['DOCUMENT_ROOT'] . 'engine/class.errorhandler.php', 'errorhandler');
+        self::loadClass($_SERVER['DOCUMENT_ROOT'] . '/engine/class.errorhandler.php', 'errorhandler');
         //
         
         // URL parsing (controller, method and arguments):
@@ -53,7 +53,7 @@ class System {
         //
         
         // Setting up route:
-        $this->cpath = $_SERVER["DOCUMENT_ROOT"] . "controllers/";
+        $this->cpath = $_SERVER["DOCUMENT_ROOT"] . "/controllers/";
         $this->controller = (isset($_REQUEST["controller"]) ? $_REQUEST["controller"] : (!empty($action[0]) ? $action[0] : DEFAULT_CONTROLLER));
         $this->method = (isset($_REQUEST["method"]) ? $_REQUEST["method"] : (!empty($action[1]) ? $action[1] : DEFAULT_METHOD));
         //
@@ -74,7 +74,7 @@ class System {
     // Change path of controller classes to mvcgenerator, set running controller to mvcgenerator and method to index, if not defined.
     private function developmode($action) {
         if (empty($action[0]) || $action[0] == 'mvcgenerator') {
-            $this->cpath = $_SERVER["DOCUMENT_ROOT"] . "engine/mvcgenerator/class.";
+            $this->cpath = $_SERVER["DOCUMENT_ROOT"] . "/engine/mvcgenerator/class.";
 
             $this->controller = "mvcgenerator";
             $this->method = (empty($this->method) ? "index" : $this->method);
@@ -128,7 +128,7 @@ class System {
     }
 
     public static function log($logname, $logmsg) {
-        $path = $_SERVER["DOCUMENT_ROOT"] . "log/";
+        $path = $_SERVER["DOCUMENT_ROOT"] . "/log/";
         if (!file_exists($path))
             mkdir($path, 0777, true);
         touch($path);

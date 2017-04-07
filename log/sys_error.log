@@ -6,3 +6,81 @@ At 2017/04/02 - 22:17:40 - Warning: Invalid argument supplied for foreach(). The
 
 From System->execute() - At 2017/04/02 - 22:17:40 - Warning: Invalid argument supplied for foreach(). The exception occurred in file /home/gabriel/Projects/oxyphp/engine/databasemodules/pdo/class.sql.php on line 76
 
+From ObjLoader::load() - Class Insecticide does not exist
+
+From ObjLoader::load() - Class Insecticide does not exist
+
+From ObjLoader::load() - Class Insecticide does not exist
+
+At 2017/04/07 - 04:36:49 - Warning: include_once(/var/www/html/OxyPHPengine/mvcgenerator/class.mvcgenerator.php): failed to open stream: No such file or directory. The exception occurred in file /home/gabriel/Projects/code-library/OxyPHP/engine/class.objloader.php on line 18
+
+From ObjLoader::load() - Class Oxyexception does not exist
+
+At 2017/04/07 - 04:36:49 - Warning: chmod(): Operation not permitted. The exception occurred in file /home/gabriel/Projects/code-library/OxyPHP/engine/class.system.php on line 135
+
+From ObjLoader::load() - Class Oxyexception does not exist
+
+At 2017/04/07 - 04:36:49 - Warning: chmod(): Operation not permitted. The exception occurred in file /home/gabriel/Projects/code-library/OxyPHP/engine/class.system.php on line 135
+
+From ObjLoader::load() - Class Oxyexception does not exist
+
+At 2017/04/07 - 04:36:49 - Warning: chmod(): Operation not permitted. The exception occurred in file /home/gabriel/Projects/code-library/OxyPHP/engine/class.system.php on line 135
+
+From ObjLoader::load() - Class Oxyexception does not exist
+
+At 2017/04/07 - 04:40:42 - Warning: include_once(/var/www/html/OxyPHPengine/mvcgenerator/class.mvcgenerator.php): failed to open stream: No such file or directory. The exception occurred in file /home/gabriel/Projects/code-library/OxyPHP/engine/class.objloader.php on line 18
+
+At 2017/04/07 - 04:40:42 - Warning: chmod(): Operation not permitted. The exception occurred in file /home/gabriel/Projects/code-library/OxyPHP/engine/class.system.php on line 135
+
+At 2017/04/07 - 04:40:42 - Warning: chmod(): Operation not permitted. The exception occurred in file /home/gabriel/Projects/code-library/OxyPHP/engine/class.system.php on line 135
+
+At 2017/04/07 - 04:40:42 - Warning: chmod(): Operation not permitted. The exception occurred in file /home/gabriel/Projects/code-library/OxyPHP/engine/class.system.php on line 135
+
+At 2017/04/07 - 04:41:29 - Warning: include_once(/var/www/html/OxyPHPengine/class.helpers.php): failed to open stream: No such file or directory. The exception occurred in file /home/gabriel/Projects/code-library/OxyPHP/engine/class.objloader.php on line 18
+
+At 2017/04/07 - 04:41:29 - Warning: chmod(): Operation not permitted. The exception occurred in file /home/gabriel/Projects/code-library/OxyPHP/engine/class.system.php on line 135
+
+At 2017/04/07 - 04:41:29 - Warning: chmod(): Operation not permitted. The exception occurred in file /home/gabriel/Projects/code-library/OxyPHP/engine/class.system.php on line 135
+
+At 2017/04/07 - 04:41:29 - Warning: chmod(): Operation not permitted. The exception occurred in file /home/gabriel/Projects/code-library/OxyPHP/engine/class.system.php on line 135
+
+At 2017/04/07 - 04:41:29 - Warning: chmod(): Operation not permitted. The exception occurred in file /home/gabriel/Projects/code-library/OxyPHP/engine/class.system.php on line 135
+
+At 2017/04/07 - 04:53:46 - Warning: mkdir(): Permission denied. The exception occurred in file /home/gabriel/Projects/code-library/OxyPHP/engine/mvcgenerator/class.mvcgenerator.php on line 133
+
+At 2017/04/07 - 04:53:46 - Warning: chmod(): Operation not permitted. The exception occurred in file /home/gabriel/Projects/code-library/OxyPHP/engine/class.system.php on line 135
+
+At 2017/04/07 - 04:53:46 - Warning: chmod(): Operation not permitted. The exception occurred in file /home/gabriel/Projects/code-library/OxyPHP/engine/class.system.php on line 135
+
+At 2017/04/07 - 04:57:39 - Warning: chmod(): Operation not permitted. The exception occurred in file /home/gabriel/Projects/code-library/OxyPHP/engine/mvcgenerator/class.mvcgenerator.php on line 135
+
+At 2017/04/07 - 04:57:39 - Warning: chmod(): Operation not permitted. The exception occurred in file /home/gabriel/Projects/code-library/OxyPHP/engine/class.system.php on line 135
+
+At 2017/04/07 - 04:57:39 - Warning: chmod(): Operation not permitted. The exception occurred in file /home/gabriel/Projects/code-library/OxyPHP/engine/class.system.php on line 135
+
+At 2017/04/07 - 05:00:45 - Warning: chmod(): Operation not permitted. The exception occurred in file /home/gabriel/Projects/code-library/OxyPHP/engine/mvcgenerator/class.mvcgenerator.php on line 135
+
+At 2017/04/07 - 05:00:45 - Warning: chmod(): Operation not permitted. The exception occurred in file /home/gabriel/Projects/code-library/OxyPHP/engine/class.system.php on line 135
+
+At 2017/04/07 - 05:00:45 - Warning: chmod(): Operation not permitted. The exception occurred in file /home/gabriel/Projects/code-library/OxyPHP/engine/class.system.php on line 135
+
+At 2017/04/07 - 05:02:57 - Warning: chmod(): Operation not permitted. The exception occurred in file /home/gabriel/Projects/code-library/OxyPHP/engine/mvcgenerator/class.mvcgenerator.php on line 135
+
+At 2017/04/07 - 05:02:57 - Warning: chmod(): Operation not permitted. The exception occurred in file /home/gabriel/Projects/code-library/OxyPHP/engine/class.system.php on line 135
+
+At 2017/04/07 - 05:02:57 - Warning: chmod(): Operation not permitted. The exception occurred in file /home/gabriel/Projects/code-library/OxyPHP/engine/class.system.php on line 135
+
+At 2017/04/07 - 05:14:02 - Warning: include(/var/www/html/OxyPHPviews/bar/listing.php): failed to open stream: No such file or directory. The exception occurred in file /home/gabriel/Projects/code-library/OxyPHP/engine/class.controller.php on line 42
+
+At 2017/04/07 - 05:14:02 - Warning: chmod(): Operation not permitted. The exception occurred in file /home/gabriel/Projects/code-library/OxyPHP/engine/class.system.php on line 135
+
+At 2017/04/07 - 05:14:02 - Warning: chmod(): Operation not permitted. The exception occurred in file /home/gabriel/Projects/code-library/OxyPHP/engine/class.system.php on line 135
+
+At 2017/04/07 - 05:14:02 - Warning: chmod(): Operation not permitted. The exception occurred in file /home/gabriel/Projects/code-library/OxyPHP/engine/class.system.php on line 135
+
+At 2017/04/07 - 05:18:54 - Warning: chmod(): Operation not permitted. The exception occurred in file /home/gabriel/Projects/code-library/OxyPHP/engine/mvcgenerator/class.mvcgenerator.php on line 135
+
+At 2017/04/07 - 05:18:54 - Warning: chmod(): Operation not permitted. The exception occurred in file /home/gabriel/Projects/code-library/OxyPHP/engine/class.system.php on line 135
+
+At 2017/04/07 - 05:18:54 - Warning: chmod(): Operation not permitted. The exception occurred in file /home/gabriel/Projects/code-library/OxyPHP/engine/class.system.php on line 135
+
