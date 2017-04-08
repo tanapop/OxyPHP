@@ -1,22 +1,4 @@
 <?php
-/* //////////////////////
-  DB TABLE PACKAGE CLASS/
- *///////////////////////
-
-class DbTableMetaData{
-    public $name;
-    
-    public $priKey;
-    
-    public $forKeys;
-    
-    public function __construct($tablename, $tablekey, $tableforeigns) {
-        $this->name = $tablename;
-        $this->priKey = $tablekey;
-        $this->forKeys = is_array($tableforeigns) ? $tableforeigns : array($tableforeigns);
-    }
-}
-
 
 /* //////////////////////
   MYSQLI DATABASE CLASS//
@@ -42,6 +24,8 @@ class Dbclass {
     private $lastresult;
     // An Exception object for connection errors.
     private $error;
+    // Tables metadata.
+    private $tbmetadata;
 
     /* Verifies if database connection data is valid, then sets the properties with those values.
      * Connect to mysql server and save the connection in a property.
@@ -136,13 +120,17 @@ class Dbclass {
     }
 
     public function describeTable($tablename) {
-        $res = $this->connection->query("DESCRIBE " . $tablename);
-        $ret = array();
-        while ($row = mysqli_fetch_assoc($res)) {
-            $ret[] = (object) $row;
+        if (!isset($this->tbmetadata[$tablename])) {
+            $res = $this->connection->query("DESCRIBE " . $tablename);
+            $ret = array();
+            while ($row = mysqli_fetch_assoc($res)) {
+                $ret[] = (object) $row;
+            }
+
+            $this->tbmetadata[$tablename] = $ret;
         }
 
-        return $ret;
+        return $this->tbmetadata[$tablename];
     }
 
     public function dbtables() {
@@ -186,11 +174,11 @@ class Dbclass {
             while ($row = $res->fetch_assoc()) {
                 $ret[] = (object) $row;
             }
-            
+
             if (strpos(strtoupper($sqlobj->sqlstring), 'JOIN') !== false) {
                 $ret = $this->mapdata($ret, $this->tablekey($sqlobj->table)->keyalias);
             }
-            
+
             $res->close();
         }
 
@@ -297,8 +285,8 @@ class Dbclass {
         foreach ($this->describeTable($table) as $row) {
             if ($row->Key == "PRI") {
                 return (object) array(
-                    'keyname' => $row->Field,
-                    'keyalias' => $table . "_" . $row->Field
+                            'keyname' => $row->Field,
+                            'keyalias' => $table . "_" . $row->Field
                 );
             }
         }

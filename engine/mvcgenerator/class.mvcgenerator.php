@@ -76,15 +76,11 @@ class Mvcgenerator {
 
     // Generate a model file, based on a template, adapting it to the module which is being created.
     private function createmodel($modulename, $fields, $return = false) {
-//        echo "<pre>";
-//        print_r($fields);
-//        echo "<pre>";
-//        die;
         $f = file_get_contents($_SERVER["DOCUMENT_ROOT"] . "/engine/mvcgenerator/templates/model.mtx");
 
         $f = str_replace("_CLASS_NAME_", "Model" . ucfirst($modulename), $f);
 
-        $path = $_SERVER["DOCUMENT_ROOT"] . "/models/";
+        $path = $_SERVER["DOCUMENT_ROOT"] . "/application/models/";
         if (!file_exists($path))
             mkdir($path, 0777, true);
         touch($path);
@@ -127,7 +123,7 @@ class Mvcgenerator {
 
         $f = str_replace("_SAVE_FILE_HANDLER_", $file_handler, $f);
 
-        $path = $_SERVER["DOCUMENT_ROOT"] . "/controllers/";
+        $path = $_SERVER["DOCUMENT_ROOT"] . "/application/controllers/";
 
         if (!file_exists($path))
             mkdir($path, 0777, true);
@@ -230,12 +226,12 @@ class Mvcgenerator {
 
         $fr = str_replace("_REGISTER_FORM_FIELDS_", $form_fields, $fr);
 
-        $viewpath = $_SERVER['DOCUMENT_ROOT'] . "/views/" . $modulename . "/";
+        $viewpath = $_SERVER['DOCUMENT_ROOT'] . "/application/views/" . $modulename . "/";
 
         if (!file_exists($viewpath))
             mkdir($viewpath, 0777, true);
         touch($viewpath);
-        chmod($_SERVER['DOCUMENT_ROOT'] . "/views/", 0777);
+        chmod($_SERVER['DOCUMENT_ROOT'] . "/application/views/", 0777);
         chmod($viewpath, 0777);
 
         if (file_put_contents($viewpath . "listing.php", $fl) && file_put_contents($viewpath . "register.php", $fr)) {

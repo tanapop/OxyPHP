@@ -53,7 +53,7 @@ class System {
         //
         
         // Setting up route:
-        $this->cpath = $_SERVER["DOCUMENT_ROOT"] . "/controllers/";
+        $this->cpath = $_SERVER["DOCUMENT_ROOT"] . "/application/controllers/";
         $this->controller = (isset($_REQUEST["controller"]) ? $_REQUEST["controller"] : (!empty($action[0]) ? $action[0] : DEFAULT_CONTROLLER));
         $this->method = (isset($_REQUEST["method"]) ? $_REQUEST["method"] : (!empty($action[1]) ? $action[1] : DEFAULT_METHOD));
         //
@@ -128,7 +128,7 @@ class System {
     }
 
     public static function log($logname, $logmsg) {
-        $path = $_SERVER["DOCUMENT_ROOT"] . "/log/";
+        $path = $_SERVER["DOCUMENT_ROOT"] . "/application/log/";
         if (!file_exists($path))
             mkdir($path, 0777, true);
         touch($path);

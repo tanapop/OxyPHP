@@ -1,5 +1,6 @@
 <?php
-if (DEVELOP_MODE)
+
+if(DEVELOP_MODE)
     $this->helpers->insecticide->dump($dataset);
 ?>
 <script>
@@ -48,32 +49,29 @@ if (DEVELOP_MODE)
                         <tr>
                             <th><input title="Check/uncheck all" id="check-all" type="checkbox" value=""></th>
                             <th>Id</th>
-                            <th>Name</th>
+<th>Name</th>
 
                             <th>Actions</th>
                         </tr>
                     </thead>
                     <tbody>
-                        <?php
-                        if (!empty($dataset)):
-                            foreach ($dataset as $key => $val):
-                                ?>
-                                <tr>
-                                    <td><input class="check-item" type="checkbox" name="<?php echo $key; ?>" value="<?php echo $val->bar_id; ?>"></td>
-                                    <td><?php echo $val->bar_id; ?></td>
-                                    <td><?php echo $val->bar_name; ?></td>
+<?php
+if(!empty($dataset)):
+foreach ($dataset as $key => $val): ?>
+                        <tr>
+                            <td><input class="check-item" type="checkbox" name="<?php echo $key; ?>" value="<?php echo $val->id; ?>"></td>
+                            <td><?php echo $val->id; ?></td>
+<td><?php echo $val->name; ?></td>
 
-                                    <td class="actions">
-                                        <a href="/bar/register/<?php echo $val->bar_id; ?>">Edit</a>
-                                        <a href="/bar/delete/<?php echo $val->bar_id; ?>">Delete</a>
-                                    </td>
-                                </tr>
-                                <?php
-                            endforeach;
-                        else:
-                            ?>
-                            <tr><td align="center" colspan="4">--- NO DATA RECORDS ---</td></tr>
-                        <?php endif; ?>
+                            <td class="actions">
+                                <a href="/bar/register/<?php echo $val->id; ?>">Edit</a>
+                                <a href="/bar/delete/<?php echo $val->id; ?>">Delete</a>
+                            </td>
+                        </tr>
+<?php endforeach;
+else:?>
+                        <tr><td align="center" colspan="4">--- NO DATA RECORDS ---</td></tr>
+<?php endif; ?>
                     </tbody>
                 </table>
             </form>

@@ -21,7 +21,10 @@
         After creating a module's MVC set(a Model, a View and/or a Controller), you can edit each file to fulfill your application's needs.
         You can find them in the "/controllers", "/models" and "/views" directories.
     </p>
-    <p style="color:#990000;">*: Do not forget to grant the required permissions for the application, as it will automatically create files in the directories.</p>
+    <p style="color:#990000;">*: Do not forget to grant the required permissions for the application, as it will automatically create files in the directories. If you are getting trouble in creating your MVC or logging, or if you're getting an error message: "chmod() operation not permitted", run this command bellow on your terminal:</p>
+    <pre> sudo chown -Rf www-data:www-data "<?php echo $_SERVER['DOCUMENT_ROOT']."/application"; ?>"</pre>
+    <p style="color:#990000;"> Command above is valid for Apache 2 web servers, running on linux. "www-data" is the name of Apache's user in operational system.</p>
+    <br>
     <p><b>Your application's databases has these tables listed bellow:</b></p>
 
     <div style="box-shadow: 0px 0px 2px;">

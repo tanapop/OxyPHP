@@ -23,7 +23,7 @@ class Controller {
         $this->module = $module;
         $this->method = $method;
 
-        if (is_file($_SERVER['DOCUMENT_ROOT'] . "/models/" . $this->module . ".php"))
+        if (is_file($_SERVER['DOCUMENT_ROOT'] . "/application/models/" . $this->module . ".php"))
             $this->_loadmodel($this->module);
     }
 
@@ -39,7 +39,7 @@ class Controller {
 
         ob_start();
         try {
-            include $_SERVER['DOCUMENT_ROOT'] . "/views/" . (empty($module) ? $this->module : $module) . "/" . $file . ".php";
+            include $_SERVER['DOCUMENT_ROOT'] . "/application/views/" . (empty($module) ? $this->module : $module) . "/" . $file . ".php";
         } catch (Exception $ex) {
             System::log("sys_error","Error message: " . $ex->getMessage() . '. In ' . $ex->getFile() . ' on line ' . $ex->getLine() . '.');
         }
@@ -97,7 +97,7 @@ class Controller {
     }
 
     protected function _loadmodel($modelname) {
-        $this->model = System::loadClass($_SERVER['DOCUMENT_ROOT'] . "/models/" . $modelname . ".php", "Model" . ucfirst($modelname), array($modelname));
+        $this->model = System::loadClass($_SERVER['DOCUMENT_ROOT'] . "/application/models/" . $modelname . ".php", "Model" . ucfirst($modelname), array($modelname));
     }
 
 }

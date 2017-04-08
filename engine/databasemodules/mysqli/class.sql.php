@@ -160,9 +160,11 @@ class Sql {
         if(empty($this->tabledesc)){
             $this->tabledesc = $this->dbclass->describeTable($table);
         }
-        if(strpos(strtoupper($sqlstr), 'SELECT') !== false){
+        
+        if(strpos(strtoupper($sqlstr), 'SELECT') !== false && strpos(strtoupper($sqlstr), 'JOIN') !== false){
             
         }
+        
         if ($overwrite) {
             $this->sqlstring = $sqlstr;
             $this->table = $table;
