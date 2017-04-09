@@ -175,7 +175,7 @@ class Dbclass {
                 $ret[] = (object) $row;
             }
 
-            if (strpos(strtoupper($sqlobj->sqlstring), 'JOIN') !== false) {
+            if ($sqlobj->mapdata === true) {
                 $ret = $this->mapdata($ret, $this->tablekey($sqlobj->table)->keyalias);
             }
 
@@ -284,10 +284,7 @@ class Dbclass {
     private function tablekey($table) {
         foreach ($this->describeTable($table) as $row) {
             if ($row->Key == "PRI") {
-                return (object) array(
-                            'keyname' => $row->Field,
-                            'keyalias' => $table . "_" . $row->Field
-                );
+                return $row->Field;
             }
         }
 

@@ -8,10 +8,13 @@ class Sqlobj {
     public $sqlstring;
     // Current table name.
     public $table;
+    // Map data?
+    public $mapdata;
     
-    public function __construct($str, $table){
+    public function __construct($str, $table, $mapdataflag){
         $this->sqlstring = $str;
         $this->table = $table;
+        $this->mapdata = $mapdataflag;
     }
 }
 
@@ -24,16 +27,17 @@ class Sql {
 
     // SQL string, itself.
     private $sqlstring;
-    // An instance of the class Mysql.
-    private $dbclass;
     // Current table name.
     private $table;
-    // A description of the current table structure.
-    private $tabledesc;
+    // Map data flag.
+    private $mapdata;
+    // An instance of the class Mysql.
+    private $dbclass;
 
     public function __construct() {
         $this->dbclass = System::loadClass($_SERVER["DOCUMENT_ROOT"] . "/engine/databasemodules/mysqli/class.dbclass.php", 'dbclass');
         $this->sqlstring = "";
+        $this->mapdata = false;
     }
 
     // Build a insert type query string with argument passed in dataset and return it.
@@ -145,6 +149,7 @@ class Sql {
         $str = rtrim($str, " " . $joint . " ");
 
         $this->write($str, null, false);
+        $this->mapdata = true;
         return $this;
     }
     
@@ -157,14 +162,6 @@ class Sql {
     
     // Register SQL query data, then return the object.
     public function write($sqlstr, $table, $overwrite = true) {
-        if(empty($this->tabledesc)){
-            $this->tabledesc = $this->dbclass->describeTable($table);
-        }
-        
-        if(strpos(strtoupper($sqlstr), 'SELECT') !== false && strpos(strtoupper($sqlstr), 'JOIN') !== false){
-            
-        }
-        
         if ($overwrite) {
             $this->sqlstring = $sqlstr;
             $this->table = $table;
@@ -180,7 +177,7 @@ class Sql {
     }
     
     public function output(){
-        return new Sqlobj($this->sqlstring, $this->table);
+        return new Sqlobj($this->sqlstring, $this->table, $this->mapdata);
     }
     
     public function reset(){
