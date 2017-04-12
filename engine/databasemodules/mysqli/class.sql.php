@@ -63,8 +63,7 @@ class Sql {
     }
 
     // Build a update type query string with argument passed in dataset and return it.
-    public function update($dataset, $table, $conditions = null) {
-        unset($conditions);
+    public function update($dataset, $table) {
         $dataset = $this->dbclass->escapevar($dataset);
 
         $sql = "UPDATE " . $this->escape($table) . " SET ";
@@ -80,8 +79,7 @@ class Sql {
     }
 
     // Build a select type query string with argument passed in dataset and return it.
-    public function select($fields, $table, $conditions = null) {
-        unset($conditions);
+    public function select($fields, $table) {
         if (is_string($fields)) {
             $fields = array($fields);
         }
@@ -118,9 +116,7 @@ class Sql {
     }
 
     // Build a delete type query string with argument passed in dataset and return it.
-    public function delete($table, $conditions = null) {
-        unset($conditions);
-
+    public function delete($table) {
         $this->write("DELETE " . $this->escape($table) . " FROM " . $this->escape($table), $table);
         return $this;
     }
