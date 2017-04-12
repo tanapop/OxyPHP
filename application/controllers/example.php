@@ -1,19 +1,23 @@
 <?php
 
-class Bar extends Controller {
+class Example extends Controller {
 
     public function index() {
         $this->listing();
     }
 
     public function listing() {
-        $this->_view("listing", array("dataset" => $this->model->get(array("*",array("foo","*")))));
+        $this->_view("listing", array("dataset" => $this->get("*")));
         $this->helpers->phpalert->show();
     }
 
     public function register($id = null) {
-        $this->_view("register", array("dataset" => (!empty($id) ? $this->model->row(array(array("bar","name"),array("foo","name")), array("id" => $id)) : array())));
+        $this->_view("register", array("dataset" => (!empty($id) ? $this->model->row("*", array("id" => $id)) : array())));
         $this->helpers->phpalert->show();
+    }
+
+    public function get($fields, $conditions = array()) {
+        return $this->model->get($fields, $conditions);
     }
 
     public function save($dataset) {
@@ -26,7 +30,7 @@ class Bar extends Controller {
             $this->helpers->phpalert->add("Attempt to save data failed!", "failure");
         }
 
-        header('Location: /bar');
+        header('Location: /example');
     }
 
     public function delete($list) {
@@ -42,7 +46,7 @@ class Bar extends Controller {
             $this->helpers->phpalert->add("Attempt to delete registers failed!", "failure");
         }
 
-        header('Location: /bar');
+        header('Location: /example');
     }
     
     public function download($args){

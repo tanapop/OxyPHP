@@ -28,6 +28,8 @@ class Dbclass {
     private $lastresult;
     // A PDOException object
     private $error;
+    // Tables metadata.
+    private $tbmetadata;
 
     /* Verifies if database connection data is valid, then sets the properties with those values.
      * Connect to database server and save the connection in a property.
@@ -124,13 +126,17 @@ class Dbclass {
     }
 
     public function describeTable($tablename) {
-        $res = $this->connection->query("DESCRIBE " . $tablename);
-        $ret = array();
-        while ($row = $res->fetch(PDO::FETCH_OBJ)) {
-            $ret[] = $row;
+        if (!isset($this->tbmetadata[$tablename])) {
+            $res = $this->connection->query("DESCRIBE " . $tablename);
+            $ret = array();
+            while ($row = $res->fetch(PDO::FETCH_OBJ)) {
+                $ret[] = $row;
+            }
+            
+            $this->tbmetadata[$tablename] = $ret;
         }
 
-        return $ret;
+        return $this->tbmetadata[$tablename];
     }
 
     public function dbtables() {
@@ -180,8 +186,8 @@ class Dbclass {
                 $res[] = $row;
             }
 
-            if (strpos(strtoupper($sqlobj->sqlstring), 'JOIN') !== false) {
-                $res = $this->mapdata($res, $this->tablekey($sqlobj->table));
+            if ($sqlobj->mapdata === true) {
+                $res = $this->mapdata($res, $this->tablekey($sqlobj->table)->keyalias);
             }
         } elseif (strpos(strtoupper($sqlobj->sqlstring), 'INSERT') !== false) {
             $res = $this->connection->lastInsertId();
@@ -267,10 +273,13 @@ class Dbclass {
         return array_values($result);
     }
 
-    private function tablekey($table) {
+    public function tablekey($table) {
         foreach ($this->describeTable($table) as $row) {
             if ($row->Key == "PRI") {
-                return $table . "_" . $row->Field;
+                return (object) array(
+                            "keyname" => $row->Field,
+                            "keyalias" => $table . "_" . $row->Field
+                );
             }
         }
 

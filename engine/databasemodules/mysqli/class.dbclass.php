@@ -237,8 +237,15 @@ class Dbclass {
     public function escapevar($dataset) {
         if (is_array($dataset)) {
             foreach ($dataset as $key => $data) {
-                if (!is_numeric($data))
+                if (!is_numeric($data) && !is_array($data))
                     $dataset[$key] = mysqli_real_escape_string($this->connection, $data);
+                elseif (is_array($data)) {
+                    foreach($data as $k => $d){
+                        if (!is_numeric($d))
+                            $dataset[$key][$k] = mysqli_real_escape_string($this->connection, $d);
+                    }
+                    
+                }
             }
         } elseif (gettype($dataset) === "object") {
             foreach ($dataset as $key => $data) {
@@ -281,10 +288,13 @@ class Dbclass {
         return array_values($result);
     }
 
-    private function tablekey($table) {
+    public function tablekey($table) {
         foreach ($this->describeTable($table) as $row) {
             if ($row->Key == "PRI") {
-                return $row->Field;
+                return (object) array(
+                            "keyname" => $row->Field,
+                            "keyalias" => $table . "_" . $row->Field
+                );
             }
         }
 

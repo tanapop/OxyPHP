@@ -1,0 +1,4 @@
+While executing mysql query an error occured. You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'foo.`id` AS `foo_id`,foo.`name` AS `foo_name`,foo.`bar_id` AS `foo_bar_id` FROM ' at line 1. Mysql query:'SELECT bar.`id` AS `bar_id`,bar.`id` AS `bar_id`,bar.`name` AS `bar_name`,,foo.`id` AS `foo_id`,foo.`name` AS `foo_name`,foo.`bar_id` AS `foo_bar_id` FROM `bar`'
+
+While executing mysql query an error occured. Unknown column 'foo.id' in 'field list'. Mysql query:'SELECT bar.`id` AS `bar_id`,bar.`id` AS `bar_id`,bar.`name` AS `bar_name`,foo.`id` AS `foo_id`,foo.`name` AS `foo_name`,foo.`bar_id` AS `foo_bar_id` FROM `bar`'
+

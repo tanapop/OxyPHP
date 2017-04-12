@@ -119,7 +119,7 @@ class System {
             return call_user_func_array(array($c_obj, (empty($method) ? $this->method : $method)), (empty($args) ? $this->args : $args));
         } catch (Exception $ex) {
             self::log("sys_error", "From System->execute() - " . $ex->getMessage());
-            $this->helpers->insecticide->debug(array("Attempt to execute URL failed.",'The system returned with the following message: "At 2017/03/21 - 18:39:19 - Warning: include_once(/var/www/html/oxyphp/controllers/bar.php): failed to open stream: No such file or directory. The exception occurred in file /home/gabriel/Projects/oxyphp/engine/class.objloader.php on line 18".'));
+            $this->helpers->insecticide->debug(array("Attempt to execute URL failed. See logs for further info.",'The system returned with the following message: "At 2017/03/21 - 18:39:19 - Warning: include_once(/var/www/html/oxyphp/controllers/bar.php): failed to open stream: No such file or directory. The exception occurred in file /home/gabriel/Projects/oxyphp/engine/class.objloader.php on line 18".'));
         }
     }
 

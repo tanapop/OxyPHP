@@ -1,6 +1,6 @@
 <?php
 
-class _CLASS_NAME_ extends Model {
+class ModelExample extends Model {
 
     // An alias for this::_get()
     public function get($fields, $conditions = array()) {
