@@ -1,7 +1,0 @@
-/test.txt
-/.gitignore
-/nbproject/
-/application/controllers/*
-/application/models/*
-/application/views/*
-/application/log/
