@@ -1,0 +1,28 @@
+At 2017/04/10 - 05:32:23 - Warning: mysqli_fetch_assoc() expects parameter 1 to be mysqli_result, boolean given. The exception occurred in file /home/gabriel/Projects/code-library/OxyPHP/engine/databasemodules/mysqli/class.dbclass.php on line 126
+
+From System->execute() - At 2017/04/10 - 05:32:23 - Warning: mysqli_fetch_assoc() expects parameter 1 to be mysqli_result, boolean given. The exception occurred in file /home/gabriel/Projects/code-library/OxyPHP/engine/databasemodules/mysqli/class.dbclass.php on line 126
+
+At 2017/04/10 - 05:34:42 - Warning: mysqli_fetch_assoc() expects parameter 1 to be mysqli_result, boolean given. The exception occurred in file /home/gabriel/Projects/code-library/OxyPHP/engine/databasemodules/mysqli/class.dbclass.php on line 126
+
+From System->execute() - At 2017/04/10 - 05:34:42 - Warning: mysqli_fetch_assoc() expects parameter 1 to be mysqli_result, boolean given. The exception occurred in file /home/gabriel/Projects/code-library/OxyPHP/engine/databasemodules/mysqli/class.dbclass.php on line 126
+
+At 2017/04/10 - 05:36:48 - Warning: mysqli_fetch_assoc() expects parameter 1 to be mysqli_result, boolean given. The exception occurred in file /home/gabriel/Projects/code-library/OxyPHP/engine/databasemodules/mysqli/class.dbclass.php on line 126
+
+From System->execute() - At 2017/04/10 - 05:36:48 - Warning: mysqli_fetch_assoc() expects parameter 1 to be mysqli_result, boolean given. The exception occurred in file /home/gabriel/Projects/code-library/OxyPHP/engine/databasemodules/mysqli/class.dbclass.php on line 126
+
+At 2017/04/10 - 05:37:23 - Warning: mysqli_fetch_assoc() expects parameter 1 to be mysqli_result, boolean given. The exception occurred in file /home/gabriel/Projects/code-library/OxyPHP/engine/databasemodules/mysqli/class.dbclass.php on line 126
+
+From System->execute() - At 2017/04/10 - 05:37:23 - Warning: mysqli_fetch_assoc() expects parameter 1 to be mysqli_result, boolean given. The exception occurred in file /home/gabriel/Projects/code-library/OxyPHP/engine/databasemodules/mysqli/class.dbclass.php on line 126
+
+At 2017/04/10 - 05:58:22 - Warning: mysqli_real_escape_string() expects parameter 2 to be string, array given. The exception occurred in file /home/gabriel/Projects/code-library/OxyPHP/engine/databasemodules/mysqli/class.dbclass.php on line 241
+
+From System->execute() - At 2017/04/10 - 05:58:22 - Warning: mysqli_real_escape_string() expects parameter 2 to be string, array given. The exception occurred in file /home/gabriel/Projects/code-library/OxyPHP/engine/databasemodules/mysqli/class.dbclass.php on line 241
+
+From System->execute() - You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'foo.`id` AS `foo_id`,foo.`name` AS `foo_name`,foo.`bar_id` AS `foo_bar_id` FROM ' at line 1
+
+From System->execute() - Unknown column 'foo.id' in 'field list'
+
+At 2017/04/11 - 22:00:41 - Warning: call_user_func_array() expects parameter 1 to be a valid callback, class 'Example' does not have a method 'delete2'. The exception occurred in file /home/gabriel/Projects/code-library/OxyPHP/engine/class.system.php on line 119
+
+From System->execute() - At 2017/04/11 - 22:00:41 - Warning: call_user_func_array() expects parameter 1 to be a valid callback, class 'Example' does not have a method 'delete2'. The exception occurred in file /home/gabriel/Projects/code-library/OxyPHP/engine/class.system.php on line 119
+
