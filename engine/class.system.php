@@ -15,8 +15,6 @@ class System {
 
     // Include some global core classes and uses data passed on POST, GET or URI to set running controller, action and args.
     public function __construct() {
-        if(!is_dir($_SERVER["DOCUMENT_ROOT"] . "/application/"))
-                
         $this->helpers = self::loadClass(__DIR__ . "/class.helpers.php", "helpers");
         
         // Setting up general configs:
@@ -132,9 +130,9 @@ class System {
     public static function log($logname, $logmsg) {
         $path = $_SERVER["DOCUMENT_ROOT"] . "/application/log/";
         if (!file_exists($path))
-            mkdir($path, 0664, true);
+            mkdir($path, 0744, true);
         touch($path);
-        chmod($path, 0664);
+        chmod($path, 0744);
 
         $log = fopen($path . $logname . '.log', 'a');
         fwrite($log, $logmsg . str_repeat((PATH_SEPARATOR == ":" ? "\r\n" : "\n"), 2));
