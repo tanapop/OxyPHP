@@ -230,6 +230,8 @@ class Sql {
     // Erase SQL query data, then return the object.
     public function reset() {
         $this->sqlstring = "";
+        $this->table = "";
+        $this->mapdata = false;
         $this->sqlvalues = array();
         return $this;
     }

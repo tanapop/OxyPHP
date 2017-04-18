@@ -24,6 +24,8 @@ class Dbclass {
     private $datatypes;
     // If true, deactivate automatic commit.
     private $transaction_mode;
+    // If true, allow commits to be sent.
+    private $tr_commit_flag;
     // An instance of the last sql result executed.
     private $lastresult;
     // A PDOException object
@@ -58,6 +60,7 @@ class Dbclass {
         $this->cnnInfo = new stdClass();
         $this->cnnInfo->info = "No connection info.";
         $this->transaction_mode = false;
+        $this->tr_commit_flag = true;
 
         if (!$this->connect(1))
             System::log("db_error", "Attempt to connect to database server failed. Error:" . $this->error);
@@ -132,7 +135,7 @@ class Dbclass {
             while ($row = $res->fetch(PDO::FETCH_OBJ)) {
                 $ret[] = $row;
             }
-            
+
             $this->tbmetadata[$tablename] = $ret;
         }
 
@@ -189,6 +192,12 @@ class Dbclass {
             if ($sqlobj->mapdata === true) {
                 $res = $this->mapdata($res, $this->tablekey($sqlobj->table)->keyalias);
             }
+
+            if ($this->transaction_mode) {
+                $this->connection->rollBack();
+                $this->tr_commit_flag = false;
+                System::log('db_error', date('m/d/Y h:i:s') . " - NOTICE: You tried to use some SELECT query(ies) in a transaction of queries. It makes no sense! Only the first SELECT query was executed.");
+            }
         } elseif (strpos(strtoupper($sqlobj->sqlstring), 'INSERT') !== false) {
             $res = $this->connection->lastInsertId();
         }
@@ -204,24 +213,24 @@ class Dbclass {
         $this->connection->beginTransaction();
         $this->transaction_mode = false;
         $this->lastresult = null;
-        $commit = true;
 
         foreach ($sqlset as $sql) {
             try {
                 $res = $this->query($sql);
             } catch (PDOException $ex) {
                 $this->connection->rollBack();
+                break;
             }
 
             if (strpos(strtoupper($sql->sqlstring), 'SELECT') !== false || $res === false) {
                 System::log('db_error', date('m/d/Y h:i:s') . " - NOTICE: You tried to use some SELECT query(ies) in a transaction of queries. It makes no sense! Only the first SELECT query was executed.");
                 $this->connection->rollBack();
-                $commit = false;
+                $this->tr_commit_flag = false;
                 break;
             }
         }
 
-        if ($commit) {
+        if ($this->tr_commit_flag) {
             $this->connection->commit();
         }
 
@@ -240,7 +249,10 @@ class Dbclass {
     public function commit() {
         $r = $this->lastresult;
         $this->lastresult = null;
-        $this->connection->commit();
+        if ($this->tr_commit_flag) {
+            $this->connection->commit();
+        }
+
         return $r;
     }
 

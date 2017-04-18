@@ -63,8 +63,7 @@ class Sql {
     }
 
     // Build a update type query string with argument passed in dataset and return it.
-    public function update($dataset, $table, $conditions = null) {
-        unset($conditions);
+    public function update($dataset, $table) {
         $dataset = $this->dbclass->escapevar($dataset);
 
         $sql = "UPDATE " . $this->escape($table) . " SET ";
@@ -208,6 +207,7 @@ class Sql {
     public function reset() {
         $this->sqlstring = "";
         $this->table = null;
+        $this->mapdata = false;
         return $this;
     }
 

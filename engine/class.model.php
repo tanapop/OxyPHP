@@ -56,9 +56,10 @@ class Model {
 
         $sql = $this->sql
                 ->select($fields, $this->table)
-                ->where($conditions, $this->table);
+                ->where($conditions)
+                ->output();
         
-        if ($result = $this->dbclass->query($sql->output())) {
+        if ($result = $this->dbclass->query($sql)) {
             return $result;
         } else
             return false;
