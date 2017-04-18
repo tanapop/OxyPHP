@@ -163,12 +163,18 @@ class Dbclass {
                 $this->transaction_mode = false;
                 $this->lastresult = null;
             }
-            System::log("db_error", "While executing mysql query an error occured. " . $ex->getMessage() . ". Mysql query:'" . $sqlobj->sqlstring . "'");
+            System::log("db_error", date('m/d/Y h:i:s') . " - While executing mysql query an error occured. " . $ex->getMessage() . ". Mysql query:'" . $sqlobj->sqlstring . "'");
             throw $ex;
         }
 
         if ($res === true || $res === false) {
-            $ret = $res;
+            if (strpos(strtoupper($sqlobj->sqlstring), 'INSERT') !== false) {
+                $this->lastresult = $this->connection->insert_id;
+                $ret = $this->connection->insert_id;
+            } else {
+                $this->lastresult = $res;
+                $ret = $res;
+            }
         } else {
             $ret = array();
             while ($row = $res->fetch_assoc()) {
@@ -179,12 +185,19 @@ class Dbclass {
                 $ret = $this->mapdata($ret, $this->tablekey($sqlobj->table)->keyalias);
             }
 
+            if ($this->transaction_mode) {
+                $this->connection->rollback();
+                $this->transaction_mode = false;
+                $this->lastresult = $ret;
+                System::log('db_error', date('m/d/Y h:i:s') . " - NOTICE: You tried to use some SELECT query(ies) in a transaction of queries. It makes no sense! Only the first SELECT query was executed.");
+            }
+
+
             $res->close();
         }
 
 
         $this->cnnInfo = (object) get_object_vars($this->connection);
-        $this->lastresult = $ret;
 
         return $ret;
     }
@@ -202,7 +215,7 @@ class Dbclass {
                 $this->connection->rollback();
             }
 
-            if (strpos(strtoupper($sql), 'SELECT') !== false) {
+            if (strpos(strtoupper($sql->sqlstring), 'SELECT') !== false) {
                 System::log('db_error', date('m/d/Y h:i:s') . " - NOTICE: You tried to use some SELECT query(ies) in a transaction of queries. It makes no sense! Only the first SELECT query was executed.");
                 $this->connection->rollback();
                 $commit = false;
@@ -240,11 +253,10 @@ class Dbclass {
                 if (!is_numeric($data) && !is_array($data))
                     $dataset[$key] = mysqli_real_escape_string($this->connection, $data);
                 elseif (is_array($data)) {
-                    foreach($data as $k => $d){
+                    foreach ($data as $k => $d) {
                         if (!is_numeric($d))
                             $dataset[$key][$k] = mysqli_real_escape_string($this->connection, $d);
                     }
-                    
                 }
             }
         } elseif (gettype($dataset) === "object") {
