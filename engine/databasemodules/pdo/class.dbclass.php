@@ -24,10 +24,14 @@ class Dbclass {
     private $datatypes;
     // If true, deactivate automatic commit.
     private $transaction_mode;
+    // If true, allow commits to be sent.
+    private $tr_commit_flag;
     // An instance of the last sql result executed.
     private $lastresult;
     // A PDOException object
     private $error;
+    // Tables metadata.
+    private $tbmetadata;
 
     /* Verifies if database connection data is valid, then sets the properties with those values.
      * Connect to database server and save the connection in a property.
@@ -56,6 +60,7 @@ class Dbclass {
         $this->cnnInfo = new stdClass();
         $this->cnnInfo->info = "No connection info.";
         $this->transaction_mode = false;
+        $this->tr_commit_flag = true;
 
         if (!$this->connect(1))
             System::log("db_error", "Attempt to connect to database server failed. Error:" . $this->error);
@@ -124,13 +129,17 @@ class Dbclass {
     }
 
     public function describeTable($tablename) {
-        $res = $this->connection->query("DESCRIBE " . $tablename);
-        $ret = array();
-        while ($row = $res->fetch(PDO::FETCH_OBJ)) {
-            $ret[] = $row;
+        if (!isset($this->tbmetadata[$tablename])) {
+            $res = $this->connection->query("DESCRIBE " . $tablename);
+            $ret = array();
+            while ($row = $res->fetch(PDO::FETCH_OBJ)) {
+                $ret[] = $row;
+            }
+
+            $this->tbmetadata[$tablename] = $ret;
         }
 
-        return $ret;
+        return $this->tbmetadata[$tablename];
     }
 
     public function dbtables() {
@@ -179,6 +188,16 @@ class Dbclass {
             while ($row = $stmt->fetch(PDO::FETCH_OBJ)) {
                 $res[] = $row;
             }
+
+            if ($sqlobj->mapdata === true) {
+                $res = $this->mapdata($res, $this->tablekey($sqlobj->table)->keyalias);
+            }
+
+            if ($this->transaction_mode) {
+                $this->connection->rollBack();
+                $this->tr_commit_flag = false;
+                System::log('db_error', date('m/d/Y h:i:s') . " - NOTICE: You tried to use some SELECT query(ies) in a transaction of queries. It makes no sense! Only the first SELECT query was executed.");
+            }
         } elseif (strpos(strtoupper($sqlobj->sqlstring), 'INSERT') !== false) {
             $res = $this->connection->lastInsertId();
         }
@@ -194,24 +213,24 @@ class Dbclass {
         $this->connection->beginTransaction();
         $this->transaction_mode = false;
         $this->lastresult = null;
-        $commit = true;
 
         foreach ($sqlset as $sql) {
             try {
                 $res = $this->query($sql);
             } catch (PDOException $ex) {
                 $this->connection->rollBack();
+                break;
             }
 
             if (strpos(strtoupper($sql->sqlstring), 'SELECT') !== false || $res === false) {
                 System::log('db_error', date('m/d/Y h:i:s') . " - NOTICE: You tried to use some SELECT query(ies) in a transaction of queries. It makes no sense! Only the first SELECT query was executed.");
                 $this->connection->rollBack();
-                $commit = false;
+                $this->tr_commit_flag = false;
                 break;
             }
         }
 
-        if ($commit) {
+        if ($this->tr_commit_flag) {
             $this->connection->commit();
         }
 
@@ -230,11 +249,19 @@ class Dbclass {
     public function commit() {
         $r = $this->lastresult;
         $this->lastresult = null;
-        $this->connection->commit();
+        if ($this->tr_commit_flag) {
+            $this->connection->commit();
+        }
+
         return $r;
     }
-    
-    private function mapData($dataset, $key) {
+
+    private function mapdata($dataset, $key) {
+        if (!$key) {
+            System::log("db_error", date('m/d/Y h:i:s') . " - NOTICE: Table from where you selected data has not a primary key. So, dataset could not be mapped. It is extremely recommended to define primary keys for all your database tables.");
+            return $dataset;
+        }
+
         $result = array();
 
         foreach ($dataset as $row) {
@@ -256,6 +283,19 @@ class Dbclass {
             }
         }
         return array_values($result);
+    }
+
+    public function tablekey($table) {
+        foreach ($this->describeTable($table) as $row) {
+            if ($row->Key == "PRI") {
+                return (object) array(
+                            "keyname" => $row->Field,
+                            "keyalias" => $table . "_" . $row->Field
+                );
+            }
+        }
+
+        return false;
     }
 
 }

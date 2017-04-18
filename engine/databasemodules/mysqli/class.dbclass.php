@@ -24,6 +24,8 @@ class Dbclass {
     private $lastresult;
     // An Exception object for connection errors.
     private $error;
+    // Tables metadata.
+    private $tbmetadata;
 
     /* Verifies if database connection data is valid, then sets the properties with those values.
      * Connect to mysql server and save the connection in a property.
@@ -54,7 +56,7 @@ class Dbclass {
     }
 
     /* Tries to connect to mysql database much times as configured. If all attempts fails, 
-     * write an error to property and returns false. Returns true on first success.
+     * Register an error, then returns false. Returns true on first success.
      */
 
     private function connect() {
@@ -118,13 +120,17 @@ class Dbclass {
     }
 
     public function describeTable($tablename) {
-        $res = $this->connection->query("DESCRIBE " . $tablename);
-        $ret = array();
-        while ($row = mysqli_fetch_assoc($res)) {
-            $ret[] = (object) $row;
+        if (!isset($this->tbmetadata[$tablename])) {
+            $res = $this->connection->query("DESCRIBE " . $tablename);
+            $ret = array();
+            while ($row = mysqli_fetch_assoc($res)) {
+                $ret[] = (object) $row;
+            }
+
+            $this->tbmetadata[$tablename] = $ret;
         }
 
-        return $ret;
+        return $this->tbmetadata[$tablename];
     }
 
     public function dbtables() {
@@ -142,7 +148,7 @@ class Dbclass {
      * If it's a mysql resource, process it into an array of objects before returning.
      */
 
-    public function query($sql) {
+    public function query(Sqlobj $sqlobj) {
         mysqli_report(MYSQLI_REPORT_ERROR | MYSQLI_REPORT_STRICT);
 
         if ($this->transaction_mode && !$this->lastresult) {
@@ -150,31 +156,48 @@ class Dbclass {
         }
 
         try {
-            $res = $this->connection->query($sql);
+            $res = $this->connection->query($sqlobj->sqlstring);
         } catch (mysqli_sql_exception $ex) {
             if ($this->transaction_mode) {
                 $this->connection->rollback();
                 $this->transaction_mode = false;
                 $this->lastresult = null;
             }
-            System::log("db_error", "While executing mysql query an error occured. " . $ex->getMessage() . ". Mysql query:'" . $sql . "'");
+            System::log("db_error", date('m/d/Y h:i:s') . " - While executing mysql query an error occured. " . $ex->getMessage() . ". Mysql query:'" . $sqlobj->sqlstring . "'");
             throw $ex;
         }
 
         if ($res === true || $res === false) {
-            $ret = $res;
+            if (strpos(strtoupper($sqlobj->sqlstring), 'INSERT') !== false) {
+                $this->lastresult = $this->connection->insert_id;
+                $ret = $this->connection->insert_id;
+            } else {
+                $this->lastresult = $res;
+                $ret = $res;
+            }
         } else {
             $ret = array();
-//          $ret $this->mapData($ret);
             while ($row = $res->fetch_assoc()) {
                 $ret[] = (object) $row;
             }
+
+            if ($sqlobj->mapdata === true) {
+                $ret = $this->mapdata($ret, $this->tablekey($sqlobj->table)->keyalias);
+            }
+
+            if ($this->transaction_mode) {
+                $this->connection->rollback();
+                $this->transaction_mode = false;
+                $this->lastresult = $ret;
+                System::log('db_error', date('m/d/Y h:i:s') . " - NOTICE: You tried to use some SELECT query(ies) in a transaction of queries. It makes no sense! Only the first SELECT query was executed.");
+            }
+
+
             $res->close();
         }
 
 
         $this->cnnInfo = (object) get_object_vars($this->connection);
-        $this->lastresult = $ret;
 
         return $ret;
     }
@@ -192,7 +215,7 @@ class Dbclass {
                 $this->connection->rollback();
             }
 
-            if (strpos(strtoupper($sql), 'SELECT') !== false) {
+            if (strpos(strtoupper($sql->sqlstring), 'SELECT') !== false) {
                 System::log('db_error', date('m/d/Y h:i:s') . " - NOTICE: You tried to use some SELECT query(ies) in a transaction of queries. It makes no sense! Only the first SELECT query was executed.");
                 $this->connection->rollback();
                 $commit = false;
@@ -227,8 +250,14 @@ class Dbclass {
     public function escapevar($dataset) {
         if (is_array($dataset)) {
             foreach ($dataset as $key => $data) {
-                if (!is_numeric($data))
+                if (!is_numeric($data) && !is_array($data))
                     $dataset[$key] = mysqli_real_escape_string($this->connection, $data);
+                elseif (is_array($data)) {
+                    foreach ($data as $k => $d) {
+                        if (!is_numeric($d))
+                            $dataset[$key][$k] = mysqli_real_escape_string($this->connection, $d);
+                    }
+                }
             }
         } elseif (gettype($dataset) === "object") {
             foreach ($dataset as $key => $data) {
@@ -242,7 +271,12 @@ class Dbclass {
         return $dataset;
     }
 
-    private function mapData($dataset, $key) {
+    private function mapdata($dataset, $key) {
+        if (!$key) {
+            System::log("db_error", date('m/d/Y h:i:s') . " - NOTICE: Table from where you selected data has not a primary key. So, dataset could not be mapped. It is extremely recommended to define primary keys for all your database tables.");
+            return $dataset;
+        }
+
         $result = array();
 
         foreach ($dataset as $row) {
@@ -265,9 +299,18 @@ class Dbclass {
         }
         return array_values($result);
     }
-    
-    private function findKey($sql){
-        
+
+    public function tablekey($table) {
+        foreach ($this->describeTable($table) as $row) {
+            if ($row->Key == "PRI") {
+                return (object) array(
+                            "keyname" => $row->Field,
+                            "keyalias" => $table . "_" . $row->Field
+                );
+            }
+        }
+
+        return false;
     }
 
 }

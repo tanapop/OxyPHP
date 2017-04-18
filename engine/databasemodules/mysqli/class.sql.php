@@ -1,5 +1,26 @@
 <?php
 
+/* //////////////////////////////
+  MYSQLI SQLOBJ PACKAGE CLASS////
+ *///////////////////////////////
+
+class Sqlobj {
+
+    // SQL string, itself.
+    public $sqlstring;
+    // Current table name.
+    public $table;
+    // Map data?
+    public $mapdata;
+
+    public function __construct($str, $table, $mapdataflag) {
+        $this->sqlstring = $str;
+        $this->table = $table;
+        $this->mapdata = $mapdataflag;
+    }
+
+}
+
 /* ///////////////////////////////
   MYSQLI SQL QUERY BUILDER CLASS//
  *////////////////////////////////
@@ -8,12 +29,17 @@ class Sql {
 
     // SQL string, itself.
     private $sqlstring;
+    // Current table name.
+    private $table;
+    // Map data flag.
+    private $mapdata;
     // An instance of the class Mysql.
     private $dbclass;
 
     public function __construct() {
         $this->dbclass = System::loadClass($_SERVER["DOCUMENT_ROOT"] . "/engine/databasemodules/mysqli/class.dbclass.php", 'dbclass');
         $this->sqlstring = "";
+        $this->mapdata = false;
     }
 
     // Build a insert type query string with argument passed in dataset and return it.
@@ -32,13 +58,12 @@ class Sql {
         $fields = rtrim($fields, ",") . ")";
         $values = rtrim($values, ",") . ")";
 
-        $this->write("INSERT INTO " . $this->escape($table) . " (" . $fields . $values);
+        $this->write("INSERT INTO " . $this->escape($table) . " (" . $fields . $values, $table);
         return $this;
     }
 
     // Build a update type query string with argument passed in dataset and return it.
-    public function update($dataset, $table, $conditions = null) {
-        unset($conditions);
+    public function update($dataset, $table) {
         $dataset = $this->dbclass->escapevar($dataset);
 
         $sql = "UPDATE " . $this->escape($table) . " SET ";
@@ -49,22 +74,45 @@ class Sql {
         }
         $sql = rtrim($sql, ",");
 
-        $this->write($sql);
+        $this->write($sql, $table);
         return $this;
     }
 
     // Build a select type query string with argument passed in dataset and return it.
     public function select($fields, $table, $conditions = null) {
         unset($conditions);
+        if (is_string($fields)) {
+            $fields = array($fields);
+        }
         $fields = $this->dbclass->escapevar($fields);
+        $tb_key = $this->dbclass->tablekey($table);
 
-        $sql = "SELECT ";
+        $sql = "SELECT " . $table . "." . $this->escape($tb_key->keyname) . " AS " . $this->escape($tb_key->keyalias) . ",";
         foreach ($fields as $f) {
-            $sql .= $this->escape($f) . ",";
+            if (is_array($f)) {
+                if ($f[1] === "*") {
+                    foreach ($this->dbclass->describeTable($f[0]) as $c) {
+                        $sql .= $f[0] . "." . $this->escape($c->Field) . " AS " . $this->escape($f[0] . "_" . $c->Field) . ",";
+                    }
+                    $sql = rtrim($sql, ",");
+                } else {
+                    $sql .= $f[0] . "." . $this->escape($f[1]) . " AS " . $this->escape($f[0] . "_" . $f[1]);
+                }
+            } else {
+                if ($f === "*") {
+                    foreach ($this->dbclass->describeTable($table) as $c) {
+                        $sql .= $table . "." . $this->escape($c->Field) . " AS " . $this->escape($table . "_" . $c->Field) . ",";
+                    }
+                    $sql = rtrim($sql, ",");
+                } else {
+                    $sql .= $table . "." . $this->escape($f) . " AS " . $this->escape($table . "_" . $f);
+                }
+            }
+            $sql .= ",";
         }
         $sql = rtrim($sql, ",");
-        
-        $this->write($sql . " FROM " . $this->escape($table));
+
+        $this->write($sql . " FROM " . $this->escape($table), $table);
         return $this;
     }
 
@@ -72,7 +120,7 @@ class Sql {
     public function delete($table, $conditions = null) {
         unset($conditions);
 
-        $this->write("DELETE ".$this->escape($table)." FROM " . $this->escape($table));
+        $this->write("DELETE " . $this->escape($table) . " FROM " . $this->escape($table), $table);
         return $this;
     }
 
@@ -80,13 +128,13 @@ class Sql {
      * the join OR or AND and operator as = or LIKE, then return the string.
      */
 
-    public function where($params, $table = null, $join = 'AND', $operator = '=') {
+    public function where($params, $join = 'AND', $operator = '=') {
         $where = '';
         if (!empty($params)) {
             if (is_array($params)) {
                 $_conditions = array();
                 foreach ($params as $key => $val) {
-                    $key = (!empty($table) ? $table.".".$this->escape($key)  : $this->escape($key));
+                    $key = $this->table . "." . $this->escape($key);
                     if (strtoupper($operator) == "LIKE") {
                         $_conditions[] = $key . ' LIKE "%' . $val . '%"';
                     } else if (is_array($val) && !empty($val)) {
@@ -106,65 +154,62 @@ class Sql {
 
                 $where = $join !== null ? ' WHERE ' . join($join, $_conditions) : '';
             } else {
-                System::log("sql_error",'Error message: ' . 'Where clause conditions must be an array.');
+                System::log("sql_error", 'Error message: ' . 'Where clause conditions must be an array.');
             }
         }
-        
-        $this->write($where, false);
+
+        $this->write($where, null, false);
 
         return $this;
     }
-    
+
     public function join($table2join, $matches, $way = 'INNER', $operators = "=", $joint = 'AND') {
         $str = " " . $way . " JOIN " . $this->escape($table2join) . " ON ";
         $counter = 0;
         foreach ($matches as $m) {
-            $str .= $this->condition($m[0], $m[1], (is_array($operators) ? $operators[$counter] : $operators)) . " " . $joint . " ";
+            $str .= $this->condition($m[0], $m[1], (is_array($operators) ? $operators[$counter] : $operators)) . " " . (is_array($joint) ? $joint[$counter] : $joint) . " ";
             $counter++;
         }
         $str = rtrim($str, " " . $joint . " ");
 
-        $this->write($str, false);
+        $this->write($str, null, false);
+        $this->mapdata = true;
         return $this;
     }
-    
+
     private function condition($factor1, $factor2, $operator = "=") {
         $factor1 = (is_array($factor1) ? $factor1[0] . '.' . $this->escape($factor1[1]) : (is_numeric($factor1) ? $factor1 : "'" . $factor1 . "'"));
         $factor2 = (is_array($factor2) ? $factor2[0] . '.' . $this->escape($factor2[1]) : (is_numeric($factor2) ? $factor2 : "'" . $factor2 . "'"));
 
         return $factor1 . $operator . $factor2;
     }
-    
+
     // Register SQL query data, then return the object.
-    public function write($sqlstr, $overwrite = true) {
+    public function write($sqlstr, $table, $overwrite = true) {
         if ($overwrite) {
             $this->sqlstring = $sqlstr;
+            $this->table = $table;
         } else {
             $this->sqlstring .= $sqlstr;
         }
-        return $this;
-    }
-    
-    private function escape($val){
-        return $val == "*" ? $val : "`".$val."`";
-    }
-    
-    public function output(){
-        return $this->sqlstring;
-    }
-    
-    public function reset(){
-        $this->sqlstring = "";
+
         return $this;
     }
 
-    public function escapeArgs($params) {
-        foreach ($params as $k => $p) {
-            $params[$k] = $this->dbclass->escapevar($p);
-        }
-        return $params;
+    private function escape($val) {
+        return $val == "*" ? $val : "`" . $val . "`";
     }
-    
+
+    public function output() {
+        return new Sqlobj($this->sqlstring, $this->table, $this->mapdata);
+    }
+
+    public function reset() {
+        $this->sqlstring = "";
+        $this->table = null;
+        $this->mapdata = false;
+        return $this;
+    }
 
 }
 

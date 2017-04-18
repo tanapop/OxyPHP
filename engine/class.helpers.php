@@ -8,7 +8,7 @@ class Helpers {
     private $summary;
 
     public function __construct() {
-        $c = parse_ini_file($_SERVER["DOCUMENT_ROOT"] . "config.ini", true);
+        $c = parse_ini_file($_SERVER["DOCUMENT_ROOT"] . "/config.ini", true);
 
         foreach ($c["HELPERS"] as $k => $v) {
             $k = strtolower($k);
@@ -36,7 +36,7 @@ class Helpers {
             $this->register($name, $path, $args);
         }
 
-        return $this->$name = ObjLoader::load($_SERVER["DOCUMENT_ROOT"] . "helpers/" . $this->summary[$name]->path, $name, $this->summary[$name]->args);
+        return $this->$name = ObjLoader::load($_SERVER["DOCUMENT_ROOT"] . "/helpers/" . $this->summary[$name]->path, $name, $this->summary[$name]->args);
     }
 
     private function register($name, $path, $args = array()) {

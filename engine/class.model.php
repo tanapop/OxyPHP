@@ -15,7 +15,7 @@ class Model {
 
     // It sets the main table name, instantiate class Mysql and defines the table's primary key.
     public function __construct($table) {
-        $this->helpers = System::loadClass($_SERVER['DOCUMENT_ROOT'] . "engine/class.helpers.php", "helpers");
+        $this->helpers = System::loadClass($_SERVER['DOCUMENT_ROOT'] . "/engine/class.helpers.php", "helpers");
 
         $this->table = $table;
 
@@ -26,12 +26,7 @@ class Model {
     }
 
     private function set_primary_key() {
-        foreach ($this->dbclass->describeTable($this->table) as $row) {
-            if ($row->Key == "PRI") {
-                $this->primarykey = $row->Field;
-                break;
-            }
-        }
+        $this->primarykey = $this->dbclass->tablekey($this->table)->keyname;
     }
 
     public function _get_primary_key() {
@@ -48,11 +43,10 @@ class Model {
         return $this->table;
     }
 
-    // Select fields from the table under the rules specified in conditions. Return a list of results.
+    // Select fields from the table under the rules specified in conditions. Return a list of results. 
+    // For more complex data selects, like joined tables results, build your own sql using methods from Sql class.
     public function _get($fields, $conditions = array()) {
-        if (is_string($fields)) {
-            $fields = array($fields);
-        } elseif (!is_array($fields)) {
+        if (!is_array($fields) && !is_string($fields)) {
             return false;
         }
 
@@ -61,10 +55,11 @@ class Model {
         }
 
         $sql = $this->sql
-                ->select($fields, $this->table, $conditions)
-                ->where($conditions, $this->table);
-
-        if ($result = $this->dbclass->query($sql->output())) {
+                ->select($fields, $this->table)
+                ->where($conditions)
+                ->output();
+        
+        if ($result = $this->dbclass->query($sql)) {
             return $result;
         } else
             return false;
@@ -75,7 +70,7 @@ class Model {
         $dataset = (array) $dataset;
         if (!empty($conditions)) {
             $sql = $this->sql
-                    ->update($dataset, $this->table, $conditions)
+                    ->update($dataset, $this->table)
                     ->where($conditions);
         } else {
             if (isset($dataset[$this->primarykey]))
@@ -89,7 +84,7 @@ class Model {
     // Delete data from table under the rules specified in conditions.
     public function _delete($conditions) {
         $sql = $this->sql
-                ->delete($this->table, $conditions)
+                ->delete($this->table)
                 ->where($conditions);
 
         return $this->dbclass->query($sql->output());

@@ -1,0 +1,8 @@
+/nbproject/
+/application/controllers/*
+/application/models/*
+/application/views/*
+/application/log/
+!/application/controllers/.placeholder
+!/application/models/.placeholder
+!/application/views/.placeholder

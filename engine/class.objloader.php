@@ -5,6 +5,10 @@ class ObjLoader {
     // A collection of already loaded objects.
     private static $collection = array();
 
+    private function __construct() {
+        
+    }
+
     /* Returns the instance of a class registered on collection.
      * If the class isn't registered yet, create a new instance of that, register it on collection, then returns it.
      */
@@ -20,7 +24,7 @@ class ObjLoader {
             self::$collection[$path] = $r->newInstanceArgs($args);
             return self::$collection[$path];
         } catch (Exception $ex) {
-            System::log("sys_error",'From ObjLoader::load() - ' . $ex->getMessage());
+            System::log("sys_error", 'From ObjLoader::load() - ' . $ex->getMessage());
             throw $ex;
         }
     }

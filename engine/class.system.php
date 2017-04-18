@@ -16,10 +16,10 @@ class System {
     // Include some global core classes and uses data passed on POST, GET or URI to set running controller, action and args.
     public function __construct() {
         $this->helpers = self::loadClass(__DIR__ . "/class.helpers.php", "helpers");
-        
+
         // Setting up general configs:
-        $c = parse_ini_file($_SERVER['DOCUMENT_ROOT'] . "config.ini", true);
-        
+        $c = parse_ini_file($_SERVER['DOCUMENT_ROOT'] . "/config.ini", true);
+
         foreach ($c as $key => $val) {
             if ($key !== "HELPERS") {
                 foreach ($val as $k => $v) {
@@ -28,13 +28,11 @@ class System {
             }
         }
         //
-        
         // Including main classes:
         require_once "engine/class.controller.php";
         require_once "engine/class.model.php";
-        self::loadClass($_SERVER['DOCUMENT_ROOT'] . 'engine/class.errorhandler.php', 'errorhandler');
+        self::loadClass($_SERVER['DOCUMENT_ROOT'] . '/engine/class.errorhandler.php', 'errorhandler');
         //
-        
         // URL parsing (controller, method and arguments):
         $action = explode("/", str_replace(strrchr($_SERVER["REQUEST_URI"], "?"), "", urldecode($_SERVER["REQUEST_URI"])));
         array_shift($action);
@@ -42,28 +40,28 @@ class System {
         if ($action[0] == "_asyncload") {
             array_shift($action);
         }
-        
+
         $urlalias = $c["URL_ALIAS"];
-        if(array_key_exists($action[0], $urlalias)){
+        if (array_key_exists($action[0], $urlalias)) {
             $arr_alias = explode("/", $urlalias[$action[0]]);
-            
+
             unset($action[0]);
-            array_unshift($action, $arr_alias[0], isset($arr_alias[1]) ? $arr_alias[1] : "");
+
+            for ($i = count($arr_alias) - 1; $i >= 0; $i--) {
+                array_unshift($action, $arr_alias[$i]);
+            }
         }
         //
-        
         // Setting up route:
-        $this->cpath = $_SERVER["DOCUMENT_ROOT"] . "controllers/";
+        $this->cpath = $_SERVER["DOCUMENT_ROOT"] . "/application/controllers/";
         $this->controller = (isset($_REQUEST["controller"]) ? $_REQUEST["controller"] : (!empty($action[0]) ? $action[0] : DEFAULT_CONTROLLER));
         $this->method = (isset($_REQUEST["method"]) ? $_REQUEST["method"] : (!empty($action[1]) ? $action[1] : DEFAULT_METHOD));
         //
-        
         // Invoking Develop mode(If it is set):
         if (DEVELOP_MODE) {
             $this->developmode($action);
         }
         //
-
         // Setting up arguments(if it is there), then execute MVC route:
         $this->setargs($action);
 
@@ -74,7 +72,7 @@ class System {
     // Change path of controller classes to mvcgenerator, set running controller to mvcgenerator and method to index, if not defined.
     private function developmode($action) {
         if (empty($action[0]) || $action[0] == 'mvcgenerator') {
-            $this->cpath = $_SERVER["DOCUMENT_ROOT"] . "engine/mvcgenerator/class.";
+            $this->cpath = $_SERVER["DOCUMENT_ROOT"] . "/engine/mvcgenerator/class.";
 
             $this->controller = "mvcgenerator";
             $this->method = (empty($this->method) ? "index" : $this->method);
@@ -119,7 +117,6 @@ class System {
             return call_user_func_array(array($c_obj, (empty($method) ? $this->method : $method)), (empty($args) ? $this->args : $args));
         } catch (Exception $ex) {
             self::log("sys_error", "From System->execute() - " . $ex->getMessage());
-            $this->helpers->insecticide->debug(array("Attempt to execute URL failed.",'The system returned with the following message: "At 2017/03/21 - 18:39:19 - Warning: include_once(/var/www/html/oxyphp/controllers/bar.php): failed to open stream: No such file or directory. The exception occurred in file /home/gabriel/Projects/oxyphp/engine/class.objloader.php on line 18".'));
         }
     }
 
@@ -128,11 +125,11 @@ class System {
     }
 
     public static function log($logname, $logmsg) {
-        $path = $_SERVER["DOCUMENT_ROOT"] . "log/";
+        $path = $_SERVER["DOCUMENT_ROOT"] . "/application/log/";
         if (!file_exists($path))
-            mkdir($path, 0777, true);
+            mkdir($path, 0755, true);
         touch($path);
-        chmod($path, 0777);
+        chmod($path, 0755);
 
         $log = fopen($path . $logname . '.log', 'a');
         fwrite($log, $logmsg . str_repeat((PATH_SEPARATOR == ":" ? "\r\n" : "\n"), 2));
