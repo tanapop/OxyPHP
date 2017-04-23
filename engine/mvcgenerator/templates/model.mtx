@@ -4,17 +4,17 @@ class _CLASS_NAME_ extends Model {
 
     // An alias for this::_get()
     public function get($fields, $conditions = array()) {
-        return $this->_get($fields, $conditions);
+        _METHOD_GET_
     }
 
     // Return the first row from this::_get() result
     public function row($fields, $conditions = array()) {
-        return $this->_get($fields, $conditions)[0];
+        return $this->get($fields, $conditions)[0];
     }
 
     // An alias for this::_save()
     public function save($dataset, $conditions = array()) {
-        return $this->_save($dataset, $conditions);
+        _METHOD_SAVE_
     }
 
     // An alias for this::_delete()

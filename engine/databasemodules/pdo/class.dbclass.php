@@ -141,6 +141,20 @@ class Dbclass {
 
         return $this->tbmetadata[$tablename];
     }
+    
+    public function tbreferences($tablename){
+        if(!isset($this->tbmetadata[$tablename]['tb_references'])){
+            $res = $this->connection->query("SELECT TABLE_NAME,COLUMN_NAME,CONSTRAINT_NAME, REFERENCED_TABLE_NAME,REFERENCED_COLUMN_NAME FROM INFORMATION_SCHEMA.KEY_COLUMN_USAGE WHERE REFERENCED_TABLE_SCHEMA = '".DBNAME."' AND REFERENCED_TABLE_NAME = '".$tablename."';");
+            $ret = array();
+            while($row = $res->fetch(PDO::FETCH_OBJ)){
+                $ret[] = $row;
+            }
+            
+            $this->tbmetadata[$tablename]['tb_references'] = $ret;
+        }
+        
+        return $this->tbmetadata[$tablename]['tb_references'];
+    }
 
     public function dbtables() {
         $res = $this->connection->query("SHOW TABLES");
