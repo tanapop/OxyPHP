@@ -1,7 +1,7 @@
 <?php
 
 if(DEVELOP_MODE)
-    $this->helpers->insecticide->dump($dataset);
+    $this->helpers->insecticide->dump($dataset, "Dataset");
 ?>
 <div id="_MODULE_NAME_-register-contents">
     <form method="post" action="/_MODULE_NAME_/save" enctype="multipart/form-data">

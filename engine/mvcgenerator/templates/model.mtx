@@ -2,24 +2,24 @@
 
 class _CLASS_NAME_ extends Model {
 
-    // An alias for this::_get()
+    // Retrieve data from database(read):
     public function get($fields, $conditions = array()) {
         _METHOD_GET_
     }
 
-    // Return the first row from this::_get() result
+    // Return the first row from this->get() result:
     public function row($fields, $conditions = array()) {
         return $this->get($fields, $conditions)[0];
     }
 
-    // An alias for this::_save()
+    // Save data to database (create or update):
     public function save($dataset, $conditions = array()) {
         _METHOD_SAVE_
     }
 
-    // An alias for this::_delete()
+    // Delete data from database (delete):
     public function delete($conditions) {
-        return $this->_delete($conditions);
+        _METHOD_DELETE_
     }
 
 }

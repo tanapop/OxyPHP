@@ -77,7 +77,7 @@ class Mvcgenerator {
 
     // Generate a model file, based on a template, adapting it to the module which is being created.
     private function createmodel($modulename, $fields, $return = false) {
-        $breakline = (PATH_SEPARATOR == ":" ? "\r\n" : "\n");
+        $breakline = (PATH_SEPARATOR == ";" ? "\r\n" : "\n");
         $f = file_get_contents($_SERVER["DOCUMENT_ROOT"] . "/engine/mvcgenerator/templates/model.mtx");
 
         // Replacements for method get() on model:
@@ -102,6 +102,22 @@ class Mvcgenerator {
         // Replacements for method save() on model:
         $method_save = 'return $this->_save($dataset, $conditions);';
         
+        /*if(!empty($this->foreign_referers)){
+            $method_save = '$t = $this->_get_table();'.$breakline.$breakline;
+            $method_save .= 'if (empty($conditions)) {'.$breakline;
+            $method_save .= '$arrSql = array();'.$breakline;
+            $method_save .= '$this->sql->insert()'.$breakline;
+            foreach($this->foreign_referers as $fk){
+            $method_save .= '$this->sql->insert()'.$breakline;
+                
+            }
+            
+        }*/
+        //
+        
+        // Replacements for method delete() on model:
+        $method_delete = 'return $this->_delete($conditions);';
+        
         if(!empty($this->foreign_referers)){
             
         }
@@ -110,6 +126,7 @@ class Mvcgenerator {
         $f = str_replace("_CLASS_NAME_", "Model" . ucfirst($modulename), $f);
         $f = str_replace("_METHOD_GET_", $method_get, $f);
         $f = str_replace("_METHOD_SAVE_", $method_save, $f);
+        $f = str_replace("_METHOD_DELETE_", $method_delete, $f);
 
         $path = $_SERVER["DOCUMENT_ROOT"] . "/application/models/";
         if (!file_exists($path))
