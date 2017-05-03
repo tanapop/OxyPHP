@@ -80,48 +80,54 @@ class Mvcgenerator {
         $breakline = (PATH_SEPARATOR == ";" ? "\r\n" : "\n");
         $f = file_get_contents($_SERVER["DOCUMENT_ROOT"] . "/engine/mvcgenerator/templates/model.mtx");
 
-        // Replacements for method get() on model:
         $method_get = 'return $this->_get($fields, $conditions);';
+        $method_save = 'return $this->_save($dataset, $conditions);';
+        $method_delete = 'return $this->_delete($conditions);';
+        
 
         if (!empty($this->foreign_referers)) {
+            // Replacements for method get() on model:
+            
             $method_get = '$t = $this->_get_table();'.$breakline.$breakline;
-            $select_list = '';
             $joins = '';
             foreach ($this->foreign_referers as $fk) {
-                $select_list .= ', array("' . $fk->TABLE_NAME . '", "*")';
                 $joins .= '->join("'.$fk->TABLE_NAME.'",array(array('.$breakline.'array($t,"'.$fk->REFERENCED_COLUMN_NAME.'"),'.$breakline.'array("'.$fk->TABLE_NAME.'", "'.$fk->COLUMN_NAME.'"))), "LEFT")'.$breakline;
             }
 
-            $method_get .= '$this->sql'.$breakline.'->select(array(array($t,"*")'.$select_list.'), $t)'.$breakline;
+            $method_get .= '$this->sql'.$breakline.'->select($fields, $t)'.$breakline;
             $method_get .= $joins;
             $method_get .= '->where($conditions);'.$breakline.$breakline;
             $method_get .= 'return $this->dbclass->query($this->sql->output());';
-        }
-        //
-        
-        // Replacements for method save() on model:
-        $method_save = 'return $this->_save($dataset, $conditions);';
-        
-        /*if(!empty($this->foreign_referers)){
-            $method_save = '$t = $this->_get_table();'.$breakline.$breakline;
-            $method_save .= 'if (empty($conditions)) {'.$breakline;
-            $method_save .= '$arrSql = array();'.$breakline;
-            $method_save .= '$this->sql->insert()'.$breakline;
-            foreach($this->foreign_referers as $fk){
-            $method_save .= '$this->sql->insert()'.$breakline;
+            
+            //
+            
+            
+            // Replacements for method save() on model:
+            
+            /*if(!empty($this->foreign_referers)){
+                $method_save = '$t = $this->_get_table();'.$breakline.$breakline;
+                $method_save .= 'if (empty($conditions)) {'.$breakline;
+                $method_save .= '$arrSql = array();'.$breakline;
+                $method_save .= '$this->sql->insert()'.$breakline;
+                foreach($this->foreign_referers as $fk){
+                    $method_save .= '$this->sql->insert()'.$breakline;
                 
-            }
+                }
             
-        }*/
-        //
-        
-        // Replacements for method delete() on model:
-        $method_delete = 'return $this->_delete($conditions);';
-        
-        if(!empty($this->foreign_referers)){
+        }   */
             
+            //
+            
+            
+            // Replacements for method delete() on model:
+            
+            
+            
+            //
         }
-        //
+        
+        
+        
         
         $f = str_replace("_CLASS_NAME_", "Model" . ucfirst($modulename), $f);
         $f = str_replace("_METHOD_GET_", $method_get, $f);
@@ -153,14 +159,15 @@ class Mvcgenerator {
         $breakline = (PATH_SEPARATOR == ":" ? "\r\n" : "\n");
         $f = file_get_contents($_SERVER["DOCUMENT_ROOT"] . "/engine/mvcgenerator/templates/controller.mtx");
 
-        $f = str_replace("_MODULE_NAME_", $modulename, $f);
         $f = str_replace("_CLASS_NAME_", ucfirst($modulename), $f);
 
-        $file_handler = "";
+        // Replacements for method save() on controller:
+        
+        $save_file_handler = "";
         foreach ($fields as $field) {
             $tablekey = preg_replace('/\([^)]*\)|[()]/', '', $field->Type);
             if ($this->datatypes[$tablekey] == "file") {
-                $file_handler = 'foreach($_FILES as $k => $f){' . $breakline .
+                $save_file_handler = 'foreach($_FILES as $k => $f){' . $breakline .
                         'if ($_FILES[$k]["size"]) {' . $breakline .
                         '$dataset[$k] = $_FILES[$k]["type"].";".file_get_contents($_FILES[$k]["tmp_name"]);' . $breakline .
                         '}' . $breakline .
@@ -168,8 +175,22 @@ class Mvcgenerator {
                 break;
             }
         }
-
-        $f = str_replace("_SAVE_FILE_HANDLER_", $file_handler, $f);
+        
+        //
+        
+        $listing_search_data = '$fields = "*"';
+        if (!empty($this->foreign_referers)) {
+            $listing_search_data = '$fields = array("*"';
+            foreach($this->foreign_referers as $fk){
+                $listing_search_data .= ','.$breakline.'array("'.$fk->TABLE_NAME.'","*")';
+            }
+            $listing_search_data .= $breakline.');';
+        }
+        
+        $f = str_replace("_SAVE_FILE_HANDLER_", $save_file_handler, $f);
+        $f = str_replace("_MODULE_NAME_", $modulename, $f);
+        $f = str_replace("_LISTING_SEARCH_DATA_", $listing_search_data, $f);
+        $f = str_replace("_REGISTER_SEARCH_DATA_", $listing_search_data, $f);
 
         $path = $_SERVER["DOCUMENT_ROOT"] . "/application/controllers/";
 

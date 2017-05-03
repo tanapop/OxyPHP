@@ -7,17 +7,15 @@ class _CLASS_NAME_ extends Controller {
     }
 
     public function listing() {
-        $this->_view("listing", array("dataset" => $this->get("*")));
+        _LISTING_SEARCH_DATA_
+        $this->_view("listing", array("dataset" => $this->model->get($fields)));
         $this->helpers->phpalert->show();
     }
 
     public function register($id = null) {
-        $this->_view("register", array("dataset" => (!empty($id) ? $this->model->row("*", array("id" => $id)) : array())));
+        _REGISTER_SEARCH_DATA_
+        $this->_view("register", array("dataset" => (!empty($id) ? $this->model->row($fields, array("id" => $id)) : array())));
         $this->helpers->phpalert->show();
-    }
-
-    public function get($fields, $conditions = array()) {
-        return $this->model->get($fields, $conditions);
     }
 
     public function save($dataset) {
