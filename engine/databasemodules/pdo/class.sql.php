@@ -223,8 +223,13 @@ class Sql {
         return $val == "*" ? $val : "`" . $val . "`";
     }
 
-    public function output() {
-        return new Sqlobj($this->sqlstring, $this->sqlvalues, $this->table, $this->mapdata);
+    public function output($clear = false) {
+        $obj = new Sqlobj($this->sqlstring, $this->sqlvalues, $this->table, $this->mapdata);
+        
+        if($clear)
+            $this->reset();
+        
+        return $obj;
     }
 
     // Erase SQL query data, then return the object.
