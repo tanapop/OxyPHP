@@ -94,6 +94,8 @@ class Mvcgenerator {
             $method_save .= '$arrSql[] = $this->sql->update($dataset[$t], $t)' . $breakline
                     . '->where($conditions)' . $breakline
                     . '->output(true);' . $breakline . $breakline;
+            
+            $method_delete = '$t = $this->_get_table();' . $breakline . $breakline;
 
             foreach ($this->foreign_referers as $fk) {
                 $joins .= '->join("' . $fk->TABLE_NAME . '",array(array(' . $breakline
@@ -101,41 +103,28 @@ class Mvcgenerator {
                         . 'array("' . $fk->TABLE_NAME . '", "' . $fk->COLUMN_NAME . '"))), "LEFT")' . $breakline;
 
                 $method_save .= '$arrSql[] = $this->sql->delete("' . $fk->TABLE_NAME . '")' . $breakline
-                        . '->where(array("' . $fk->COLUMN_NAME . '",$dataset[$t]["' . $fk->REFERENCED_COLUMN_NAME . '"]))'.$breakline
-                        .'->output(true);' . $breakline . $breakline;
+                        . '->where(array("' . $fk->COLUMN_NAME . '",$dataset[$t]["' . $fk->REFERENCED_COLUMN_NAME . '"]))' . $breakline
+                        . '->output(true);' . $breakline . $breakline;
             }
-            
-            $method_save .= 'unset($dataset[$t]);' . $breakline . $breakline;
-            $method_save .= '}' . $breakline . $breakline;
-            $method_save .= 'foreach($dataset as $table => $data){' . $breakline;
-            $method_save .= '$arrSql[] = $this->sql->insert($data, $table)->output(true);' . $breakline;
-            $method_save .= '}' . $breakline . $breakline;
-            $method_save .= 'return $this->dbclass->transaction($arrSsql);' . $breakline;
+
 
             $method_get .= '$this->sql' . $breakline . '->select($fields, $t)' . $breakline;
             $method_get .= $joins;
             $method_get .= '->where($conditions);' . $breakline . $breakline;
             $method_get .= 'return $this->dbclass->query($this->sql->output());';
 
-
-            // Replacements for method save() on model:
-
-            /* if(!empty($this->foreign_referers)){
-
-              foreach($this->foreign_referers as $fk){
-              $method_save .= '$this->sql->insert()'.$breakline;
-
-              }
-
-              } */
-
-            //
-            // Replacements for method delete() on model:
-        //
+            $method_save .= 'unset($dataset[$t]);' . $breakline . $breakline;
+            $method_save .= '}' . $breakline . $breakline;
+            $method_save .= 'foreach($dataset as $table => $data){' . $breakline;
+            $method_save .= '$arrSql[] = $this->sql->insert($data, $table)->output(true);' . $breakline;
+            $method_save .= '}' . $breakline . $breakline;
+            $method_save .= 'return $this->dbclass->transaction($arrSsql);' . $breakline;
+            
+            $method_delete .= '$this->sql' . $breakline . '->delete($t)' . $breakline;
+            $method_delete .= $joins;
+            $method_delete .= '->where($conditions);' . $breakline . $breakline;
+            $method_delete .= 'return $this->dbclass->query($this->sql->output());';
         }
-
-
-
 
         $f = str_replace("_CLASS_NAME_", "Model" . ucfirst($modulename), $f);
         $f = str_replace("_METHOD_GET_", $method_get, $f);
