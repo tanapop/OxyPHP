@@ -91,7 +91,7 @@ class Mvcgenerator {
             $method_save = '$t = $this->_get_table();' . $breakline . $breakline;
             $method_save .= '$arrSql = array();' . $breakline . $breakline;
             $method_save .= 'if (!empty($conditions)) {' . $breakline;
-            $method_save .= '$arrSql[] = $this->sql->update($dataset, $t)' . $breakline
+            $method_save .= '$arrSql[] = $this->sql->update($dataset[$t], $t)' . $breakline
                     . '->where($conditions)' . $breakline
                     . '->output(true);' . $breakline . $breakline;
 

@@ -22,6 +22,15 @@ class _CLASS_NAME_ extends Controller {
         _SAVE_FILE_HANDLER_
         $primarykey = $this->model->_get_primary_key();
         
+        $t_data = array();
+        foreach($dataset as $k => $v){
+            if(!is_array($v)){
+                $t_data[$k] = $v;
+                unset($dataset[$k]);
+            }
+        }
+        $dataset[$this->model->_get_table()] = $t_data;
+        
         if ($this->model->save($dataset, (empty($dataset[$primarykey]) ? array() : array($primarykey => $dataset[$primarykey])))) {
             $this->helpers->phpalert->add("The data was successfully saved!", "success");
         } else {
