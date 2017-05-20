@@ -63,14 +63,12 @@ class Mvcgenerator {
     }
 
     public function createmvc($modulename, $fileset) {
-        $fields = $this->dbclass->describeTable($modulename);
+        $fields = $this->dbclass->describeTable($modulename)['tb_fields'];
         $this->primarykey = $this->dbclass->tablekey($modulename);
-        $this->foreign_referers = $this->dbclass->tbreferences($modulename);
-
-
-        echo "<pre>";
-        print_r($this->foreign_referers);
-        echo "</pre>";
+        $this->foreign_referers = $this->dbclass->describeTable($modulename)['tb_references'];
+        
+        $this->helpers->insecticide->dump($this->dbclass->describeTable($modulename));
+        die;
 
         call_user_func_array(array($this, "create" . $fileset), array($modulename, $fields));
     }

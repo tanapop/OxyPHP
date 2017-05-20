@@ -93,7 +93,7 @@ class Sql {
         foreach ($fields as $f) {
             if (is_array($f)) {
                 if ($f[1] === "*") {
-                    foreach ($this->dbclass->describeTable($f[0]) as $c) {
+                    foreach ($this->dbclass->describeTable($f[0])['tb_fields'] as $c) {
                         $sql .= $f[0] . "." . $this->escape($c->Field) . " AS " . $this->escape($f[0] . "_" . $c->Field) . ",";
                     }
                     $sql = rtrim($sql, ",");
@@ -102,7 +102,7 @@ class Sql {
                 }
             } else {
                 if ($f === "*") {
-                    foreach ($this->dbclass->describeTable($table) as $c) {
+                    foreach ($this->dbclass->describeTable($table)['tb_fields'] as $c) {
                         $sql .= $table . "." . $this->escape($c->Field) . " AS " . $this->escape($table . "_" . $c->Field) . ",";
                     }
                     $sql = rtrim($sql, ",");

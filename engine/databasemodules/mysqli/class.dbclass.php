@@ -120,17 +120,33 @@ class Dbclass {
     }
 
     public function describeTable($tablename) {
-        if (!isset($this->tbmetadata[$tablename])) {
+        if (!isset($this->tbmetadata[$tablename]['tb_fields'])) {
             $res = $this->connection->query("DESCRIBE " . $tablename);
             $ret = array();
             while ($row = mysqli_fetch_assoc($res)) {
                 $ret[] = (object) $row;
             }
 
-            $this->tbmetadata[$tablename] = $ret;
+            $this->tbmetadata[$tablename]['tb_fields'] = $ret;
         }
+        
+        $this->tbreferences($tablename);
 
         return $this->tbmetadata[$tablename];
+    }
+    
+    private function tbreferences($tablename){
+        if(!isset($this->tbmetadata[$tablename]['tb_references'])){
+            $res = $this->connection->query("SELECT TABLE_NAME,COLUMN_NAME,CONSTRAINT_NAME, REFERENCED_TABLE_NAME,REFERENCED_COLUMN_NAME FROM INFORMATION_SCHEMA.KEY_COLUMN_USAGE WHERE REFERENCED_TABLE_SCHEMA = '".DBNAME."' AND REFERENCED_TABLE_NAME = '".$tablename."';");
+            $ret = array();
+            while($row = mysqli_fetch_assoc($res)){
+                $ret[] = $row;
+            }
+            
+            $this->tbmetadata[$tablename]['tb_references'] = $ret;
+        }
+        
+        return $this->tbmetadata[$tablename]['tb_references'];
     }
 
     public function dbtables() {
@@ -301,7 +317,7 @@ class Dbclass {
     }
 
     public function tablekey($table) {
-        foreach ($this->describeTable($table) as $row) {
+        foreach ($this->describeTable($table)['tb_fields'] as $row) {
             if ($row->Key == "PRI") {
                 return (object) array(
                             "keyname" => $row->Field,
