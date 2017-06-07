@@ -18,8 +18,9 @@ class Mvcgenerator {
     public function __construct() {
         $this->helpers = System::loadClass($_SERVER['DOCUMENT_ROOT'] . "/engine/class.helpers.php", "helpers");
 
+        require_once $_SERVER["DOCUMENT_ROOT"] . "/engine/databasemodules/" . DBCLASS . "/class.tbmetadata.php";
+        
         $this->dbclass = System::loadClass($_SERVER["DOCUMENT_ROOT"] . "/engine/databasemodules/" . DBCLASS . "/class.dbclass.php", 'dbclass');
-
         $this->tables = $this->dbclass->dbtables();
 
         $this->datatypes = array(

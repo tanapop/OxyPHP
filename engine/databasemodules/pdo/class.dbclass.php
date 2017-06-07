@@ -30,8 +30,6 @@ class Dbclass {
     private $lastresult;
     // A PDOException object
     private $error;
-    // Tables metadata.
-    private $tbmetadata;
 
     /* Verifies if database connection data is valid, then sets the properties with those values.
      * Connect to database server and save the connection in a property.
