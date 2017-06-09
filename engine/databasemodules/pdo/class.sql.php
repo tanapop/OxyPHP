@@ -38,14 +38,11 @@ class Sql {
     private $table;
     // Map data flag.
     private $mapdata;
-    // An instance of the class Mysql.
-    private $dbclass;
 
     public function __construct() {
         $this->sqlstring = "";
         $this->sqlvalues = array();
         $this->mapdata = false;
-        $this->dbclass = System::loadClass($_SERVER["DOCUMENT_ROOT"] . "/engine/databasemodules/pdo/class.dbclass.php", 'dbclass');
     }
 
     // Build a insert type query string with argument passed in dataset.
@@ -87,13 +84,13 @@ class Sql {
         if (is_string($fields)) {
             $fields = array($fields);
         }
-        $tb_key = $this->dbclass->tablekey($table);
+        $tb_key = Tbmetadata::info($table)->key;
 
         $sql = "SELECT " . $table . "." . $this->escape($tb_key->keyname) . " AS " . $this->escape($tb_key->keyalias) . ",";
         foreach ($fields as $f) {
             if (is_array($f)) {
                 if ($f[1] === "*") {
-                    foreach ($this->dbclass->describeTable($f[0])['tb_fields'] as $c) {
+                    foreach (Tbmetadata::info($f[0])->fields as $c) {
                         $sql .= $f[0] . "." . $this->escape($c->Field) . " AS " . $this->escape($f[0] . "_" . $c->Field) . ",";
                     }
                     $sql = rtrim($sql, ",");
@@ -102,7 +99,7 @@ class Sql {
                 }
             } else {
                 if ($f === "*") {
-                    foreach ($this->dbclass->describeTable($table)['tb_fields'] as $c) {
+                    foreach (Tbmetadata::info($table)->fields as $c) {
                         $sql .= $table . "." . $this->escape($c->Field) . " AS " . $this->escape($table . "_" . $c->Field) . ",";
                     }
                     $sql = rtrim($sql, ",");

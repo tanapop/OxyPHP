@@ -15,6 +15,7 @@ class Model {
 
     // It sets the main table name, instantiate class Mysql and defines the table's primary key.
     public function __construct($table) {
+        require_once $_SERVER['DOCUMENT_ROOT']."/engine/databasemodules/".DBCLASS."/class.tbmetadata.php";
         $this->helpers = System::loadClass($_SERVER['DOCUMENT_ROOT'] . "/engine/class.helpers.php", "helpers");
 
         $this->table = $table;
