@@ -3,7 +3,7 @@
 class Model {
 
     // The name of table's primary key.
-    private $primarykey;
+    private $tbmetadata;
     // The name of main table of this module. By default, it has the same name of the module itself.
     private $table;
     // An instance of the class Dbclass.
@@ -23,21 +23,21 @@ class Model {
         $this->dbclass = System::loadClass($_SERVER["DOCUMENT_ROOT"] . "/engine/databasemodules/" . DBCLASS . "/class.dbclass.php", 'dbclass');
         $this->sql = System::loadClass($_SERVER["DOCUMENT_ROOT"] . "/engine/databasemodules/" . DBCLASS . "/class.sql.php", 'sql');
 
-        $this->set_primary_key();
+        $this->upd_metadata();
     }
 
-    private function set_primary_key() {
-        $this->primarykey = $this->dbclass->tablekey($this->table)->keyname;
+    private function upd_metadata() {
+        $this->tbmetadata = Tbmetadata::info($this->table);
     }
 
     public function _get_primary_key() {
-        return $this->primarykey;
+        return $this->tbmetadata->key->keyname;
     }
 
     public function _set_table($tablename) {
         $this->table = $tablename;
 
-        $this->set_primary_key();
+        $this->upd_metadata();
     }
 
     public function _get_table() {
@@ -74,8 +74,8 @@ class Model {
                     ->update($dataset, $this->table)
                     ->where($conditions);
         } else {
-            if (isset($dataset[$this->primarykey]))
-                unset($dataset[$this->primarykey]);
+            if (isset($dataset[$this->_get_primary_key()]))
+                unset($dataset[$this->_get_primary_key()]);
             $sql = $this->sql->insert($dataset, $this->table);
         }
 

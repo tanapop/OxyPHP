@@ -58,7 +58,7 @@ class Sql {
         $fields = rtrim($fields, ",") . ")";
         $values = rtrim($values, ",") . ")";
 
-        $this->write("INSERT INTO " . $this->escape($table) . " (" . $fields . $values, $table);
+        $this->write("INSERT INTO " . $this->escape($table) . " (" . $fields . $values, null, $table);
         return $this;
     }
 
@@ -74,7 +74,7 @@ class Sql {
         }
         $sql = rtrim($sql, ",");
 
-        $this->write($sql, $table);
+        $this->write($sql, null, $table);
         return $this;
     }
 
@@ -112,7 +112,7 @@ class Sql {
         }
         $sql = rtrim($sql, ",");
 
-        $this->write($sql . " FROM " . $this->escape($table), $table);
+        $this->write($sql . " FROM " . $this->escape($table), null, $table);
         return $this;
     }
 
@@ -120,7 +120,7 @@ class Sql {
     public function delete($table, $conditions = null) {
         unset($conditions);
 
-        $this->write("DELETE " . $this->escape($table) . " FROM " . $this->escape($table), $table);
+        $this->write("DELETE " . $this->escape($table) . " FROM " . $this->escape($table), null, $table);
         return $this;
     }
 
@@ -158,7 +158,7 @@ class Sql {
             }
         }
 
-        $this->write($where, null, false);
+        $this->write($where, null, null, false);
 
         return $this;
     }
@@ -172,7 +172,7 @@ class Sql {
         }
         $str = rtrim($str, " " . $joint . " ");
 
-        $this->write($str, null, false);
+        $this->write($str, null, null, false);
         $this->mapdata = true;
         return $this;
     }
@@ -185,7 +185,8 @@ class Sql {
     }
 
     // Register SQL query data, then return the object.
-    public function write($sqlstr, $table, $overwrite = true) {
+    public function write($sqlstr, $values, $table, $overwrite = true) {
+        unset($values);
         if ($overwrite) {
             $this->sqlstring = $sqlstr;
             $this->table = $table;

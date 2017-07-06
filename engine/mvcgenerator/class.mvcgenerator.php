@@ -65,12 +65,9 @@ class Mvcgenerator {
 
     public function createmvc($modulename, $fileset) {
         $fields = Tbmetadata::info($modulename)->fields;
-        $this->primarykey = Tbmetadata::info($modulename)->key;
+        $this->primarykey = Tbmetadata::info($modulename)->key->keyname;
         $this->foreign_referers = Tbmetadata::info($modulename)->references;
         
-        $this->helpers->insecticide->dump(Tbmetadata::info($modulename));
-        die;
-
         call_user_func_array(array($this, "create" . $fileset), array($modulename, $fields));
     }
 

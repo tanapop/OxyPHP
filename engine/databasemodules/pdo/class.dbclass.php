@@ -157,6 +157,7 @@ class Dbclass {
 
             $stmt = $this->prepare_statement($sqlobj->sqlstring, array_values($sqlobj->sqlvalues));
             $res = $stmt->execute();
+            
         } catch (PDOException $ex) {
             if ($this->transaction_mode) {
                 $this->connection->rollBack();
@@ -167,7 +168,7 @@ class Dbclass {
             throw $ex;
         }
 
-        if (strpos(strtoupper($sqlobj->sqlstring), 'SELECT') !== false) {
+        if ($stmt->columnCount() > 0) {
             $res = array();
             while ($row = $stmt->fetch(PDO::FETCH_OBJ)) {
                 $res[] = $row;
