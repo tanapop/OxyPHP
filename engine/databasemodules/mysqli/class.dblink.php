@@ -4,7 +4,7 @@
   MYSQLI DATABASE CLASS//
  *///////////////////////
 
-class Dbclass {
+class Dblink {
 
     // Mysql database host server. Example: "localhost".
     private $dbhost;
@@ -132,7 +132,7 @@ class Dbclass {
      * If it's a mysql resource, process it into an array of objects before returning.
      */
 
-    public function query(Sqlobj $sqlobj) {
+    public function runsql(Sqlobj $sqlobj) {
         mysqli_report(MYSQLI_REPORT_ERROR | MYSQLI_REPORT_STRICT);
 
         if ($this->transaction_mode && !$this->lastresult) {
@@ -165,10 +165,6 @@ class Dbclass {
                 $ret[] = (object) $row;
             }
 
-            if ($sqlobj->mapdata === true) {
-                $ret = $this->mapdata($ret, $this->tablekey($sqlobj->table)->keyalias);
-            }
-
             if ($this->transaction_mode) {
                 $this->connection->rollback();
                 $this->transaction_mode = false;
@@ -194,7 +190,7 @@ class Dbclass {
 
         foreach ($sqlset as $sql) {
             try {
-                $res = $this->query($sql);
+                $res = $this->runsql($sql);
             } catch (mysqli_sql_exception $ex) {
                 $this->connection->rollback();
             }

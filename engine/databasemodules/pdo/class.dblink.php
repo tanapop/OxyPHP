@@ -4,7 +4,7 @@
   PDO DATABASE CLASS//
  *///////////////////////
 
-class Dbclass {
+class Dblink {
 
     // Database host server. Example: "localhost".
     private $dbhost;
@@ -149,7 +149,7 @@ class Dbclass {
         return $stmt;
     }
 
-    public function query(Sqlobj $sqlobj) {
+    public function runsql(Sqlobj $sqlobj) {
         try {
             if ($this->transaction_mode && !$this->lastresult) {
                 $this->connection->beginTransaction();
@@ -174,14 +174,10 @@ class Dbclass {
                 $res[] = $row;
             }
 
-            if ($sqlobj->mapdata === true) {
-                $res = $this->mapdata($res, $this->tablekey($sqlobj->table)->keyalias);
-            }
-
             if ($this->transaction_mode) {
                 $this->connection->rollBack();
                 $this->tr_commit_flag = false;
-                System::log('db_error', date('m/d/Y h:i:s') . " - NOTICE: You tried to use some SELECT query(ies) in a transaction of queries. It makes no sense! Only the first SELECT query was executed.");
+                System::log('db_error', date('m/d/Y h:i:s') . " - NOTICE: You tried to use some SELECT query(ies) in a transaction. It makes no sense! Only the first SELECT query was executed.");
             }
         } elseif (strpos(strtoupper($sqlobj->sqlstring), 'INSERT') !== false) {
             $res = $this->connection->lastInsertId();
@@ -201,7 +197,7 @@ class Dbclass {
 
         foreach ($sqlset as $sql) {
             try {
-                $res = $this->query($sql);
+                $res = $this->runsql($sql);
             } catch (PDOException $ex) {
                 $this->connection->rollBack();
                 break;

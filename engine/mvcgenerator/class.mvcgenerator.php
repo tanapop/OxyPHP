@@ -2,8 +2,8 @@
 
 class Mvcgenerator {
 
-    // An instance of Mysql class
-    private $dbclass;
+    // An instance of Dblink class
+    private $dblink;
     // A tables list from database
     private $tables;
     // A dictionary to translate database datatypes to form input's type.
@@ -20,8 +20,8 @@ class Mvcgenerator {
 
         require_once $_SERVER["DOCUMENT_ROOT"] . "/engine/databasemodules/" . DBCLASS . "/class.tbmetadata.php";
         
-        $this->dbclass = System::loadClass($_SERVER["DOCUMENT_ROOT"] . "/engine/databasemodules/" . DBCLASS . "/class.dbclass.php", 'dbclass');
-        $this->tables = $this->dbclass->dbtables();
+        $this->dblink = System::loadClass($_SERVER["DOCUMENT_ROOT"] . "/engine/databasemodules/" . DBCLASS . "/class.dblink.php", 'dblink');
+        $this->tables = $this->dblink->dbtables();
 
         $this->datatypes = array(
             "char" => "text",
@@ -107,19 +107,19 @@ class Mvcgenerator {
             $method_get .= '$this->sql' . $breakline . '->select($fields, $t)' . $breakline;
             $method_get .= $joins;
             $method_get .= '->where($conditions);' . $breakline . $breakline;
-            $method_get .= 'return $this->dbclass->query($this->sql->output());';
+            $method_get .= 'return $this->dbquery($this->sql->output());';
 
             $method_save .= 'unset($dataset[$t]);' . $breakline . $breakline;
             $method_save .= '}' . $breakline . $breakline;
             $method_save .= 'foreach($dataset as $table => $data){' . $breakline;
             $method_save .= '$arrSql[] = $this->sql->insert($data, $table)->output(true);' . $breakline;
             $method_save .= '}' . $breakline . $breakline;
-            $method_save .= 'return $this->dbclass->transaction($arrSsql);' . $breakline;
+            $method_save .= 'return $this->dblink->transaction($arrSsql);' . $breakline;
             
             $method_delete .= '$this->sql' . $breakline . '->delete($t)' . $breakline;
             $method_delete .= $joins;
             $method_delete .= '->where($conditions);' . $breakline . $breakline;
-            $method_delete .= 'return $this->dbclass->query($this->sql->output());';
+            $method_delete .= 'return $this->dbquery($this->sql->output());';
         }
 
         $f = str_replace("_CLASS_NAME_", "Model" . ucfirst($modulename), $f);

@@ -34,17 +34,17 @@ class Sql {
     // Map data flag.
     private $mapdata;
     // An instance of the class Mysql.
-    private $dbclass;
+    private $dblink;
 
     public function __construct() {
-        $this->dbclass = System::loadClass($_SERVER["DOCUMENT_ROOT"] . "/engine/databasemodules/mysqli/class.dbclass.php", 'dbclass');
+        $this->dblink = System::loadClass($_SERVER["DOCUMENT_ROOT"] . "/engine/databasemodules/mysqli/class.dblink.php", 'dblink');
         $this->sqlstring = "";
         $this->mapdata = false;
     }
 
     // Build a insert type query string with argument passed in dataset and return it.
     public function insert($dataset, $table) {
-        $dataset = $this->dbclass->escapevar($dataset);
+        $dataset = $this->dblink->escapevar($dataset);
 
         $fields = "";
         $values = " VALUES (";
@@ -64,7 +64,7 @@ class Sql {
 
     // Build a update type query string with argument passed in dataset and return it.
     public function update($dataset, $table) {
-        $dataset = $this->dbclass->escapevar($dataset);
+        $dataset = $this->dblink->escapevar($dataset);
 
         $sql = "UPDATE " . $this->escape($table) . " SET ";
         foreach ($dataset as $key => $val) {
@@ -84,7 +84,7 @@ class Sql {
         if (is_string($fields)) {
             $fields = array($fields);
         }
-        $fields = $this->dbclass->escapevar($fields);
+        $fields = $this->dblink->escapevar($fields);
         $tb_key = Tbmetadata::info($table)->key;
 
         $sql = "SELECT " . $table . "." . $this->escape($tb_key->keyname) . " AS " . $this->escape($tb_key->keyalias) . ",";
