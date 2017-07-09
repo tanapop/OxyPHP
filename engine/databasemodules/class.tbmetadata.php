@@ -12,8 +12,8 @@ class Tbmetadata {
         if (!isset(self::$collection[$tablename])) {
             $cnn = System::loadClass($_SERVER["DOCUMENT_ROOT"] . "/engine/databasemodules/" . DBCLASS . "/class.dblink.php", 'dblink');
             $sql = System::loadClass($_SERVER["DOCUMENT_ROOT"] . "/engine/databasemodules/" . DBCLASS . "/class.sql.php", 'sql');
+            $res_f = $cnn->runsql($sql->write("DESCRIBE `" . $tablename."`", array(), $tablename)->output(true));
             
-            $res_f = $cnn->runsql($sql->write("DESCRIBE " . $tablename, array(), $tablename)->output(true));
             $fields = array();
             $key = false;
             foreach ($res_f as $row) {
@@ -26,14 +26,12 @@ class Tbmetadata {
                     );
                 }
             }
-            $fields = (object) $fields;
 
-            $res_r = $cnn->runsql($sql->write("SELECT TABLE_NAME,COLUMN_NAME,CONSTRAINT_NAME, REFERENCED_TABLE_NAME,REFERENCED_COLUMN_NAME FROM INFORMATION_SCHEMA.KEY_COLUMN_USAGE WHERE REFERENCED_TABLE_SCHEMA = '" . DBNAME . "' AND REFERENCED_TABLE_NAME = '" . $tablename . "';", array(), $tablename)->output(true));
-            $refs = (object) $res_r;
+            $res_r = $cnn->runsql($sql->write("SELECT TABLE_NAME,COLUMN_NAME,CONSTRAINT_NAME, REFERENCED_TABLE_NAME,REFERENCED_COLUMN_NAME FROM INFORMATION_SCHEMA.KEY_COLUMN_USAGE WHERE REFERENCED_TABLE_SCHEMA = '" . DBNAME . "' AND REFERENCED_TABLE_NAME = '" . $tablename . "';",array(), $tablename)->output(true));
             
             self::$collection[$tablename] = (object) array(
                         'fields' => $fields,
-                        'references' => $refs,
+                        'references' => $res_r,
                         'key' => $key
                 
             );

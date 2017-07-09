@@ -18,7 +18,7 @@ class Mvcgenerator {
     public function __construct() {
         $this->helpers = System::loadClass($_SERVER['DOCUMENT_ROOT'] . "/engine/class.helpers.php", "helpers");
 
-        require_once $_SERVER["DOCUMENT_ROOT"] . "/engine/databasemodules/" . DBCLASS . "/class.tbmetadata.php";
+        require_once $_SERVER["DOCUMENT_ROOT"] . "/engine/databasemodules/class.tbmetadata.php";
         
         $this->dblink = System::loadClass($_SERVER["DOCUMENT_ROOT"] . "/engine/databasemodules/" . DBCLASS . "/class.dblink.php", 'dblink');
         $this->tables = $this->dblink->dbtables();
@@ -67,6 +67,21 @@ class Mvcgenerator {
         $fields = Tbmetadata::info($modulename)->fields;
         $this->primarykey = Tbmetadata::info($modulename)->key->keyname;
         $this->foreign_referers = Tbmetadata::info($modulename)->references;
+        
+        foreach($fields as $k => $f){
+            $fields[$k]->Field = $modulename."_".$f->Field;
+        }
+        
+        foreach ($this->foreign_referers as $r){
+            foreach (Tbmetadata::info($r->TABLE_NAME)->fields as $rf){
+                $rf->Field = $r->TABLE_NAME."_".$rf->Field;
+                $fields[] = $rf;
+            }
+        }
+        
+//        $this->helpers->insecticide->dump(Tbmetadata::info($modulename));
+//        $this->helpers->insecticide->dump($fields);
+//        die;
         
         call_user_func_array(array($this, "create" . $fileset), array($modulename, $fields));
     }
@@ -213,11 +228,11 @@ class Mvcgenerator {
             return "<th>" . ucfirst($f->Field) . ($f->Type == "tinyint(1)" ? "?" : "") . "</th>" . $breakline;
         else {
             if ($f->Type == "tinyint(1)") {
-                $content = '<?php echo (empty($val->' . $f->Field . ') ? "No" : "Yes"); ?>';
+                $content = '<?php if(is_array($val->' . $f->Field . ')) foreach($val->' . $f->Field . ' as $v){echo "<p>".(empty($v) ? "No" : "Yes")."</p>";} else echo (empty($val->' . $f->Field . ') ? "No" : "Yes"); ?>';
             } elseif ($this->datatypes[preg_replace('/\([^)]*\)|[()]/', '', $f->Type)] == "file") {
                 $content = '<?php if(!empty($val->' . $f->Field . ')): ?><a href="/' . $modulename . '/download/?args[0][field]=' . $f->Field . '&args[0][conditions][' . $this->primarykey . ']=<?php echo $val->' . $this->primarykey . '; ?>">Download file</a><?php endif; ?>';
             } else {
-                $content = '<?php echo $val->' . $f->Field . '; ?>';
+                $content = '<?php if(is_array($val->' . $f->Field . ')) foreach($val->' . $f->Field . ' as $v){echo "<p>".$v."</p>"; } else echo $val->' . $f->Field . '; ?>';
             }
             return '<td>' . $content . '</td>' . $breakline;
         }
@@ -321,12 +336,12 @@ class Mvcgenerator {
             return false;
         }
         if (!$this->createcontroller($modulename, $fields, true)) {
-            $this->helpers->phpalert->add("Attempt to create module's controller failed. But model file created with success.", "failure");
+            $this->helpers->phpalert->add("Attempt to create module's controller failed. But model file was created with success.", "failure");
             header('Location: /');
             return false;
         }
         if (!$this->createviews($modulename, $fields, true)) {
-            $this->helpers->phpalert->add("Attempt to create module's views failed. But controller and model files created with success.");
+            $this->helpers->phpalert->add("Attempt to create module's views failed. But controller and model files were created with success.");
             header('Location: /');
             return false;
         }
