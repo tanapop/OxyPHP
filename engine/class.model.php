@@ -43,7 +43,7 @@ class Model {
                 $result[$row->$key] = $row;
             } else {
                 foreach ((array) $row as $k => $v) {
-                    if ($result[$row->$key]->$k != $v) {
+                    if ($k != $key || $result[$row->$key]->$k != $v) {
                         if (!is_array($result[$row->$key]->$k)) {
                             $result[$row->$key]->$k = array($result[$row->$key]->$k, $v);
                         } else {
@@ -85,7 +85,9 @@ class Model {
 
     // Select fields from the table under the rules specified in conditions. Return a list of results. 
     // For more complex data selects, like joined tables results, build your own sql using methods from Sql class.
-    public function _get($fields, $conditions = array()) {
+    public function _get($fields, $conditions = array(), $table = "") {
+        $table = (empty($table) ? $this->table : $table);
+        
         if (!is_array($fields) && !is_string($fields)) {
             return false;
         }
@@ -95,10 +97,10 @@ class Model {
         }
 
         $sql = $this->sql
-                ->select($fields, $this->table)
+                ->select($fields, $table)
                 ->where($conditions)
                 ->output();
-
+        
         if ($result = $this->dbquery($sql)) {
             return $result;
         } else
@@ -106,25 +108,29 @@ class Model {
     }
 
     // Save on database data passed in dataset, under the rules specified in conditions.
-    public function _save($dataset, $conditions = array()) {
+    public function _save($dataset, $conditions = array(), $table = "") {
+        $table = (empty($table) ? $this->table : $table);
+        
         $dataset = (array) $dataset;
         if (!empty($conditions)) {
             $sql = $this->sql
-                    ->update($dataset, $this->table)
+                    ->update($dataset, $table)
                     ->where($conditions);
         } else {
             if (isset($dataset[$this->_get_primary_key()]))
                 unset($dataset[$this->_get_primary_key()]);
-            $sql = $this->sql->insert($dataset, $this->table);
+            $sql = $this->sql->insert($dataset, $table);
         }
 
         return $this->dbquery($sql->output());
     }
 
     // Delete data from table under the rules specified in conditions.
-    public function _delete($conditions) {
+    public function _delete($conditions, $table = "") {
+        $table = (empty($table) ? $this->table : $table);
+        
         $sql = $this->sql
-                ->delete($this->table)
+                ->delete($table)
                 ->where($conditions);
 
         return $this->dbquery($sql->output());

@@ -21,7 +21,7 @@ class System {
         $c = parse_ini_file($_SERVER['DOCUMENT_ROOT'] . "/config.ini", true);
 
         foreach ($c as $key => $val) {
-            if ($key !== "HELPERS") {
+            if ($key != "HELPERS") {
                 foreach ($val as $k => $v) {
                     define(strtoupper($k), $v);
                 }

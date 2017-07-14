@@ -9,7 +9,7 @@ class Mvcgenerator {
     // A dictionary to translate database datatypes to form input's type.
     private $datatypes;
     // The current table's primary key name.
-    private $primarykey;
+    private $modulename;
     // The global object of Helpers class
     private $helpers;
     private $foreign_referers;
@@ -65,16 +65,18 @@ class Mvcgenerator {
 
     public function createmvc($modulename, $fileset) {
         $fields = Tbmetadata::info($modulename)->fields;
-        $this->primarykey = Tbmetadata::info($modulename)->key->keyname;
+        $this->modulename = $modulename;
         $this->foreign_referers = Tbmetadata::info($modulename)->references;
         
         foreach($fields as $k => $f){
-            $fields[$k]->Field = $modulename."_".$f->Field;
-        }
+            $fields[$k]->Alias = $modulename."_".$f->Field;
+            $fields[$k]->Table = $modulename;
+         }
         
         foreach ($this->foreign_referers as $r){
             foreach (Tbmetadata::info($r->TABLE_NAME)->fields as $rf){
-                $rf->Field = $r->TABLE_NAME."_".$rf->Field;
+                $rf->Alias = $r->TABLE_NAME."_".$rf->Field;
+                $rf->Table = $r->TABLE_NAME;
                 $fields[] = $rf;
             }
         }
@@ -175,9 +177,13 @@ class Mvcgenerator {
         foreach ($fields as $field) {
             $tablekey = preg_replace('/\([^)]*\)|[()]/', '', $field->Type);
             if ($this->datatypes[$tablekey] == "file") {
+                Tbmetadata::alter_table($field->Table, "MODIFY ".$field->Field." varchar(255)");
+                
                 $save_file_handler = 'foreach($_FILES as $k => $f){' . $breakline .
                         'if ($_FILES[$k]["size"]) {' . $breakline .
-                        '$dataset[$k] = $_FILES[$k]["type"].";".file_get_contents($_FILES[$k]["tmp_name"]);' . $breakline .
+                        '$filename = uniqid().".".explode(".",$_FILES[$k]["name"])[1];'.$breakline.
+                        'if(!move_uploaded_file($_FILES[$k]["tmp_name"], $_SERVER["DOCUMENT_ROOT"]."/application/upload/".$filename)){'.$breakline.'return false;'.$breakline.'}'.$breakline.
+                        '$dataset[$k] = $filename;' . $breakline .
                         '}' . $breakline .
                         '}';
                 break;
@@ -225,14 +231,14 @@ class Mvcgenerator {
     private function tableListing($f, $modulename, $header = false) {
         $breakline = (PATH_SEPARATOR == ":" ? "\r\n" : "\n");
         if ($header)
-            return "<th>" . ucfirst($f->Field) . ($f->Type == "tinyint(1)" ? "?" : "") . "</th>" . $breakline;
+            return "<th>" . ucfirst($f->Alias) . ($f->Type == "tinyint(1)" ? "?" : "") . "</th>" . $breakline;
         else {
             if ($f->Type == "tinyint(1)") {
-                $content = '<?php if(is_array($val->' . $f->Field . ')) foreach($val->' . $f->Field . ' as $v){echo "<p>".(empty($v) ? "No" : "Yes")."</p>";} else echo (empty($val->' . $f->Field . ') ? "No" : "Yes"); ?>';
+                $content = '<?php if(is_array($val->' . $f->Alias . ')) foreach($val->' . $f->Alias . ' as $v){echo "<p>".(empty($v) ? "No" : "Yes")."</p>";} else echo (empty($val->' . $f->Alias . ') ? "No" : "Yes"); ?>';
             } elseif ($this->datatypes[preg_replace('/\([^)]*\)|[()]/', '', $f->Type)] == "file") {
-                $content = '<?php if(!empty($val->' . $f->Field . ')): ?><a href="/' . $modulename . '/download/?args[0][field]=' . $f->Field . '&args[0][conditions][' . $this->primarykey . ']=<?php echo $val->' . $this->primarykey . '; ?>">Download file</a><?php endif; ?>';
+                $content = '<?php if(is_array($val->' . $f->Alias . ')) foreach($val->' . $f->Alias . ' as $v){if(!empty($v)): ?><p><a href="/application/upload/<?php echo $v; ?>">File</a></p><?php endif; } else if(!empty($val->' . $f->Alias . ')): ?><a href="/application/upload/<?php echo $val->'.$f->Alias.'; ?>">File</a><?php endif; ?>';
             } else {
-                $content = '<?php if(is_array($val->' . $f->Field . ')) foreach($val->' . $f->Field . ' as $v){echo "<p>".$v."</p>"; } else echo $val->' . $f->Field . '; ?>';
+                $content = '<?php if(is_array($val->' . $f->Alias . ')) foreach($val->' . $f->Alias . ' as $v){echo "<p>".$v."</p>"; } else echo $val->' . $f->Alias . '; ?>';
             }
             return '<td>' . $content . '</td>' . $breakline;
         }
@@ -241,7 +247,7 @@ class Mvcgenerator {
     // Returns a well formated form input string, based on field type.
     private function formField($f) {
         $breakline = (PATH_SEPARATOR == ":" ? "\r\n" : "\n");
-        if ($f->Field == $this->primarykey) {
+        if ($f->Field == Tbmetadata::info($this->modulename)->key->keyname) {
             $input = '<div class="col-md-12">' . $breakline;
             $input .= '<input id="input-' . $f->Field . '" type="hidden" name="' . $f->Field . '" value="<?php echo !empty($dataset) ? $dataset->' . $f->Field . ' : ""; ?>">' . $breakline;
             $input .= '</div>';

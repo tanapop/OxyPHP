@@ -55,10 +55,6 @@ class _CLASS_NAME_ extends Controller {
 
         header('Location: /_MODULE_NAME_');
     }
-    
-    public function download($args){
-        $this->_downloadfile($args, uniqid());
-    }
 
 }
 
